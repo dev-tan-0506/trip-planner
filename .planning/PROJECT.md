@@ -60,6 +60,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 ## Constraints
 
 - **[Khả năng sử dụng]**: Các tính năng Deep-tech (Mesh, AI) phải hoạt động chạy nền trơn tru, giấu kĩ thuật để UI tối giản.
+- **[Ngôn ngữ & Giao diện (Tone of Voice & UI/UX)]**: Sử dụng 100% Tiếng Việt với văn phong cực kỳ thân thiện, gần gũi, mộc mạc (như những người bạn đang nói chuyện với nhau). Thiết kế UI mang lại cảm giác ấm áp, vui vẻ, xua tan mọi áp lực hành chính trong việc tổ chức vất vả.
 - **[Pin / Privacy]**: Bluetooth Mesh và Live Location cần siêu tiết kiệm pin. Tắt tự động khi hết "End Trip".
 
 ## Key Decisions
