@@ -1,12 +1,12 @@
-# Chuyến Đi Tiện Lợi (Trip Planner)
+# Trip Planner (Chuyến Đi Tiện Lợi)
 
 ## What This Is
 
-Một ứng dụng/web kết nối lên kế hoạch du lịch toàn diện dành cho cá nhân, nhóm bạn hoặc tập thể lớn. Ứng dụng cung cấp trải nghiệm từ A-Z: chọn địa điểm, lên lịch trình, dự tính chi phí, phân công nhiệm vụ, theo dõi vị trí và chia sẻ kỷ niệm, với định hướng thương mại hóa trong tương lai.
+A comprehensive, all-in-one trip planning web/mobile application for solo travelers, friend groups, and large collectives. The app provides an end-to-end experience: from destination selection, itinerary building, budget estimation, task delegation, to live location tracking and memory sharing, with a future vision for commercialization.
 
 ## Core Value
 
-Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain points) khi đi chơi nhóm, thông qua việc quản lý tập trung toàn bộ lịch trình, tài chính, nhiệm vụ và kỷ niệm tại một nơi duy nhất.
+Maximum convenience and the total elimination of group-travel "pain points" by centralizing itinerary, finances, logistics, and memories into a single, seamless platform.
 
 ## Requirements
 
@@ -20,49 +20,50 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] **Lên kế hoạch linh hoạt & Chợ Lịch trình 1-Chạm:** Cung cấp Thư viện Template cộng đồng. Bấm 1 nút để sao chép nguyên mẫu lịch trình. Tích hợp tính năng "Quẹt (Swipe)" kiểu Tinder để khảo sát ý kiến.
-- [ ] **Lộ trình Ẩm thực (Culinary Routing):** "Xếp lịch trình theo đường bao tử". Chọn món muốn ăn, AI vẽ lộ trình hợp logic di chuyển chống đi ngược đường.
-- [ ] **Trợ lý Thời trang & Dresscode (AI Outfit Planner):** (Optional) Tích hợp AI gợi ý màu sắc/kiểu dáng trang phục dựa trên thời tiết, cảnh quan. Phối hợp checklist túi đồ.
-- [ ] **Phân Tách Nhóm Thông Minh (Smart Room & Ride Allocation):** Giải quyết nỗi đau xếp xe/xếp phòng cho nhóm đông bằng 3 chế độ: (1) Leader tự chắp nối xếp thả; (2) Tự do đăng ký slot trống; (3) Hệ thống xếp Random.
-- [ ] **Điểm danh bằng Selfie & Trạm Tập trung (Photo-Proof Check-in):** Leader được cấp quyền thiết lập "Điểm Tập Trung" & Giờ khởi hành. Ứng dụng cung cấp một bảng trạng thái (Dashboard) báo cáo Real-time hiển thị "Ai đã có mặt" và "Ai chưa đến". Thành viên khi tới điểm hẹn bắt buộc phải chụp 1 bức ảnh cá nhân (selfie) tại đó để App xác nhận "Đã đến". Chống cao su tuyệt đối!
-- [ ] **Nhập liệu tự động (Auto-parsing Hub):** Tích hợp AI đọc email nội dung vé máy bay, booking khách sạn được forward tới, tự xếp vào Timeline.
-- [ ] **Lịch trình sống động:** Hiển thị timeline hoạt động linh hoạt.
-- [ ] **Hồ sơ Cá nhân hóa (Health & Dietary Profile):** Thành viên tự khai báo dị ứng, say xe... App map vào lịch trình chung để cảnh báo hoặc xếp ghế.
-- [ ] **Trợ lý AI Bản địa & Cảnh báo Văn hóa (Cultural Warning):** Tích hợp AI làm HDV, dịch menu. Cảnh báo màn hình khóa khi đến khu vực nhạy cảm văn hóa (vd: nhắc quy định quần áo khi tới đền, chùa).
-- [ ] **Đối chuẩn Giá cả Địa phương (Local Cost Benchmarking):** Đối chiếu chi phí khoản mục với Big Data để cảnh báo ngân sách thấp/hoặc bị "chặt chém".
-- [ ] **Bản đồ & Định vị nhóm:** Theo dõi vị trí thiết bị các thành viên.
-- [ ] **Tương tác Ngoại tuyến (Offline Mode & Mesh Network):** Tự động chuyển qua kết nối phân tán (Mesh) để nhắn tin và tìm vị trí tầm ngắn khi mất sóng.
-- [ ] **Phân công & Hạ tầng Logistics (Smart To-do):** Trưởng nhóm giao việc. Tracking hoàn thành.
-- [ ] **Quản lý Quỹ nhóm & Chi phí:** Mẫu dự toán. Quản lý quỹ bởi thủ quỹ, QR code đóng tiền (MoMo/Bank), nhắc tự động.
-- [ ] **Kho lưu trữ số:** Cloud chia sẻ media. "Két sắt ảo" để thu thập chứng minh thư/vé máy bay.
-- [ ] **Chiến lược Quà tặng (Souvenir Planner):** Gợi ý đặc sản uy tín, nhắc nhở mua sắm cuối chuyến.
-- [ ] **Khám phá & Cảnh báo:** Thời tiết điểm đến. Trạm y tế, trạm xăng lân cận.
-- [ ] **Radar Dự báo Đám đông (Crowd Prediction):** Dự báo độ đông đúc thời gian thực (tránh kẹt xe).
-- [ ] **Bản tin Radio Hành trình (AI Daily Podcast):** Cuối ngày AI đọc bản tin tổng hợp sự kiện vui nhộn.
-- [ ] **Gắn kết Hậu chuyến đi (Reunion Organizer):** Nhắc lịch off-team sau chuyến đi. Gửi E-invite.
-- [ ] **Cứu hộ dã chiến (On-demand Concierge):** Gọi đội sửa xe/cứu hộ địa phương đã xác minh.
-- [ ] **Giải trí & Cứu hộ (Gamification & SOS):** Mini-game trên app. Nút SOS khẩn cấp nội bộ.
-- [ ] **Khảo sát ẩn danh (Anonymous Feedback):** Cuối chuyến đi review tự do ẩn danh.
-- [ ] **Mô hình thương mại (Phase tiếp theo):** Thành viên đăng bản sao lịch trình kiếm affiliate.
-- [ ] **Định vị vật phẩm (Phase tiếp theo):** Tích hợp Smart Tag Bluetooth quản lý vali/thú cưng.
+- [ ] **Flexible Planning & 1-Click Marketplace:** Support diverse group sizes. Provide a Community Template Library where users can copy an entire itinerary (e.g., "Da Lat Healing 3D2N") with 1 click. Integrate a Tinder-style swipe feature to vote on food/activities.
+- [ ] **Culinary Routing:** "Route by stomach." After selecting desired food spots, AI automatically drafts the most logical geographical route passing through the best restaurants to prevent backtracking.
+- [ ] **AI Outfit Planner (Optional):** AI suggests outfit colors/styles based on the destination's weather, scenery, and trends for symmetric group photos. Auto-syncs with personal packing checklists.
+- [ ] **Smart Room & Ride Allocation:** Solves the headache of distributing people into cars/rooms for large groups via 3 modes: (1) Leader drag-and-drop; (2) Members freely register for empty slots; (3) Fun random automated assignment.
+- [ ] **Photo-Proof Check-in:** Leader sets gathering points. Members must take a selfie at the exact location to confirm "Arrived" instead of merely clicking a button. Completely eliminates lateness and builds a funny candid photo library.
+- [ ] **Auto-parsing Hub:** AI scans forwarded flight and hotel booking emails, extracting and placing booking codes and schedules exactly into the correct Timeline slots automatically.
+- [ ] **Dynamic Itinerary:** Displays a flexible activity timeline. Red-alerts if an added activity/food spot violates the group's health profile.
+- [ ] **Health & Dietary Profile:** Members declare allergies/motion sickness. The app cross-references this with the itinerary to warn the group or auto-arrange car seating.
+- [ ] **Local Expert AI & Cultural Warning:** AI acts as a native tour guide (translating menus, suggesting hidden gems). Triggers lock-screen warnings when entering culturally sensitive areas (e.g., reminding to rent a sarong before entering a temple).
+- [ ] **Local Cost Benchmarking:** Cross-references planned expenses with Big Data to alert users if their budget is unfeasibly low or if they are being ripped off.
+- [ ] **Group Map & Live Location:** Tracks team members' devices strictly during the trip on a shared map.
+- [ ] **Offline Mode & Mesh Network:** Automatically switches to a Bluetooth-based decentralized Mesh network for short-range messaging and location tracking in areas without cell coverage (forests, mountains).
+- [ ] **Smart To-do & Logistics:** Leader delegates major tasks and shared packing items. Tracks task completion status (Assigned, Remembered, Done with proof).
+- [ ] **Fund Management & Expenses:** Budget templates provided. The group treasurer manages a centralized pool, with built-in Bank/MoMo QR codes for money collection and automated payment reminders.
+- [ ] **Digital Vault & Shared Media:** High-speed cloud for shared photos/videos. A "Virtual Vault" to gather ID cards and flight tickets for the Leader to handle group check-ins seamlessly.
+- [ ] **Souvenir Planner:** Recommends authentic local specialties and sends last-minute reminders to buy gifts before leaving.
+- [ ] **Smart Discovery & Alerts:** Forecasts weather for upcoming itinerary stops. Suggests nearby clinics/gas stations.
+- [ ] **Real-time Crowd Prediction:** Forecasts real-time crowding at tourist spots to avoid traffic jams and queues.
+- [ ] **AI Daily Podcast:** At the end of the day, AI synthesizes a humorous audio broadcast summing up the day's events, distance traveled, funny photos, and latecomers.
+- [ ] **Reunion Organizer:** Analyzes schedules and sends e-invites for a post-trip meetup/dinner 1 week/1 month after the trip.
+- [ ] **On-demand Concierge:** Quick access to verified local mechanics (tire repair) or emergency medical support near the group's coordinates.
+- [ ] **Gamification & SOS:** Built-in mini-games. Internal SOS button to alert/vibrate all members' phones in emergencies.
+- [ ] **Anonymous Post-trip Feedback:** A fun, incognito survey at the end of the trip to vote on the most tardy person or praise the treasurer, clearing away bad vibes.
+- [ ] **Commercial Marketplace (Next Phase):** Members publish their itinerary templates to the community to earn affiliate commissions down the line.
+- [ ] **Smart Tag Tracking (Next Phase):** Bluetooth tag integration to prevent losing communal luggages or pets.
 
 ### Out of Scope
 
 <!-- Explicit boundaries. Includes reasoning to prevent re-adding. -->
 
-- [Khoa học giả lập / Vlog auto-render / Kỷ niệm AR / Dịch vụ hành lý] — Ghi nhận ý tưởng nhưng không đưa vào V1 để ưu tiên nguồn lực.
-- [Chia tiền lẻ tẻ tự động] — Tạm thời nằm ngoài phạm vi V1, V1 sẽ tập trung vào "Quỹ chung".
-- [Sửa chung Real-time] — V1 chỉ cấp quyền cho Leader tạo/sửa lịch trình.
+- [Auto-vlog render / AR Memories / Luggage Teleportation / Live Voice Translation / Biometric Auto-Delay] — Acknowledged ideas but excluded from V1 to prioritize core development resources.
+- [Automated Split Bill] — V1 strictly utilizes a centralized "Group Fund" approach (collect first, spend later) to avoid end-of-trip debt collection complexities.
+- [Real-time Co-editing Itinerary] — V1 strictly assigns itinerary modification rights only to the Leader to prevent data conflict (CRDT is too complex).
 
 ## Context
 
-- Khóa sức mạnh cốt lõi là các tính năng Auto-AI, Offline Mesh, định dạng Utility "Tour Guide" siêu mạnh trước khi thương mại hóa diện rộng.
+- The product is positioned as a super-utility "Tour Guide" tool to organically attract users before unlocking broad commercialization. Deep-tech features (Offline Mesh, AI) serve as massive core-differentiators.
+- Pre-existing code in the directory exists, but codebase mapping was skipped. Development will append/refactor directly based on this document.
 
 ## Constraints
 
-- **[Khả năng sử dụng]**: Các tính năng Deep-tech (Mesh, AI) phải hoạt động chạy nền trơn tru, giấu kĩ thuật để UI tối giản.
-- **[Ngôn ngữ & Giao diện (Tone of Voice & UI/UX)]**: Sử dụng 100% Tiếng Việt với văn phong cực kỳ thân thiện, gần gũi, mộc mạc (như những người bạn đang nói chuyện với nhau). Thiết kế UI mang lại cảm giác ấm áp, vui vẻ, xua tan mọi áp lực hành chính trong việc tổ chức vất vả.
-- **[Pin / Privacy]**: Bluetooth Mesh và Live Location cần siêu tiết kiệm pin. Tắt tự động khi hết "End Trip".
+- **[Usability]**: Deep-tech features (Mesh, AI) must run silently in the background. The User Interface must remain extremely minimalist so non-tech-savvy users can operate it smoothly.
+- **[Language & Tone of Voice]**: The App UI/UX must be strictly 100% Vietnamese. The tone must be intensely friendly, intimate, and casual (like friends talking). It should invoke warmth and fun, eliminating the "administrative burden" feeling of trip planning.
+- **[Battery / Privacy]**: Bluetooth Mesh and Live Location must solve battery drain over multi-day trips. Location data is only gathered when "Trip On-going" and auto-terminates on "End Trip".
 
 ## Key Decisions
 
@@ -70,8 +71,8 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| [Chọn "Quỹ chung" thay vì "Split bill"] | Dễ quản lý tài chính tập trung V1. | — Pending |
-| [Phân quyền Leader-driven] | Dễ kiểm soát cấu trúc dữ liệu. | — Pending |
+| [Centralized Fund over Split Bill] | Easier to control risks and guarantee upfront capital. | — Pending |
+| [Leader-driven Itinerary Rights] | Prevents data chaos and conflict during concurrent editing. | — Pending |
 
 ---
-*Last updated: 2026-03-28 after user brainstorming*
+*Last updated: 2026-03-28 translated to English by request*
