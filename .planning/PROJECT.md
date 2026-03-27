@@ -21,6 +21,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 <!-- Current scope. Building toward these. -->
 
 - [ ] **Lên kế hoạch linh hoạt:** Hỗ trợ tạo chuyến đi đa dạng quy mô. Tích hợp tính năng "Quẹt (Swipe)" kiểu Tinder để khảo sát ý kiến ăn uống/vui chơi trong nhóm.
+- [ ] **Lộ trình Ẩm thực (Culinary Routing):** Cho phép "Xếp lịch trình theo đường bao tử". Chọn các món muốn ăn, AI tự vẽ lộ trình đi qua các quán ngon nhất hợp logic di chuyển để chống đi ngược đường.
 - [ ] **Trợ lý Thời trang & Dresscode (AI Outfit Planner):** (Optional) Cho phép nhóm thống nhất dresscode chung cho từng ngày. Tích hợp AI gợi ý màu sắc/kiểu dáng dựa trên thời tiết, phong cảnh điểm đến và trend nhằm giúp nhóm có ảnh đẹp. Phối hợp tự động với checklist đóng gói hành lý cá nhân.
 - [ ] **Nhập liệu tự động (Auto-parsing Hub):** Tích hợp AI đọc email nội dung vé máy bay, booking khách sạn được forward tới. Tự động bóc tách và xếp thông tin vé/giờ bay, mã booking vào khung giờ đúng trên Timeline.
 - [ ] **Lịch trình sống động:** Hiển thị timeline các hoạt động. Cho phép bổ sung/thay đổi lịch trình mọi lúc. Tự động cảnh báo đỏ nếu điểm đến/quán ăn vi phạm hồ sơ dị ứng sức khỏe của nhóm.
@@ -35,6 +36,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 - [ ] **Khám phá & Cảnh báo thông minh:** Hiển thị thời tiết cho các điểm đến sắp tới. Gợi ý trạm y tế, trạm xăng lân cận.
 - [ ] **Radar Dự báo Đám đông (Crowd Prediction):** Dựa trên dữ liệu để dự báo mức độ đông đúc của các điểm tham quan theo thời gian thực, giúp nhóm tránh cảnh kẹt xe/xếp hàng.
 - [ ] **Bản tin Radio Hành trình (AI Daily Podcast):** Cuối ngày, AI tự động tổng hợp các sự kiện (ảnh chụp, km đã đi, ai lề mề) và đọc thành một bản tin âm thanh hài hước cho cả nhóm cùng nghe.
+- [ ] **Gắn kết Hậu chuyến đi (Reunion Organizer):** Tự động nhắc lịch off-team sau 1 tuần/1 tháng để nhóm gặp lại. Gợi ý quán lẩu/nướng gần nhà mọi người và gửi E-invite tự động.
 - [ ] **Cứu hộ dã chiến (On-demand Concierge):** Khi gặp sự cố xe cộ (đứt lốp) hoặc cấp cứu y tế, nhóm có thể gọi trực tiếp đội sửa xe/cứu hộ địa phương đã được App xác minh gần tọa độ nhất.
 - [ ] **Giải trí & Cứu hộ (Gamification & SOS):** Tích hợp mini-game trên app. Nút SOS khẩn cấp nội bộ báo động rung thiết bị cho tất cả thành viên.
 - [ ] **Khảo sát ẩn danh (Anonymous Post-trip Feedback):** Cuối chuyến đi, một bảng review vui vẻ ẩn danh giúp xí xóa tâm lý, rút kinh nghiệm (ví dụ: vote người hay lề mề nhất, khen ngợi thủ quỹ...).
@@ -45,7 +47,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 
 <!-- Explicit boundaries. Includes reasoning to prevent re-adding. -->
 
-- [Kỷ niệm ảo AR/Energy Monitor/Ví điện tử tạm thời] — Ghi nhận ý tưởng mở rộng nhưng không đưa vào V1 để ưu tiên nguồn lực cốt lõi.
+- [Kỷ niệm ảo AR / Trạm mù Blind Date / Phạt chống cao su] — Các ý tưởng hay nhưng chưa ưu tiên triển khai trong V1 để giữ App đủ nhanh gọn ban đầu.
 - [Nhật ký chạy tự động / Vlog auto-render] — Tạm gác lại do chưa cần thiết ở giai đoạn đầu và chi phí render cao.
 - [Chia tiền lẻ tẻ tự động] — Tạm thời nằm ngoài phạm vi V1, V1 sẽ tập trung vào "Quỹ chung".
 - [Sửa chung Real-time] — V1 chỉ cấp quyền cho Leader tạo/sửa lịch trình để dễ kiểm soát dữ liệu.
@@ -71,4 +73,4 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 | [Phân quyền Leader-driven] | Dễ kiểm soát cấu trúc dữ liệu V1. | — Pending |
 
 ---
-*Last updated: 2026-03-27 after initialization*
+*Last updated: 2026-03-28 after final brainstorming*
