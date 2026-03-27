@@ -31,7 +31,10 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 - [ ] **Phân công & Hạ tầng Logistics (Smart To-do):** Trưởng nhóm giao việc lớn và đồ dùng chung. Tracking trạng thái hoàn thành kèm minh chứng (vé, bill).
 - [ ] **Quản lý Quỹ nhóm & Chi phí:** Mẫu dự toán chi phí. Quản lý quỹ tập trung bởi thủ quỹ, hiển thị QR code đóng tiền (MoMo/Bank), nhắc nhở thành viên đóng quỹ.
 - [ ] **Kho lưu trữ số:** Cloud chia sẻ media siêu tốc. "Két sắt ảo" để thu thập bản sao giấy tờ (CCCD, vé máy bay) giúp Leader check-in đoàn rút gọn trải nghiệm.
+- [ ] **Chiến lược Quà tặng (Souvenir Planner):** Gợi ý danh sách đặc sản/quà tặng uy tín ngay từ lúc lên plan. Bổ sung tính năng "cứu cánh" nhắc nhở và chỉ điểm mua sắm nhanh gọn vào những ngày cuối chuyến đi.
 - [ ] **Khám phá & Cảnh báo thông minh:** Hiển thị thời tiết cho các điểm đến sắp tới. Gợi ý trạm y tế, trạm xăng lân cận.
+- [ ] **Radar Dự báo Đám đông (Crowd Prediction):** Dựa trên dữ liệu để dự báo mức độ đông đúc của các điểm tham quan theo thời gian thực, giúp nhóm tránh cảnh kẹt xe/xếp hàng.
+- [ ] **Bản tin Radio Hành trình (AI Daily Podcast):** Cuối ngày, AI tự động tổng hợp các sự kiện (ảnh chụp, km đã đi, ai lề mề) và đọc thành một bản tin âm thanh hài hước cho cả nhóm cùng nghe.
 - [ ] **Cứu hộ dã chiến (On-demand Concierge):** Khi gặp sự cố xe cộ (đứt lốp) hoặc cấp cứu y tế, nhóm có thể gọi trực tiếp đội sửa xe/cứu hộ địa phương đã được App xác minh gần tọa độ nhất.
 - [ ] **Giải trí & Cứu hộ (Gamification & SOS):** Tích hợp mini-game trên app. Nút SOS khẩn cấp nội bộ báo động rung thiết bị cho tất cả thành viên.
 - [ ] **Khảo sát ẩn danh (Anonymous Post-trip Feedback):** Cuối chuyến đi, một bảng review vui vẻ ẩn danh giúp xí xóa tâm lý, rút kinh nghiệm (ví dụ: vote người hay lề mề nhất, khen ngợi thủ quỹ...).
