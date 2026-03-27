@@ -21,6 +21,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 <!-- Current scope. Building toward these. -->
 
 - [ ] **Lên kế hoạch linh hoạt:** Hỗ trợ tạo chuyến đi đa dạng quy mô. Tích hợp tính năng "Quẹt (Swipe)" kiểu Tinder để khảo sát ý kiến ăn uống/vui chơi trong nhóm.
+- [ ] **Nhập liệu tự động (Auto-parsing Hub):** Tích hợp AI đọc email nội dung vé máy bay, booking khách sạn được forward tới. Tự động bóc tách và xếp thông tin vé/giờ bay, mã booking vào khung giờ đúng trên Timeline.
 - [ ] **Lịch trình sống động:** Hiển thị timeline các hoạt động. Cho phép bổ sung/thay đổi lịch trình mọi lúc. Tự động cảnh báo đỏ nếu điểm đến/quán ăn vi phạm hồ sơ dị ứng sức khỏe của nhóm.
 - [ ] **Hồ sơ Cá nhân hóa (Health & Dietary Profile):** Thành viên tự khai báo tình trạng dị ứng, say xe... App tự map vào lịch trình chung để cảnh báo hoặc tự động sắp xếp ghế ngồi di chuyển.
 - [ ] **Trợ lý AI Bản địa (Local Expert AI):** Tích hợp AI đóng vai trò HDV chuyên sâu bản địa, gợi ý các không gian "núp hẻm" của dân địa phương, dịch menu ngon miệng và thuyết minh lịch sử khi quét camera.
@@ -38,6 +39,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 
 <!-- Explicit boundaries. Includes reasoning to prevent re-adding. -->
 
+- [Kỷ niệm ảo AR/Energy Monitor] — Ghi nhận ý tưởng nhưng không đưa vào V1 để ưu tiên nguồn lực cốt lõi.
 - [Nhật ký chạy tự động / Vlog auto-render] — Tạm gác lại do chưa cần thiết ở giai đoạn đầu và chi phí render cao.
 - [Chia tiền lẻ tẻ tự động] — Tạm thời nằm ngoài phạm vi V1, V1 sẽ tập trung vào "Quỹ chung".
 - [Sửa chung Real-time] — V1 chỉ cấp quyền cho Leader tạo/sửa lịch trình để dễ kiểm soát dữ liệu.
@@ -59,7 +61,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| [Chọn "Quỹ chung" thay vì "Split bill"] | Dễ quản lý rủi ro đòi tiền cuối khóa. | — Pending |
+| [Chọn "Quỹ chung" thay vì "Split bill"] | Dễ quản lý rủi tự đòi tiền cuối khóa. | — Pending |
 | [Phân quyền Leader-driven] | Dễ kiểm soát cấu trúc dữ liệu V1. | — Pending |
 
 ---
