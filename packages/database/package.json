@@ -1,0 +1,20 @@
+{
+  "name": "@minh-di-dau-the/database",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Prisma schema and database client for Mình Đi Đâu Thế",
+  "main": "./src/index.ts",
+  "scripts": {
+    "generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.0.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.0.0",
+    "typescript": "^5.1.3"
+  }
+}

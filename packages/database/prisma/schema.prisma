@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Auth & Profiles ───────────────────────────────
+
+model User {
+  id            String       @id @default(cuid())
+  email         String       @unique
+  name          String?
+  avatarUrl     String?
+  healthProfile String?      // JSON string: allergies, motion sickness, etc.
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  tripMembers   TripMember[]
+}
+
+// ─── Trip Management ───────────────────────────────
+
+model Trip {
+  id          String       @id @default(cuid())
+  name        String
+  destination String
+  startDate   DateTime
+  endDate     DateTime
+  joinCode    String       @unique // Shareable link code
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  members     TripMember[]
+}
+
+enum TripRole {
+  LEADER
+  MEMBER
+}
+
+model TripMember {
+  id        String   @id @default(cuid())
+  userId    String
+  tripId    String
+  role      TripRole @default(MEMBER)
+  joinedAt  DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tripId])
+}
