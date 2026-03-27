@@ -20,48 +20,46 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] **Lên kế hoạch linh hoạt:** Hỗ trợ tạo chuyến đi đa dạng quy mô. Tích hợp tính năng "Quẹt (Swipe)" kiểu Tinder để khảo sát ý kiến ăn uống/vui chơi trong nhóm.
+- [ ] **Lên kế hoạch linh hoạt & Chợ Lịch trình 1-Chạm:** Hỗ trợ tạo chuyến đi đa dạng quy mô. Cung cấp Thư viện Template cộng đồng, bấm 1 nút để sao chép nguyên mẫu lịch trình (vd: "Đà Lạt 3N2Đ") vào ngày đi của nhóm. Tích hợp tính năng "Quẹt (Swipe)" kiểu Tinder để khảo sát ý kiến.
 - [ ] **Lộ trình Ẩm thực (Culinary Routing):** Cho phép "Xếp lịch trình theo đường bao tử". Chọn các món muốn ăn, AI tự vẽ lộ trình đi qua các quán ngon nhất hợp logic di chuyển để chống đi ngược đường.
-- [ ] **Trợ lý Thời trang & Dresscode (AI Outfit Planner):** (Optional) Cho phép nhóm thống nhất dresscode chung cho từng ngày. Tích hợp AI gợi ý màu sắc/kiểu dáng dựa trên thời tiết, phong cảnh điểm đến và trend nhằm giúp nhóm có ảnh đẹp. Phối hợp tự động với checklist đóng gói hành lý cá nhân.
-- [ ] **Nhập liệu tự động (Auto-parsing Hub):** Tích hợp AI đọc email nội dung vé máy bay, booking khách sạn được forward tới. Tự động bóc tách và xếp thông tin vé/giờ bay, mã booking vào khung giờ đúng trên Timeline.
-- [ ] **Lịch trình sống động:** Hiển thị timeline các hoạt động. Cho phép bổ sung/thay đổi lịch trình mọi lúc. Tự động cảnh báo đỏ nếu điểm đến/quán ăn vi phạm hồ sơ dị ứng sức khỏe của nhóm.
-- [ ] **Hồ sơ Cá nhân hóa (Health & Dietary Profile):** Thành viên tự khai báo tình trạng dị ứng, say xe... App tự map vào lịch trình chung để cảnh báo hoặc tự động sắp xếp ghế ngồi di chuyển.
-- [ ] **Trợ lý AI Bản địa (Local Expert AI):** Tích hợp AI đóng vai trò HDV chuyên sâu bản địa, gợi ý các không gian "núp hẻm" của dân địa phương, dịch menu ngon miệng và thuyết minh lịch sử khi quét camera.
-- [ ] **Bản đồ & Định vị nhóm:** Hiển thị lịch trình trên bản đồ. Theo dõi vị trí thiết bị các thành viên.
-- [ ] **Tương tác Ngoại tuyến (Offline Mode & Mesh Network):** Dành cho khu vực không có sóng/vùng sâu vùng xa. Tự động chuyển qua kết nối Bluetooth mạng lưới nhóm (Mesh) để nhắn tin và tìm vị trí tầm ngắn.
-- [ ] **Phân công & Hạ tầng Logistics (Smart To-do):** Trưởng nhóm giao việc lớn và đồ dùng chung. Tracking trạng thái hoàn thành kèm minh chứng (vé, bill).
-- [ ] **Quản lý Quỹ nhóm & Chi phí:** Mẫu dự toán chi phí. Quản lý quỹ tập trung bởi thủ quỹ, hiển thị QR code đóng tiền (MoMo/Bank), nhắc nhở thành viên đóng quỹ.
-- [ ] **Kho lưu trữ số:** Cloud chia sẻ media siêu tốc. "Két sắt ảo" để thu thập bản sao giấy tờ (CCCD, vé máy bay) giúp Leader check-in đoàn rút gọn trải nghiệm.
-- [ ] **Chiến lược Quà tặng (Souvenir Planner):** Gợi ý danh sách đặc sản/quà tặng uy tín ngay từ lúc lên plan. Bổ sung tính năng "cứu cánh" nhắc nhở và chỉ điểm mua sắm nhanh gọn vào những ngày cuối chuyến đi.
-- [ ] **Khám phá & Cảnh báo thông minh:** Hiển thị thời tiết cho các điểm đến sắp tới. Gợi ý trạm y tế, trạm xăng lân cận.
-- [ ] **Radar Dự báo Đám đông (Crowd Prediction):** Dựa trên dữ liệu để dự báo mức độ đông đúc của các điểm tham quan theo thời gian thực, giúp nhóm tránh cảnh kẹt xe/xếp hàng.
-- [ ] **Bản tin Radio Hành trình (AI Daily Podcast):** Cuối ngày, AI tự động tổng hợp các sự kiện (ảnh chụp, km đã đi, ai lề mề) và đọc thành một bản tin âm thanh hài hước cho cả nhóm cùng nghe.
-- [ ] **Gắn kết Hậu chuyến đi (Reunion Organizer):** Tự động nhắc lịch off-team sau 1 tuần/1 tháng để nhóm gặp lại. Gợi ý quán lẩu/nướng gần nhà mọi người và gửi E-invite tự động.
-- [ ] **Cứu hộ dã chiến (On-demand Concierge):** Khi gặp sự cố xe cộ (đứt lốp) hoặc cấp cứu y tế, nhóm có thể gọi trực tiếp đội sửa xe/cứu hộ địa phương đã được App xác minh gần tọa độ nhất.
-- [ ] **Giải trí & Cứu hộ (Gamification & SOS):** Tích hợp mini-game trên app. Nút SOS khẩn cấp nội bộ báo động rung thiết bị cho tất cả thành viên.
-- [ ] **Khảo sát ẩn danh (Anonymous Post-trip Feedback):** Cuối chuyến đi, một bảng review vui vẻ ẩn danh giúp xí xóa tâm lý, rút kinh nghiệm (ví dụ: vote người hay lề mề nhất, khen ngợi thủ quỹ...).
-- [ ] **Mô hình kinh doanh (Phase tiếp theo):** Thành viên đăng bản sao lịch trình lên cộng đồng kiếm affiliate.
-- [ ] **Định vị vật phẩm (Tag Tracking - Phase tiếp theo):** Hỗ trợ tích hợp Smart Tag Bluetooth để quản lý vali chung/thú cưng.
+- [ ] **Trợ lý Thời trang & Dresscode (AI Outfit Planner):** (Optional) Tích hợp AI gợi ý màu sắc/kiểu dáng trang phục dựa trên thời tiết, phong cảnh điểm đến. Phối hợp checklist hành lý.
+- [ ] **Nhập liệu tự động (Auto-parsing Hub):** Tích hợp AI đọc email nội dung vé máy bay, booking khách sạn được forward tới. Tự động xếp vào khung giờ đúng trên Timeline.
+- [ ] **Lịch trình sống động:** Hiển thị timeline hoạt động linh hoạt. Cảnh báo vi phạm sức khỏe.
+- [ ] **Hồ sơ Cá nhân hóa (Health & Dietary Profile):** Thành viên tự khai báo dị ứng, say xe... App tự map vào lịch trình chung để cảnh báo hoặc xếp ghế.
+- [ ] **Trợ lý AI Bản địa & Cảnh báo Văn hóa (Cultural Warning):** Tích hợp AI làm HDV, dịch menu. Cảnh báo màn hình khóa khi đến khu vực nhạy cảm văn hóa (vd: Tới đền gợi ý thuê đồ dài).
+- [ ] **Đối chuẩn Giá cả Địa phương (Local Cost Benchmarking):** Khi dự tính chi phí 1 khoản mục, App đối chiếu với Big Data để cảnh báo ngân sách quá thấp hoặc khách đang bị "chặt chém" giá quá cao.
+- [ ] **Bản đồ & Định vị nhóm:** Theo dõi vị trí thiết bị các thành viên.
+- [ ] **Tương tác Ngoại tuyến (Offline Mode & Mesh Network):** Tự động chuyển qua kết nối phân tán (Mesh) để nhắn tin và tìm vị trí tầm ngắn khi mất sóng.
+- [ ] **Phân công & Hạ tầng Logistics (Smart To-do):** Trưởng nhóm giao việc. Tracking hoàn thành.
+- [ ] **Quản lý Quỹ nhóm & Chi phí:** Mẫu dự toán. Quản lý quỹ bởi thủ quỹ, QR code đóng tiền (MoMo/Bank), nhắc nhở đóng quỹ.
+- [ ] **Kho lưu trữ số:** Cloud chia sẻ media. "Két sắt ảo" để thu thập chứng minh thư/vé máy bay.
+- [ ] **Chiến lược Quà tặng (Souvenir Planner):** Gợi ý đặc sản uy tín, nhắc nhở mua sắm cuối chuyến.
+- [ ] **Khám phá & Cảnh báo:** Thời tiết điểm đến. Trạm y tế, trạm xăng lân cận.
+- [ ] **Radar Dự báo Đám đông (Crowd Prediction):** Dự báo độ đông đúc thời gian thực (tránh kẹt xe).
+- [ ] **Bản tin Radio Hành trình (AI Daily Podcast):** Cuối ngày AI đọc bản tin tổng hợp sự kiện hài hước.
+- [ ] **Gắn kết Hậu chuyến đi (Reunion Organizer):** Nhắc lịch off-team sau chuyến đi. Gửi E-invite.
+- [ ] **Cứu hộ dã chiến (On-demand Concierge):** Gọi đội sửa xe/cứu hộ địa phương đã xác minh.
+- [ ] **Giải trí & Cứu hộ (Gamification & SOS):** Mini-game trên app. Nút SOS khẩn cấp nội bộ.
+- [ ] **Khảo sát ẩn danh (Anonymous Feedback):** Cuối chuyến đi review vui vẻ ẩn danh.
+- [ ] **Mô hình thương mại (Phase tiếp theo):** Thành viên đăng bản sao lịch trình kiếm affiliate.
+- [ ] **Định vị vật phẩm (Phase tiếp theo):** Tích hợp Smart Tag Bluetooth quản lý vali/thú cưng.
 
 ### Out of Scope
 
 <!-- Explicit boundaries. Includes reasoning to prevent re-adding. -->
 
-- [Kỷ niệm ảo AR / Trạm mù Blind Date / Phạt chống cao su] — Các ý tưởng hay nhưng chưa ưu tiên triển khai trong V1 để giữ App đủ nhanh gọn ban đầu.
-- [Nhật ký chạy tự động / Vlog auto-render] — Tạm gác lại do chưa cần thiết ở giai đoạn đầu và chi phí render cao.
+- [Nhật ký chạy tự động / Vlog auto-render / Kỷ niệm AR] — Ghi nhận ý tưởng nhưng không đưa vào V1 để ưu tiên nguồn lực.
 - [Chia tiền lẻ tẻ tự động] — Tạm thời nằm ngoài phạm vi V1, V1 sẽ tập trung vào "Quỹ chung".
-- [Sửa chung Real-time] — V1 chỉ cấp quyền cho Leader tạo/sửa lịch trình để dễ kiểm soát dữ liệu.
+- [Sửa chung Real-time] — V1 chỉ cấp quyền cho Leader tạo/sửa lịch trình.
 
 ## Context
 
-- Sản phẩm định dạng như một super-utility du lịch siêu mạnh, biến Trưởng Đoàn thành một Tour guide chuyên nghiệp. Các công nghệ nền sâu (Offline Mesh, AI) là năng lực cốt lõi so sánh với thị trường (core-differentiators).
-- Thư mục dự án đã có sẵn code nên tính năng phát triển bổ sung/refactor tiếp nối (Skip codebase map).
+- Khóa sức mạnh cốt lõi là các tính năng Auto-AI, Offline Mesh, định dạng Utility "Tour Guide" siêu mạnh trước khi thương mại hóa diện rộng.
 
 ## Constraints
 
-- **[Khả năng sử dụng]**: Mọi tính năng cao cấp (Mesh Network, AI) phải hoạt động mượt mà ngầm, giữ UI cực kì tối giản cho mẹ bỉm sữa, dân không văn phòng vẫn bấm mượt mà.
-- **[Hiệu năng Pin]**: Live Tracking và Bluetooth Mesh bắt buộc giải bài toán tiết kiệm Pin (Battery Drain) khi dùng cho chuyến đi vài ngày.
-- **[Quyền riêng tư]**: Dữ liệu Live Location chỉ thu thập với sự đồng thuận rõ ràng khi chuyến đi "On-going" và tự tắt khi kết thúc (End Trip).
+- **[Khả năng sử dụng]**: Các tính năng Deep-tech (Mesh, AI) phải hoạt động chạy nền trơn tru, giấu kĩ thuật để UI tối giản.
+- **[Pin / Privacy]**: Bluetooth Mesh và Live Location cần siêu tiết kiệm pin. Tắt tự động khi hết "End Trip".
 
 ## Key Decisions
 
@@ -69,8 +67,8 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| [Chọn "Quỹ chung" thay vì "Split bill"] | Dễ quản lý rủi tự đòi tiền cuối khóa. | — Pending |
-| [Phân quyền Leader-driven] | Dễ kiểm soát cấu trúc dữ liệu V1. | — Pending |
+| [Chọn "Quỹ chung" thay vì "Split bill"] | Dễ quản lý tài chính tập trung V1. | — Pending |
+| [Phân quyền Leader-driven] | Dễ kiểm soát cấu trúc dữ liệu. | — Pending |
 
 ---
-*Last updated: 2026-03-28 after final brainstorming*
+*Last updated: 2026-03-28 after user brainstorming*
