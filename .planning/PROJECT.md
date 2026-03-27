@@ -21,6 +21,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 <!-- Current scope. Building toward these. -->
 
 - [ ] **Lên kế hoạch linh hoạt:** Hỗ trợ tạo chuyến đi đa dạng quy mô. Tích hợp tính năng "Quẹt (Swipe)" kiểu Tinder để khảo sát ý kiến ăn uống/vui chơi trong nhóm.
+- [ ] **Trợ lý Thời trang & Dresscode (AI Outfit Planner):** (Optional) Cho phép nhóm thống nhất dresscode chung cho từng ngày. Tích hợp AI gợi ý màu sắc/kiểu dáng dựa trên thời tiết, phong cảnh điểm đến và trend nhằm giúp nhóm có ảnh đẹp. Phối hợp tự động với checklist đóng gói hành lý cá nhân.
 - [ ] **Nhập liệu tự động (Auto-parsing Hub):** Tích hợp AI đọc email nội dung vé máy bay, booking khách sạn được forward tới. Tự động bóc tách và xếp thông tin vé/giờ bay, mã booking vào khung giờ đúng trên Timeline.
 - [ ] **Lịch trình sống động:** Hiển thị timeline các hoạt động. Cho phép bổ sung/thay đổi lịch trình mọi lúc. Tự động cảnh báo đỏ nếu điểm đến/quán ăn vi phạm hồ sơ dị ứng sức khỏe của nhóm.
 - [ ] **Hồ sơ Cá nhân hóa (Health & Dietary Profile):** Thành viên tự khai báo tình trạng dị ứng, say xe... App tự map vào lịch trình chung để cảnh báo hoặc tự động sắp xếp ghế ngồi di chuyển.
@@ -31,7 +32,9 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 - [ ] **Quản lý Quỹ nhóm & Chi phí:** Mẫu dự toán chi phí. Quản lý quỹ tập trung bởi thủ quỹ, hiển thị QR code đóng tiền (MoMo/Bank), nhắc nhở thành viên đóng quỹ.
 - [ ] **Kho lưu trữ số:** Cloud chia sẻ media siêu tốc. "Két sắt ảo" để thu thập bản sao giấy tờ (CCCD, vé máy bay) giúp Leader check-in đoàn rút gọn trải nghiệm.
 - [ ] **Khám phá & Cảnh báo thông minh:** Hiển thị thời tiết cho các điểm đến sắp tới. Gợi ý trạm y tế, trạm xăng lân cận.
-- [ ] **Giải trí & Cứu hộ (Gamification & SOS):** Tích hợp mini-game trên app. Có nút SOS khẩn cấp gửi vị trí/phát báo động rung thiết bị cho tất cả thành viên.
+- [ ] **Cứu hộ dã chiến (On-demand Concierge):** Khi gặp sự cố xe cộ (đứt lốp) hoặc cấp cứu y tế, nhóm có thể gọi trực tiếp đội sửa xe/cứu hộ địa phương đã được App xác minh gần tọa độ nhất.
+- [ ] **Giải trí & Cứu hộ (Gamification & SOS):** Tích hợp mini-game trên app. Nút SOS khẩn cấp nội bộ báo động rung thiết bị cho tất cả thành viên.
+- [ ] **Khảo sát ẩn danh (Anonymous Post-trip Feedback):** Cuối chuyến đi, một bảng review vui vẻ ẩn danh giúp xí xóa tâm lý, rút kinh nghiệm (ví dụ: vote người hay lề mề nhất, khen ngợi thủ quỹ...).
 - [ ] **Mô hình kinh doanh (Phase tiếp theo):** Thành viên đăng bản sao lịch trình lên cộng đồng kiếm affiliate.
 - [ ] **Định vị vật phẩm (Tag Tracking - Phase tiếp theo):** Hỗ trợ tích hợp Smart Tag Bluetooth để quản lý vali chung/thú cưng.
 
@@ -39,7 +42,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 
 <!-- Explicit boundaries. Includes reasoning to prevent re-adding. -->
 
-- [Kỷ niệm ảo AR/Energy Monitor] — Ghi nhận ý tưởng nhưng không đưa vào V1 để ưu tiên nguồn lực cốt lõi.
+- [Kỷ niệm ảo AR/Energy Monitor/Ví điện tử tạm thời] — Ghi nhận ý tưởng mở rộng nhưng không đưa vào V1 để ưu tiên nguồn lực cốt lõi.
 - [Nhật ký chạy tự động / Vlog auto-render] — Tạm gác lại do chưa cần thiết ở giai đoạn đầu và chi phí render cao.
 - [Chia tiền lẻ tẻ tự động] — Tạm thời nằm ngoài phạm vi V1, V1 sẽ tập trung vào "Quỹ chung".
 - [Sửa chung Real-time] — V1 chỉ cấp quyền cho Leader tạo/sửa lịch trình để dễ kiểm soát dữ liệu.
