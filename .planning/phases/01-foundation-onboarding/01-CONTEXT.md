@@ -22,7 +22,7 @@ Establishing the core technical foundation and initial user onboarding experienc
 - **D-04:** Multi-modal Login: System will support a hybrid approach combining traditional Email/Password, Social Auth (Google/Facebook), and passwordless Magic Links to maximize conversion.
 
 ### Guest Join Experience
-- **D-05:** "Lôi kéo kiểu hờ hững" (High Virality): Unauthenticated users clicking a trip link are immediately shown the Trip Itinerary (Read-only mode). They are only prompted to register/login when attempting interactive actions (e.g., voting on food, joining a car, editing).
+- **D-05:** High Virality Preview: Unauthenticated users clicking a trip link are immediately shown the Trip Itinerary (Read-only mode). They are only prompted to register/login when attempting interactive actions (e.g., voting on food, joining a car, editing).
 
 ### UI/UX Aesthetic
 - **D-06:** Vibrant & Playful: GenZ-friendly styling. Bright colors, rounded corners (chubbly), and bouncy micro-animations (similar to Tinder or Duolingo). Not a dry, minimalist corporate utility.
