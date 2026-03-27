@@ -20,13 +20,15 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] **Lên kế hoạch linh hoạt:** Hỗ trợ tạo chuyến đi cho 1 mình, nhóm bạn, hoặc tập thể lớn.
-- [ ] **Bản đồ & Định vị nhóm:** Hiển thị lịch trình trên bản đồ tương tác, tự động tính khoảng cách/thời gian. Theo dõi vị trí các thành viên trong chuyến đi (biết ai đã đến điểm tập trung, ai đã về nhà an toàn).
-- [ ] **Timeline Lịch trình & Nhắc nhở:** Hiển thị dòng thời gian các hoạt động (đã qua, đang diễn ra, sắp tới). Có hệ thống thông báo nhắc nhở trước chuyến đi, đến ngày đi và kết thúc chuyến đi.
-- [ ] **Phân công nhiệm vụ (To-do List):** Trưởng nhóm giao việc (thuê xe, book phòng...). Người được giao có thể xác nhận "Done", tải lên minh chứng/thông tin booking kèm thông báo báo cáo.
-- [ ] **Quản lý Quỹ nhóm & Chi phí:** Cung cấp mẫu dự toán chi phí để áp dụng nhanh. Quản lý quỹ tập trung bởi leader/thủ quỹ, hỗ trợ hiển thị mã QR (MoMo/Ngân hàng) để thu tiền, theo dõi tiến độ đóng quỹ và nhắc nhở thành viên.
-- [ ] **Kho lưu trữ kỷ niệm:** Album ảnh/video chung trên cloud của chuyến đi. Thành viên có thể chủ động upload và download trực tiếp trên app cực nhanh gọn không cần qua Google Drive.
-- [ ] **Khám phá & Cảnh báo thông minh (Contextual Alerts):** Cảnh báo thời tiết cho các điểm đến sắp tới trên timeline để linh hoạt đổi lịch. Gợi ý thông minh các tiện ích xung quanh (trạm xăng, trạm y tế...).
+- [ ] **Lên kế hoạch linh hoạt:** Hỗ trợ tạo chuyến đi cho 1 mình, nhóm bạn, hoặc tập thể lớn. Tích hợp tính năng "Quẹt (Swipe)" kiểu Tinder để khảo sát ý kiến ăn uống/vui chơi trong nhóm.
+- [ ] **Lịch trình sống động:** Hiển thị timeline các hoạt động (đã qua, đang diễn ra, sắp tới). Cho phép linh hoạt bổ sung hoặc thay đổi lịch trình ngay cả khi chuyến đi đang lấp đầy hay trống lịch.
+- [ ] **Bản đồ & Định vị nhóm:** Hiển thị lịch trình trên bản đồ. Theo dõi vị trí các thành viên (biết ai đã đến điểm tập trung, ai đã về nhà an toàn).
+- [ ] **Phân công & Hạ tầng Logistics (Smart To-do & Packing List):** Trưởng nhóm giao việc lớn (thuê xe, book phòng) và đồ dùng dùng chung. Check-list nhiều điểm chạm: Đã giao -> Xác nhận đã ghi nhớ -> Đã hoàn thành (Load minh chứng/ảnh/thông tin booking).
+- [ ] **Quản lý Quỹ nhóm & Chi phí:** Cung cấp mẫu dự toán chi phí. Quản lý quỹ bởi thủ quỹ, hiển thị mã QR (MoMo/Ngân hàng) để thu tiền, theo dõi tiến độ đóng quỹ và nhắc nhở thành viên.
+- [ ] **Kho lưu trữ số (Media & Digital Wallet):** Cloud chia sẻ ảnh/video siêu nhanh cho nhóm. "Két sắt ảo" để thu thập bản sao giấy tờ (CCCD, vé máy bay/khách sạn) giúp Leader dễ check-in.
+- [ ] **Khám phá & Cảnh báo thông minh:** Hiển thị thời tiết cho các điểm đến sắp tới trên timeline. Gợi ý thông minh các trạm y tế, trạm xăng lân cận.
+- [ ] **Giải trí & Gắn kết (Gamification):** Tích hợp các mini-game (Truth or Dare, Quiz, Xoay vòng...) trên app để chơi giết thời gian lúc đi xe gường nằm/di chuyển xa.
+- [ ] **Cứu hộ khẩn cấp (SOS Alert):** Nút SOS khẩn cấp, khi kích hoạt sẽ phát tín hiệu thiết bị rung cảnh báo và hiển thị vị trí cho tất cả các thành viên trong nhóm.
 - [ ] **Mô hình kinh doanh (Phase tiếp theo):** Thành viên đăng bản sao lịch trình (ví dụ: Đà Lạt 3N2Đ) lên cộng đồng; người khác copy lịch trình sẽ giúp người tạo ra hoa hồng (affiliate).
 
 ### Out of Scope
@@ -34,7 +36,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 <!-- Explicit boundaries. Includes reasoning to prevent re-adding. -->
 
 - [Chia tiền lẻ tẻ (Split bill) tự động] — Tạm thời nằm ngoài phạm vi V1, V1 sẽ tập trung vào quản lý "Quỹ chung" (thu trước, chi sau) để đơn giản hóa luồng tiền. Tích hợp sau.
-- [Sửa chung Real-time / Cấp quyền tự do] — V1 chỉ cấp quyền cho Leader tạo/sửa lịch trình và Member nhận việc/đề xuất. Real-time co-editing (như Google Docs) là quá phức tạp cho MVP và sẽ làm sau.
+- [Sửa chung Real-time / Cấp quyền tự do] — V1 chỉ cấp quyền cho Leader tạo/sửa lịch trình và Member nhận việc/vote. Real-time co-editing (như Google Docs) là quá phức tạp cho MVP và sẽ làm sau.
 
 ## Context
 
