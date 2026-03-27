@@ -23,6 +23,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 - [ ] **Lên kế hoạch linh hoạt & Chợ Lịch trình 1-Chạm:** Hỗ trợ tạo chuyến đi đa dạng quy mô. Cung cấp Thư viện Template cộng đồng, bấm 1 nút để sao chép nguyên mẫu lịch trình (vd: "Đà Lạt 3N2Đ") vào ngày đi của nhóm. Tích hợp tính năng "Quẹt (Swipe)" kiểu Tinder để khảo sát ý kiến.
 - [ ] **Lộ trình Ẩm thực (Culinary Routing):** Cho phép "Xếp lịch trình theo đường bao tử". Chọn các món muốn ăn, AI tự vẽ lộ trình đi qua các quán ngon nhất hợp logic di chuyển để chống đi ngược đường.
 - [ ] **Trợ lý Thời trang & Dresscode (AI Outfit Planner):** (Optional) Tích hợp AI gợi ý màu sắc/kiểu dáng trang phục dựa trên thời tiết, phong cảnh điểm đến. Phối hợp checklist hành lý.
+- [ ] **Phân Tách Nhóm Thông Minh (Smart Room & Ride Allocation):** Giải quyết nỗi đau xếp xe/xếp phòng cho nhóm đông. Cung cấp 3 chế độ linh hoạt: (1) Leader tự chắp nối xếp thả; (2) Mở để mọi người tự do đăng ký chọn chỗ/phòng trống; (3) Hệ thống xếp Random ngẫu nhiên vui nhộn.
 - [ ] **Nhập liệu tự động (Auto-parsing Hub):** Tích hợp AI đọc email nội dung vé máy bay, booking khách sạn được forward tới. Tự động xếp vào khung giờ đúng trên Timeline.
 - [ ] **Lịch trình sống động:** Hiển thị timeline hoạt động linh hoạt. Cảnh báo vi phạm sức khỏe.
 - [ ] **Hồ sơ Cá nhân hóa (Health & Dietary Profile):** Thành viên tự khai báo dị ứng, say xe... App tự map vào lịch trình chung để cảnh báo hoặc xếp ghế.
@@ -31,7 +32,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 - [ ] **Bản đồ & Định vị nhóm:** Theo dõi vị trí thiết bị các thành viên.
 - [ ] **Tương tác Ngoại tuyến (Offline Mode & Mesh Network):** Tự động chuyển qua kết nối phân tán (Mesh) để nhắn tin và tìm vị trí tầm ngắn khi mất sóng.
 - [ ] **Phân công & Hạ tầng Logistics (Smart To-do):** Trưởng nhóm giao việc. Tracking hoàn thành.
-- [ ] **Quản lý Quỹ nhóm & Chi phí:** Mẫu dự toán. Quản lý quỹ bởi thủ quỹ, QR code đóng tiền (MoMo/Bank), nhắc nhở đóng quỹ.
+- [ ] **Quản lý Quỹ nhóm & Chi phí:** Mẫu dự toán. Quản lý quỹ bởi thủ quỹ, QR code đóng tiền (MoMo/Bank), nhắc tự động.
 - [ ] **Kho lưu trữ số:** Cloud chia sẻ media. "Két sắt ảo" để thu thập chứng minh thư/vé máy bay.
 - [ ] **Chiến lược Quà tặng (Souvenir Planner):** Gợi ý đặc sản uy tín, nhắc nhở mua sắm cuối chuyến.
 - [ ] **Khám phá & Cảnh báo:** Thời tiết điểm đến. Trạm y tế, trạm xăng lân cận.
@@ -40,7 +41,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 - [ ] **Gắn kết Hậu chuyến đi (Reunion Organizer):** Nhắc lịch off-team sau chuyến đi. Gửi E-invite.
 - [ ] **Cứu hộ dã chiến (On-demand Concierge):** Gọi đội sửa xe/cứu hộ địa phương đã xác minh.
 - [ ] **Giải trí & Cứu hộ (Gamification & SOS):** Mini-game trên app. Nút SOS khẩn cấp nội bộ.
-- [ ] **Khảo sát ẩn danh (Anonymous Feedback):** Cuối chuyến đi review vui vẻ ẩn danh.
+- [ ] **Khảo sát ẩn danh (Anonymous Feedback):** Cuối chuyến đi review tự do ẩn danh.
 - [ ] **Mô hình thương mại (Phase tiếp theo):** Thành viên đăng bản sao lịch trình kiếm affiliate.
 - [ ] **Định vị vật phẩm (Phase tiếp theo):** Tích hợp Smart Tag Bluetooth quản lý vali/thú cưng.
 
@@ -48,7 +49,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 
 <!-- Explicit boundaries. Includes reasoning to prevent re-adding. -->
 
-- [Nhật ký chạy tự động / Vlog auto-render / Kỷ niệm AR] — Ghi nhận ý tưởng nhưng không đưa vào V1 để ưu tiên nguồn lực.
+- [Nhật ký chạy tự động / Vlog auto-render / Kỷ niệm AR / Dịch vụ hành lý / Tự động phiên dịch giọng nói / Đồng hồ sinh học] — Ghi nhận ý tưởng nhưng không đưa vào V1 để ưu tiên nguồn lực.
 - [Chia tiền lẻ tẻ tự động] — Tạm thời nằm ngoài phạm vi V1, V1 sẽ tập trung vào "Quỹ chung".
 - [Sửa chung Real-time] — V1 chỉ cấp quyền cho Leader tạo/sửa lịch trình.
 
