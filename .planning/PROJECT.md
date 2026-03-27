@@ -24,7 +24,7 @@ Sự tiện lợi tối đa và loại bỏ hoàn toàn các "nỗi đau" (pain 
 - [ ] **Lộ trình Ẩm thực (Culinary Routing):** "Xếp lịch trình theo đường bao tử". Chọn món muốn ăn, AI vẽ lộ trình hợp logic di chuyển chống đi ngược đường.
 - [ ] **Trợ lý Thời trang & Dresscode (AI Outfit Planner):** (Optional) Tích hợp AI gợi ý màu sắc/kiểu dáng trang phục dựa trên thời tiết, cảnh quan. Phối hợp checklist túi đồ.
 - [ ] **Phân Tách Nhóm Thông Minh (Smart Room & Ride Allocation):** Giải quyết nỗi đau xếp xe/xếp phòng cho nhóm đông bằng 3 chế độ: (1) Leader tự chắp nối xếp thả; (2) Tự do đăng ký slot trống; (3) Hệ thống xếp Random.
-- [ ] **Điểm danh bằng Selfie (Photo-Proof Check-in):** Leader tạo điểm hẹn. Thành viên phải chụp 1 bức ảnh cá nhân (selfie) ngay tại vị trí tập trung để xác nhận "Đã đến" thay vì bấm nút suông. Vừa chống cao su vừa làm kho ảnh dìm.
+- [ ] **Điểm danh bằng Selfie & Trạm Tập trung (Photo-Proof Check-in):** Leader được cấp quyền thiết lập "Điểm Tập Trung" & Giờ khởi hành. Ứng dụng cung cấp một bảng trạng thái (Dashboard) báo cáo Real-time hiển thị "Ai đã có mặt" và "Ai chưa đến". Thành viên khi tới điểm hẹn bắt buộc phải chụp 1 bức ảnh cá nhân (selfie) tại đó để App xác nhận "Đã đến". Chống cao su tuyệt đối!
 - [ ] **Nhập liệu tự động (Auto-parsing Hub):** Tích hợp AI đọc email nội dung vé máy bay, booking khách sạn được forward tới, tự xếp vào Timeline.
 - [ ] **Lịch trình sống động:** Hiển thị timeline hoạt động linh hoạt.
 - [ ] **Hồ sơ Cá nhân hóa (Health & Dietary Profile):** Thành viên tự khai báo dị ứng, say xe... App map vào lịch trình chung để cảnh báo hoặc xếp ghế.
