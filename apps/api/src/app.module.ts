@@ -7,6 +7,8 @@ import { TripsModule } from './trips/trips.module';
 import { AuthModule } from './auth/auth.module';
 import { ItineraryModule } from './itinerary/itinerary.module';
 import { ProposalsModule } from './proposals/proposals.module';
+import { VotesModule } from './votes/votes.module';
+import { TemplatesModule } from './templates/templates.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { ProposalsModule } from './proposals/proposals.module';
     TripsModule,
     ItineraryModule,
     ProposalsModule,
+    VotesModule,
+    TemplatesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
