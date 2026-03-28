@@ -17,7 +17,7 @@ expected: Kill any running dev server. Run `npm run dev` from scratch. Both the 
 result: pass
 
 ### 2. Register a New Account
-expected: Navigate to /auth/register. Fill in name, email, and password. Click register. Should redirect to the home page showing "Chào buổi sáng, [Name]!" greeting with logged-in state.
+expected: Navigate to /auth/register. Fill in name, email, and password. Click register. It should redirect to the home page and show the logged-in personalized greeting.
 result: pass
 
 ### 3. Login with Existing Account
@@ -25,21 +25,19 @@ expected: Navigate to /auth/login. Enter the credentials from the registration. 
 result: pass
 
 ### 4. Logout
-expected: While logged in on the home page, click the "Đăng xuất" button. Should return to the guest view showing "Bắt Đầu Ngay" CTA.
+expected: While logged in on the home page, click the logout button. It should return to the guest view with the primary get-started CTA.
 result: pass
 
 ### 5. Dashboard — Create a Trip
-expected: Log in, then navigate to /dashboard. Click "Tạo chuyến đi mới". Fill in trip name ("Đà Lạt Mộng Mơ"), destination ("Đà Lạt, Lâm Đồng"), start date, and end date. Click "Tạo chuyến đi 🚀". Should show a success screen with a shareable link and a "Xem chuyến đi" button.
+expected: Log in, then navigate to /dashboard. Click the create-trip CTA. Fill in trip name ("Da Lat Dream Trip"), destination ("Da Lat, Lam Dong"), start date, and end date. Submit the form. It should show a success screen with a shareable link and a trip-view button.
 result: pass
 
 ### 6. Trip Preview — View via Join Code (Guest)
-expected: Copy the shareable link from the success screen. Open it in an incognito/new browser window (not logged in). Should see the trip name, destination, dates, member list (with you as Leader), and a "Đăng nhập ngay" prompt (since the viewer is not logged in).
-result: issue
-reported: "\"property name should not exist,property destination should not exist,property startDate should not exist,property endDate should not exist\" tôi gặp lỗi này"
-severity: major
+expected: Copy the shareable link from the success screen. Open it in an incognito/new browser window (not logged in). It should show the trip name, destination, dates, member list (with you as Leader), and a login prompt because the viewer is not authenticated.
+result: pass
 
 ### 7. Trip Preview — Error for Invalid Join Code
-expected: Navigate to /trip/INVALID_CODE. Should show a friendly "Oops! 😅" error page with "Về trang chủ" link.
+expected: Navigate to /trip/INVALID_CODE. It should show a friendly error page with a link back to the home page.
 result: pass
 
 ## Summary
@@ -53,10 +51,12 @@ blocked: 0
 
 ## Gaps
 
-- truth: "Copy the shareable link from the success screen. Open it in an incognito/new browser window (not logged in). Should see the trip name, destination, dates, member list (with you as Leader), and a \"Đăng nhập ngay\" prompt (since the viewer is not logged in)."
-  status: failed
-  reason: "User reported: \"property name should not exist,property destination should not exist,property startDate should not exist,property endDate should not exist\" tôi gặp lỗi này"
+- truth: "Copy the shareable link from the success screen. Open it in an incognito/new browser window (not logged in). It should show the trip name, destination, dates, member list (with you as Leader), and a login prompt because the viewer is not authenticated."
+  status: fixed
+  reason: "User reported the validation error: \"property name should not exist,property destination should not exist,property startDate should not exist,property endDate should not exist\"."
   severity: major
   test: 6
-  artifacts: []
+  root_cause: "ValidationPipe stripped payload because CreateTripDto lacked class-validator decorators"
+  artifacts:
+    - "apps/api/src/trips/dto/create-trip.dto.ts"
   missing: []

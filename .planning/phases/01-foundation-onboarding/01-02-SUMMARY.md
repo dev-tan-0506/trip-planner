@@ -30,7 +30,7 @@ status: complete
    - Conditional CTAs: join button (logged in), login prompt (guest), joined confirmation.
    - Friendly error page for invalid join codes.
 
-6. **Home Page Wiring**: "Tạo Chuyến Đi Mới" button now links to `/dashboard`.
+6. **Home Page Wiring**: The primary "create new trip" CTA now links to `/dashboard`.
 
 7. **Tailwind CSS v4 Migration**: Fixed `globals.css` from v3 directives to v4 syntax (`@import "tailwindcss"` + `@theme`).
 
