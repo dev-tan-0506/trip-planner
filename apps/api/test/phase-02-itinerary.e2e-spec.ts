@@ -329,4 +329,67 @@ describe('Phase 02 Itinerary API', () => {
       expect(approveRes.body.status).toBe('OPEN');
     });
   });
+
+  // ─── Community Template Flow ─────────────────────────
+  describe('Community Template Flow', () => {
+    let templateId: string;
+
+    it('POST /trips/:tripId/templates/publish — leader publishes sanitized template', async () => {
+      const res = await request(app.getHttpServer())
+        .post(`/trips/${tripId}/templates/publish`)
+        .set('Authorization', `Bearer ${leaderToken}`)
+        .send({ title: 'Da Lat Template', summary: 'Test summary' })
+        .expect(201);
+
+      templateId = res.body.id;
+      expect(res.body.title).toBe('Da Lat Template');
+      expect(res.body.sanitizedSnapshot).toBeDefined();
+      expect(res.body.sanitizedSnapshot.destination).toBeDefined();
+      // Verify no joinCode in snapshot
+      expect(JSON.stringify(res.body.sanitizedSnapshot)).not.toContain('joinCode');
+    });
+
+    it('GET /templates — lists published templates', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/templates')
+        .expect(200);
+
+      expect(res.body.length).toBeGreaterThanOrEqual(1);
+      expect(res.body.some((t: any) => t.id === templateId)).toBe(true);
+    });
+
+    it('GET /templates/:templateId — retrieves template with snapshot', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/templates/${templateId}`)
+        .expect(200);
+
+      expect(res.body.id).toBe(templateId);
+      expect(res.body.sanitizedSnapshot.days).toBeDefined();
+    });
+
+    it('POST /templates/:templateId/clone — clones into new trip', async () => {
+      const res = await request(app.getHttpServer())
+        .post(`/templates/${templateId}/clone`)
+        .set('Authorization', `Bearer ${memberToken}`)
+        .send({
+          name: 'Clone Trip',
+          destination: 'Da Lat Clone',
+          startDate: new Date(Date.now() + 86400000).toISOString(),
+          endDate: new Date(Date.now() + 86400000 * 3).toISOString(),
+          timeZone: 'Asia/Ho_Chi_Minh',
+        })
+        .expect(201);
+
+      expect(res.body.joinCode).toBeDefined();
+      expect(res.body.tripId).toBeDefined();
+    });
+
+    it('rejects non-leader publish attempts', async () => {
+      await request(app.getHttpServer())
+        .post(`/trips/${tripId}/templates/publish`)
+        .set('Authorization', `Bearer ${memberToken}`)
+        .send({ title: 'Unauthorized Template' })
+        .expect(403);
+    });
+  });
 });
