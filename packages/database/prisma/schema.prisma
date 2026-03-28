@@ -12,13 +12,36 @@ datasource db {
 model User {
   id            String       @id @default(cuid())
   email         String       @unique
+  passwordHash  String?      // Nullable to support future Social Auth
   name          String?
   avatarUrl     String?
   healthProfile String?      // JSON string: allergies, motion sickness, etc.
+  provider      String       @default("local") // "local", "google", "facebook"
+  providerId    String?      // External provider user ID
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
-  tripMembers   TripMember[]
+  tripMembers              TripMember[]
+  refreshTokens            RefreshToken[]
+  proposedItineraryChanges ItineraryProposal[]  @relation("ProposalProposer")
+  reviewedItineraryChanges ItineraryProposal[]  @relation("ProposalReviewer")
+  createdVoteSessions      VoteSession[]        @relation("VoteSessionCreator")
+  approvedVoteSessions     VoteSession[]        @relation("VoteSessionApprover")
+  publishedTemplates       CommunityTemplate[]  @relation("TemplatePublisher")
+  voteBallots              VoteBallot[]
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
 }
 
 // ─── Trip Management ───────────────────────────────
@@ -30,10 +53,16 @@ model Trip {
   startDate   DateTime
   endDate     DateTime
   joinCode    String       @unique // Shareable link code
+  timeZone    String       @default("Asia/Ho_Chi_Minh")
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  members     TripMember[]
+  members              TripMember[]
+  itineraryItems       ItineraryItem[]
+  itineraryProposals   ItineraryProposal[]
+  voteSessions         VoteSession[]
+  voteSessionOutcomes  VoteSessionOutcome[]
+  communityTemplates   CommunityTemplate[]
 }
 
 enum TripRole {
@@ -52,4 +81,199 @@ model TripMember {
   trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
 
   @@unique([userId, tripId])
+}
+
+// ─── Itinerary ─────────────────────────────────────
+
+model ItineraryItem {
+  id              String    @id @default(cuid())
+  tripId          String
+  dayIndex        Int
+  sortOrder       Int
+  startMinute     Int?
+  title           String
+  locationName    String?
+  locationAddress String?
+  placeId         String?
+  lat             Float?
+  lng             Float?
+  shortNote       String?
+  version         Int       @default(1)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  trip      Trip                @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  proposals ItineraryProposal[] @relation("ProposalTargetItem")
+  voteSessionsAsTarget   VoteSession[]        @relation("VoteSessionTargetItem")
+  voteOutcomesAsTarget   VoteSessionOutcome[] @relation("VoteOutcomeTargetItem")
+  voteOutcomesAsCreated  VoteSessionOutcome[] @relation("VoteOutcomeCreatedItem")
+
+  @@index([tripId, dayIndex])
+  @@unique([tripId, dayIndex, sortOrder])
+}
+
+// ─── Itinerary Proposals ───────────────────────────
+
+enum ItineraryProposalType {
+  ADD_ITEM
+  UPDATE_TIME
+  UPDATE_LOCATION
+  UPDATE_NOTE
+}
+
+enum ItineraryProposalStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  OUTDATED
+}
+
+model ItineraryProposal {
+  id            String                   @id @default(cuid())
+  tripId        String
+  proposerId    String
+  targetItemId  String?
+  type          ItineraryProposalType
+  payload       Json
+  baseVersion   Int?
+  status        ItineraryProposalStatus  @default(PENDING)
+  reviewedById  String?
+  reviewedAt    DateTime?
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
+
+  trip          Trip           @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  proposer      User           @relation("ProposalProposer", fields: [proposerId], references: [id])
+  reviewer      User?          @relation("ProposalReviewer", fields: [reviewedById], references: [id])
+  targetItem    ItineraryItem? @relation("ProposalTargetItem", fields: [targetItemId], references: [id])
+  voteOutcomeAsReplacement VoteSessionOutcome[] @relation("VoteOutcomeReplacementProposal")
+
+  @@index([tripId, status])
+  @@index([targetItemId])
+}
+
+// ─── Voting System ─────────────────────────────────
+
+enum VoteSessionMode {
+  NEW_OPTION
+  REPLACE_ITEM
+  TIE_BREAK
+}
+
+enum VoteSessionStatus {
+  PENDING_APPROVAL
+  OPEN
+  CLOSED
+  LEADER_DECISION_REQUIRED
+}
+
+enum VoteOptionStatus {
+  PENDING_APPROVAL
+  ACTIVE
+  REJECTED
+  WINNER
+  RUNNER_UP
+}
+
+model VoteSession {
+  id                       String            @id @default(cuid())
+  tripId                   String
+  createdById              String
+  targetItemId             String?
+  targetDayIndex           Int?
+  targetInsertAfterItemId  String?
+  mode                     VoteSessionMode
+  status                   VoteSessionStatus @default(PENDING_APPROVAL)
+  deadline                 DateTime
+  parentSessionId          String?
+  approvedById             String?
+  tieBreakRound            Int               @default(0)
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+
+  trip          Trip           @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  createdBy     User           @relation("VoteSessionCreator", fields: [createdById], references: [id])
+  approvedBy    User?          @relation("VoteSessionApprover", fields: [approvedById], references: [id])
+  targetItem    ItineraryItem? @relation("VoteSessionTargetItem", fields: [targetItemId], references: [id])
+  parentSession VoteSession?   @relation("VoteSessionParentChild", fields: [parentSessionId], references: [id])
+  childSessions VoteSession[]  @relation("VoteSessionParentChild")
+  options       VoteOption[]
+  ballots       VoteBallot[]
+  outcome       VoteSessionOutcome?
+
+  @@index([tripId, status])
+}
+
+model VoteOption {
+  id             String           @id @default(cuid())
+  voteSessionId  String
+  title          String
+  payload        Json
+  status         VoteOptionStatus @default(PENDING_APPROVAL)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  voteSession    VoteSession      @relation(fields: [voteSessionId], references: [id], onDelete: Cascade)
+  ballots        VoteBallot[]
+  winningOutcome VoteSessionOutcome[] @relation("VoteOutcomeWinningOption")
+
+  @@index([voteSessionId])
+}
+
+model VoteBallot {
+  id             String      @id @default(cuid())
+  voteSessionId  String
+  userId         String
+  voteOptionId   String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  voteSession    VoteSession @relation(fields: [voteSessionId], references: [id], onDelete: Cascade)
+  user           User        @relation(fields: [userId], references: [id])
+  voteOption     VoteOption  @relation(fields: [voteOptionId], references: [id])
+
+  @@unique([voteSessionId, userId])
+}
+
+model VoteSessionOutcome {
+  id                      String    @id @default(cuid())
+  voteSessionId           String    @unique
+  winningOptionId         String
+  tripId                  String
+  targetItemId            String?
+  targetDayIndex          Int?
+  targetInsertAfterItemId String?
+  createdItemId           String?
+  replacementProposalId   String?
+  payload                 Json
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  voteSession         VoteSession        @relation(fields: [voteSessionId], references: [id], onDelete: Cascade)
+  winningOption       VoteOption         @relation("VoteOutcomeWinningOption", fields: [winningOptionId], references: [id])
+  trip                Trip               @relation(fields: [tripId], references: [id])
+  targetItem          ItineraryItem?     @relation("VoteOutcomeTargetItem", fields: [targetItemId], references: [id])
+  createdItem         ItineraryItem?     @relation("VoteOutcomeCreatedItem", fields: [createdItemId], references: [id])
+  replacementProposal ItineraryProposal? @relation("VoteOutcomeReplacementProposal", fields: [replacementProposalId], references: [id])
+}
+
+// ─── Community Templates ───────────────────────────
+
+model CommunityTemplate {
+  id                String   @id @default(cuid())
+  sourceTripId      String
+  publishedById     String
+  title             String
+  destinationLabel  String
+  summary           String?
+  coverNote         String?
+  daysCount         Int
+  cloneCount        Int      @default(0)
+  sanitizedSnapshot Json
+  status            String   @default("PUBLISHED")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  sourceTrip    Trip @relation(fields: [sourceTripId], references: [id])
+  publishedBy   User @relation("TemplatePublisher", fields: [publishedById], references: [id])
 }
