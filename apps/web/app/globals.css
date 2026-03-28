@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand Colors */
+  --color-brand-coral: #FF6B6B;
+  --color-brand-yellow: #FFD93D;
+  --color-brand-green: #6BCB77;
+  --color-brand-blue: #4D96FF;
+  --color-brand-dark: #1A1A2E;
+  --color-brand-light: #F8F9FA;
+
+  /* Font Family */
+  --font-sans: var(--font-plus-jakarta), sans-serif;
+
+  /* Custom Animations */
+  --animate-bounce-soft: bounceSoft 2s infinite;
+  --animate-fade-in-up: fadeInUp 0.5s ease-out forwards;
+
+  @keyframes bounceSoft {
+    0%, 100% {
+      transform: translateY(-5%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateY(0);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  body {
+    background-color: #F8F9FA;
+    color: #1A1A2E;
+  }
+}
+
+/* Custom Utilities for Bouncy UIs */
+@utility glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@utility glass-dark {
+  background: rgba(26, 26, 46, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}

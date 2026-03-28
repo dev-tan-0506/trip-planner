@@ -1,14 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { randomBytes } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTripDto } from './dto/create-trip.dto';
-import { nanoid } from 'nanoid';
 
 @Injectable()
 export class TripsService {
   constructor(private prisma: PrismaService) {}
 
+  private generateJoinCode(length = 8): string {
+    return randomBytes(length)
+      .toString('base64url')
+      .slice(0, length)
+      .toUpperCase();
+  }
+
   async create(dto: CreateTripDto, leaderUserId: string) {
-    const joinCode = nanoid(8); // Short, shareable code
+    const joinCode = this.generateJoinCode();
 
     const trip = await this.prisma.trip.create({
       data: {
