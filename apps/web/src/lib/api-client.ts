@@ -376,3 +376,124 @@ export const proposalsApi = {
   },
 };
 
+// ─── Votes API ───────────────────────────────────────
+
+export type VoteSessionMode = 'NEW_OPTION' | 'REPLACE_ITEM' | 'TIE_BREAK';
+export type VoteSessionStatus = 'PENDING_APPROVAL' | 'OPEN' | 'CLOSED' | 'LEADER_DECISION_REQUIRED';
+export type VoteOptionStatus = 'PENDING_APPROVAL' | 'ACTIVE' | 'REJECTED' | 'WINNER' | 'RUNNER_UP';
+
+export interface VoteOption {
+  id: string;
+  voteSessionId: string;
+  title: string;
+  payload: Record<string, unknown>;
+  status: VoteOptionStatus;
+  voteCount?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface VoteBallotRef {
+  id: string;
+  userId: string;
+  voteOptionId: string;
+}
+
+export interface VoteSessionOutcome {
+  id: string;
+  voteSessionId: string;
+  winningOptionId: string;
+  tripId: string;
+  targetItemId: string | null;
+  targetDayIndex: number | null;
+  targetInsertAfterItemId: string | null;
+  createdItemId: string | null;
+  replacementProposalId: string | null;
+  payload: Record<string, unknown>;
+}
+
+export interface VoteSession {
+  id: string;
+  tripId: string;
+  createdById: string;
+  targetItemId: string | null;
+  targetDayIndex: number | null;
+  targetInsertAfterItemId: string | null;
+  mode: VoteSessionMode;
+  status: VoteSessionStatus;
+  deadline: string;
+  parentSessionId: string | null;
+  tieBreakRound: number;
+  options: VoteOption[];
+  ballots: VoteBallotRef[];
+  createdBy: { id: string; name: string | null; avatarUrl: string | null };
+  outcome: VoteSessionOutcome | null;
+  totalVotes?: number;
+  currentItem?: ItineraryItem | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateVoteSessionPayload {
+  mode: 'NEW_OPTION' | 'REPLACE_ITEM';
+  deadline: string;
+  targetItemId?: string;
+  targetDayIndex?: number;
+  targetInsertAfterItemId?: string;
+}
+
+export interface CreateVoteOptionPayload {
+  title: string;
+  payload: Record<string, unknown>;
+}
+
+export const votesApi = {
+  async createSession(tripId: string, body: CreateVoteSessionPayload): Promise<VoteSession> {
+    return request<VoteSession>(`/trips/${tripId}/votes/sessions`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async listSessions(tripId: string): Promise<VoteSession[]> {
+    return request<VoteSession[]>(`/trips/${tripId}/votes/sessions`);
+  },
+
+  async getSession(tripId: string, sessionId: string): Promise<VoteSession> {
+    return request<VoteSession>(`/trips/${tripId}/votes/sessions/${sessionId}`);
+  },
+
+  async approveSession(sessionId: string): Promise<VoteSession> {
+    return request<VoteSession>(`/vote-sessions/${sessionId}/approve`, {
+      method: 'POST',
+    });
+  },
+
+  async submitBallot(sessionId: string, voteOptionId: string): Promise<VoteBallotRef> {
+    return request<VoteBallotRef>(`/vote-sessions/${sessionId}/ballot`, {
+      method: 'POST',
+      body: JSON.stringify({ voteOptionId }),
+    });
+  },
+
+  async createOption(sessionId: string, body: CreateVoteOptionPayload): Promise<VoteOption> {
+    return request<VoteOption>(`/vote-sessions/${sessionId}/options`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async approveOption(sessionId: string, optionId: string): Promise<VoteOption> {
+    return request<VoteOption>(`/vote-sessions/${sessionId}/options/${optionId}/approve`, {
+      method: 'POST',
+    });
+  },
+
+  async resolveLeaderDecision(sessionId: string, winningOptionId: string): Promise<VoteSession> {
+    return request<VoteSession>(`/vote-sessions/${sessionId}/resolve`, {
+      method: 'POST',
+      body: JSON.stringify({ winningOptionId }),
+    });
+  },
+};
+
