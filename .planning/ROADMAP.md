@@ -6,11 +6,11 @@
 - [x] 1.2: Authentication and Profile basics — Passport.js + JWT self-built auth (AUTH-01, AUTH-02).
 - [x] 1.3: Core Trip Management and Guest Invites (TRIP-01, TRIP-02).
 
-## Phase 2: The Itinerary Engine
+## Phase 2: The Itinerary Engine ✅
 **Focus**: The Drag-and-drop timeline, Maps integration, and Tinder-style collaborative voting.
-- [ ] 2.1: Itinerary Timeline CRUD (PLAN-01, PLAN-02).
-- [ ] 2.2: Tinder-style Voting System using WebSockets (PLAN-03).
-- [ ] 2.3: Community Template Cloning (TRIP-03).
+- [x] 2.1: Itinerary Timeline CRUD (PLAN-01, PLAN-02).
+- [x] 2.2: Tinder-style Voting System using WebSockets (PLAN-03).
+- [x] 2.3: Community Template Cloning (TRIP-03).
 
 ## Phase 3: Logistics & Attendance
 **Focus**: Managing the physical movement and coordination of the group.
