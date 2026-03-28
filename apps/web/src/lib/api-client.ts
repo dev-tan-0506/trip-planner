@@ -497,3 +497,69 @@ export const votesApi = {
   },
 };
 
+// ─── Community Templates ────────────────────────────
+
+export interface TemplateListing {
+  id: string;
+  title: string;
+  destinationLabel: string;
+  summary: string | null;
+  daysCount: number;
+  cloneCount: number;
+  createdAt: string;
+  publishedBy: { id: string; name: string | null; avatarUrl: string | null };
+}
+
+export interface CommunityTemplate extends TemplateListing {
+  sourceTripId: string;
+  publishedById: string;
+  coverNote: string | null;
+  sanitizedSnapshot: {
+    destination: string;
+    days: Array<{
+      dayIndex: number;
+      items: Array<{
+        title: string;
+        startMinute: number | null;
+        locationName: string | null;
+        lat: number | null;
+        lng: number | null;
+        shortNote: string | null;
+        sortOrder: number;
+      }>;
+    }>;
+  };
+  status: string;
+  updatedAt: string;
+}
+
+export const templatesApi = {
+  async list(): Promise<TemplateListing[]> {
+    return request<TemplateListing[]>('/templates');
+  },
+
+  async get(templateId: string): Promise<CommunityTemplate> {
+    return request<CommunityTemplate>(`/templates/${templateId}`);
+  },
+
+  async publish(tripId: string, body: { title: string; summary?: string; coverNote?: string }): Promise<CommunityTemplate> {
+    return request<CommunityTemplate>(`/trips/${tripId}/templates/publish`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async clone(templateId: string, body: {
+    name: string;
+    destination: string;
+    startDate: string;
+    endDate: string;
+    timeZone: string;
+  }): Promise<{ tripId: string; joinCode: string }> {
+    return request<{ tripId: string; joinCode: string }>(`/templates/${templateId}/clone`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+};
+

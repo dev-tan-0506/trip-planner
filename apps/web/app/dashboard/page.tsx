@@ -350,6 +350,29 @@ export default function DashboardPage() {
             </motion.button>
           )}
         </AnimatePresence>
+
+        {/* Template Library Link */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Link
+            href="/templates"
+            className="block w-full group relative overflow-hidden bg-white rounded-3xl shadow-sm border border-gray-100 hover:border-brand-green/40 p-6 transition-all hover:shadow-lg"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-green/5 to-brand-blue/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative flex items-center gap-4">
+              <div className="p-3 bg-brand-green/10 rounded-2xl group-hover:bg-brand-green/20 transition-colors">
+                <Compass size={24} className="text-brand-green" />
+              </div>
+              <div>
+                <h3 className="font-black text-gray-900">Khám phá mẫu hành trình 🌍</h3>
+                <p className="text-sm text-gray-500">Clone hành trình từ cộng đồng, chỉnh sửa theo ý bạn!</p>
+              </div>
+            </div>
+          </Link>
+        </motion.div>
       </main>
     </div>
   );
