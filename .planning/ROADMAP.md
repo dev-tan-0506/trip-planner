@@ -1,10 +1,10 @@
 # Roadmap: Mình Đi Đâu Thế
 
-## Phase 1: Foundation & Onboarding
-**Focus**: Project setup, Authentication, and basic Trip creation (invite via Web Links).
-- [ ] 1.1: Project setup (Next.js PWA, Supabase, Tailwind, Zustand).
-- [ ] 1.2: Authentication and Profile basics (AUTH-01, AUTH-02).
-- [ ] 1.3: Core Trip Management and Guest Invites (TRIP-01, TRIP-02).
+## Phase 1: Foundation & Onboarding ✅
+**Focus**: Project setup, Authentication (Passport.js + JWT), and basic Trip creation (invite via Web Links).
+- [x] 1.1: Project setup (Next.js PWA, NestJS API, Prisma, Tailwind, Zustand).
+- [x] 1.2: Authentication and Profile basics — Passport.js + JWT self-built auth (AUTH-01, AUTH-02).
+- [x] 1.3: Core Trip Management and Guest Invites (TRIP-01, TRIP-02).
 
 ## Phase 2: The Itinerary Engine
 **Focus**: The Drag-and-drop timeline, Maps integration, and Tinder-style collaborative voting.
