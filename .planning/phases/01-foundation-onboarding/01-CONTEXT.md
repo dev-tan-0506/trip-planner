@@ -15,11 +15,11 @@ Establishing the core technical foundation and initial user onboarding experienc
 
 ### Architecture & Tech Stack
 - **D-01:** Frontend: **Next.js (Web PWA)**.
-- **D-02:** Backend: **NestJS** serving REST APIs. This is a deliberate pivot from the initial "backend-less" Supabase approach to ensure strong structural readiness for Phase 2 mobile apps.
+- **D-02:** Backend: **NestJS** serving REST APIs with self-built **Passport.js + JWT** authentication. No external auth provider dependency (Supabase removed). Full control over auth flow.
 - **D-03:** Database: **PostgreSQL** driven by Prisma ORM. Ensures robust relational modeling and ACID compliance for the Group Fund feature.
 
 ### Authentication Strategy
-- **D-04:** Multi-modal Login: System will support a hybrid approach combining traditional Email/Password, Social Auth (Google/Facebook), and passwordless Magic Links to maximize conversion.
+- **D-04:** Multi-modal Login: System will support a hybrid approach combining traditional Email/Password (via Passport.js Local strategy + bcrypt), with future extensibility for Social Auth (Google/Facebook via Passport.js OAuth strategies) and passwordless Magic Links.
 
 ### Guest Join Experience
 - **D-05:** High Virality Preview: Unauthenticated users clicking a trip link are immediately shown the Trip Itinerary (Read-only mode). They are only prompted to register/login when attempting interactive actions (e.g., voting on food, joining a car, editing).

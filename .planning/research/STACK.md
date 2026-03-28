@@ -11,12 +11,14 @@ Trip Planning & Travel Utility App ("Mình Đi Đâu Thế")
 - **UI/UX**: TailwindCSS + Framer Motion.
 
 **2. Backend & Database**
-- **BaaS / Real-time**: Supabase (PostgreSQL + Realtime Subscriptions).
-- **Justification**: The web app needs real-time "Tinder-swipe" voting updates and real-time Photo-proof Check-in dashboards. Supabase handles WebSockets natively.
+- **API Server**: NestJS (REST API + Swagger).
+- **Authentication**: Self-built using Passport.js (Local + JWT strategies), bcrypt for password hashing, and refresh token rotation stored in PostgreSQL.
+- **Database**: PostgreSQL managed by Prisma ORM.
+- **Justification**: Full control over auth flow, no vendor lock-in, no third-party dependency for core auth. Passport.js is battle-tested with 500+ strategies for future Social Auth (Google, Facebook). JWT access token (15m) + secure refresh token rotation ensures both security and UX.
 
 **3. Future Phase (Native App V2)**
 - **Framework**: Expo / React Native.
 - **Deferred Tech**: `react-native-ble-plx` (for Offline Mesh) and Background Location Tracking APIs. These require native modules which will be built after V1 Web App validation.
 
 ## Confidence Level
-High (95%). Pivoting to Web App for V1 drastically reduces Go-To-Market time and removes user friction (app installation), completely validating the core mechanics before investing in deep-tech mobile engineering.
+High (95%). Self-built auth within NestJS provides maximum flexibility and eliminates external service dependency. Passport.js is the most widely adopted Node.js auth middleware with easy extensibility for future Social Auth integration.

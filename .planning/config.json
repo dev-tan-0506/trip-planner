@@ -1,3 +1,6 @@
 {
-  "resolve_model_ids": "omit"
+  "resolve_model_ids": "omit",
+  "workflow": {
+    "_auto_chain_active": false
+  }
 }
