@@ -201,3 +201,178 @@ export const tripsApi = {
     });
   },
 };
+
+// ─── Itinerary API ───────────────────────────────────
+
+export type ProgressState = 'sap toi' | 'dang di' | 'da di' | 'chua chot gio';
+
+export interface ItineraryItem {
+  id: string;
+  tripId: string;
+  dayIndex: number;
+  sortOrder: number;
+  startMinute: number | null;
+  startTime: string | null;
+  title: string;
+  locationName: string | null;
+  locationAddress: string | null;
+  placeId: string | null;
+  lat: number | null;
+  lng: number | null;
+  shortNote: string | null;
+  version: number;
+  progress: ProgressState;
+  proposalCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DayGroup {
+  dayIndex: number;
+  items: ItineraryItem[];
+}
+
+export interface OverlapWarning {
+  itemId: string;
+  conflictsWith: string;
+  dayIndex: number;
+  startMinute: number;
+  message: string;
+}
+
+export interface MapItem {
+  id: string;
+  title: string;
+  lat: number;
+  lng: number;
+  dayIndex: number;
+  sortOrder: number;
+}
+
+export interface ItinerarySnapshot {
+  tripId: string;
+  days: DayGroup[];
+  overlapWarnings: OverlapWarning[];
+  mapItems: MapItem[];
+  totalItems: number;
+  isLeader: boolean;
+  canEdit: boolean;
+}
+
+export interface CreateItineraryItemPayload {
+  title: string;
+  dayIndex: number;
+  insertAfterItemId?: string;
+  startTime?: string;
+  locationName?: string;
+  shortNote?: string;
+  locationAddress?: string;
+  placeId?: string;
+  lat?: number;
+  lng?: number;
+}
+
+export interface UpdateItineraryItemPayload {
+  title?: string;
+  dayIndex?: number;
+  startTime?: string;
+  locationName?: string;
+  shortNote?: string;
+  locationAddress?: string;
+  placeId?: string;
+  lat?: number;
+  lng?: number;
+}
+
+export interface ReorderPayload {
+  items: { itemId: string; dayIndex: number; sortOrder: number }[];
+}
+
+export const itineraryApi = {
+  async getSnapshot(tripId: string): Promise<ItinerarySnapshot> {
+    return request<ItinerarySnapshot>(`/trips/${tripId}/itinerary`);
+  },
+
+  async createItem(tripId: string, body: CreateItineraryItemPayload): Promise<ItinerarySnapshot> {
+    return request<ItinerarySnapshot>(`/trips/${tripId}/itinerary/items`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async updateItem(tripId: string, itemId: string, body: UpdateItineraryItemPayload): Promise<ItinerarySnapshot> {
+    return request<ItinerarySnapshot>(`/trips/${tripId}/itinerary/items/${itemId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async deleteItem(tripId: string, itemId: string): Promise<ItinerarySnapshot> {
+    return request<ItinerarySnapshot>(`/trips/${tripId}/itinerary/items/${itemId}`, {
+      method: 'DELETE',
+    });
+  },
+
+  async reorder(tripId: string, body: ReorderPayload): Promise<ItinerarySnapshot> {
+    return request<ItinerarySnapshot>(`/trips/${tripId}/itinerary/reorder`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+};
+
+// ─── Proposals API ───────────────────────────────────
+
+export type ProposalType = 'ADD_ITEM' | 'UPDATE_TIME' | 'UPDATE_LOCATION' | 'UPDATE_NOTE';
+export type ProposalStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'OUTDATED';
+
+export interface Proposal {
+  id: string;
+  tripId: string;
+  proposerId: string;
+  targetItemId: string | null;
+  type: ProposalType;
+  payload: Record<string, unknown>;
+  baseVersion: number | null;
+  status: ProposalStatus;
+  reviewedById: string | null;
+  reviewedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  proposer: { id: string; name: string | null; avatarUrl: string | null };
+  reviewer: { id: string; name: string | null; avatarUrl: string | null } | null;
+  targetItem: { id: string; title: string; dayIndex: number; version: number } | null;
+}
+
+export interface CreateProposalPayload {
+  type: ProposalType;
+  targetItemId?: string;
+  payload: Record<string, unknown>;
+  baseVersion?: number;
+}
+
+export const proposalsApi = {
+  async listProposals(tripId: string): Promise<Proposal[]> {
+    return request<Proposal[]>(`/trips/${tripId}/proposals`);
+  },
+
+  async createProposal(tripId: string, body: CreateProposalPayload): Promise<Proposal> {
+    return request<Proposal>(`/trips/${tripId}/proposals`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async acceptProposal(tripId: string, proposalId: string): Promise<Proposal> {
+    return request<Proposal>(`/trips/${tripId}/proposals/${proposalId}/accept`, {
+      method: 'POST',
+    });
+  },
+
+  async rejectProposal(tripId: string, proposalId: string): Promise<Proposal> {
+    return request<Proposal>(`/trips/${tripId}/proposals/${proposalId}/reject`, {
+      method: 'POST',
+    });
+  },
+};
+

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { tripsApi, Trip } from '../../../src/lib/api-client';
 import { useAuthStore } from '../../../src/store/useAuthStore';
+import { TripWorkspaceShell } from '../../../src/components/trip/TripWorkspaceShell';
 import { motion } from 'framer-motion';
 import {
   MapPin,
@@ -20,7 +21,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-export default function TripPreviewPage() {
+export default function TripPage() {
   const params = useParams();
   const joinCode = params.joinCode as string;
   const { user, isHydrated } = useAuthStore();
@@ -31,6 +32,7 @@ export default function TripPreviewPage() {
   const [copied, setCopied] = useState(false);
   const [joining, setJoining] = useState(false);
   const [joined, setJoined] = useState(false);
+  const [isMember, setIsMember] = useState(false);
 
   useEffect(() => {
     async function fetchTrip() {
@@ -40,8 +42,9 @@ export default function TripPreviewPage() {
 
         // Check if current user already joined
         if (user) {
-          const isMember = data.members.some((m) => m.user.id === user.id);
-          setJoined(isMember);
+          const memberStatus = data.members.some((m) => m.user.id === user.id);
+          setJoined(memberStatus);
+          setIsMember(memberStatus);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Không tìm thấy chuyến đi');
@@ -64,6 +67,7 @@ export default function TripPreviewPage() {
     try {
       await tripsApi.join(joinCode);
       setJoined(true);
+      setIsMember(true);
       // Refresh trip data to show updated member list
       const updated = await tripsApi.getByJoinCode(joinCode);
       setTrip(updated);
@@ -130,6 +134,54 @@ export default function TripPreviewPage() {
   const leader = trip.members.find((m) => m.role === 'LEADER');
   const dayCount = getDayCount(trip.startDate, trip.endDate);
 
+  // ── Member workspace view ──
+  if (user && isMember) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-brand-light via-white to-brand-blue/5">
+        {/* Floating Background Shapes */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 -left-20 w-72 h-72 bg-brand-yellow/10 rounded-full filter blur-3xl" />
+          <div className="absolute top-40 -right-20 w-80 h-80 bg-brand-coral/10 rounded-full filter blur-3xl" />
+        </div>
+
+        {/* Header */}
+        <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/70 border-b border-gray-200/50">
+          <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <Link href="/dashboard" className="flex items-center gap-2 group">
+              <div className="p-1.5 bg-brand-yellow/20 rounded-xl group-hover:bg-brand-yellow/30 transition-colors">
+                <Compass size={20} className="text-brand-yellow" />
+              </div>
+              <div className="hidden sm:block">
+                <p className="font-black text-sm text-gray-900 leading-tight">{trip.name}</p>
+                <p className="text-xs text-gray-500 flex items-center gap-1">
+                  <MapPin size={10} /> {trip.destination} · {dayCount} ngày
+                </p>
+              </div>
+            </Link>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 font-medium hidden sm:block">
+                {trip.members.length} thành viên
+              </span>
+              <button
+                onClick={handleCopy}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium text-xs transition-all active:scale-95"
+              >
+                {copied ? <Check size={14} className="text-brand-green" /> : <Share2 size={14} />}
+                {copied ? 'Đã copy!' : 'Chia sẻ'}
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main className="relative z-10 max-w-5xl mx-auto px-4 py-6">
+          <TripWorkspaceShell trip={trip} joinCode={joinCode} />
+        </main>
+      </div>
+    );
+  }
+
+  // ── Guest preview / Join CTA ──
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-light via-white to-brand-blue/5">
       {/* Floating Background Shapes */}
@@ -169,7 +221,6 @@ export default function TripPreviewPage() {
           transition={{ duration: 0.5 }}
           className="relative overflow-hidden bg-gradient-to-br from-brand-dark via-brand-dark/95 to-brand-dark/90 rounded-3xl p-8 text-white"
         >
-          {/* Decorative elements */}
           <div className="absolute top-0 right-0 w-40 h-40 bg-brand-coral/20 rounded-full filter blur-3xl" />
           <div className="absolute bottom-0 left-0 w-32 h-32 bg-brand-blue/20 rounded-full filter blur-2xl" />
 
@@ -208,18 +259,13 @@ export default function TripPreviewPage() {
           className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 p-6 space-y-6"
         >
           <h2 className="text-lg font-black text-gray-900">📅 Lịch trình</h2>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-brand-green/5 rounded-2xl p-4 border border-brand-green/10">
-              <p className="text-xs font-bold text-brand-green uppercase tracking-wider mb-1">
-                Ngày đi
-              </p>
+              <p className="text-xs font-bold text-brand-green uppercase tracking-wider mb-1">Ngày đi</p>
               <p className="text-lg font-bold text-gray-900">{formatDate(trip.startDate)}</p>
             </div>
             <div className="bg-brand-coral/5 rounded-2xl p-4 border border-brand-coral/10">
-              <p className="text-xs font-bold text-brand-coral uppercase tracking-wider mb-1">
-                Ngày về
-              </p>
+              <p className="text-xs font-bold text-brand-coral uppercase tracking-wider mb-1">Ngày về</p>
               <p className="text-lg font-bold text-gray-900">{formatDate(trip.endDate)}</p>
             </div>
           </div>
@@ -235,7 +281,6 @@ export default function TripPreviewPage() {
           <h2 className="text-lg font-black text-gray-900">
             👥 Thành viên ({trip.members.length})
           </h2>
-
           <div className="space-y-3">
             {trip.members.map((member, i) => (
               <motion.div
@@ -255,9 +300,7 @@ export default function TripPreviewPage() {
                   {(member.user.name || '?').charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-bold text-gray-900 truncate">
-                    {member.user.name || 'Ẩn danh'}
-                  </p>
+                  <p className="font-bold text-gray-900 truncate">{member.user.name || 'Ẩn danh'}</p>
                   <p className="text-xs text-gray-500">
                     {member.role === 'LEADER' ? '👑 Trưởng đoàn' : '🎒 Thành viên'}
                   </p>
@@ -282,23 +325,9 @@ export default function TripPreviewPage() {
               disabled={joining}
               className="px-8 py-4 bg-white text-brand-blue rounded-2xl font-black text-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 active:scale-95 disabled:opacity-60 flex items-center gap-2 mx-auto"
             >
-              {joining ? (
-                <Loader2 size={20} className="animate-spin" />
-              ) : (
-                <UserPlus size={20} />
-              )}
+              {joining ? <Loader2 size={20} className="animate-spin" /> : <UserPlus size={20} />}
               {joining ? 'Đang tham gia...' : 'Tham gia ngay!'}
             </button>
-          </motion.div>
-        )}
-
-        {user && joined && (
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-brand-green/10 border border-brand-green/20 rounded-3xl p-6 text-center"
-          >
-            <p className="text-brand-green font-bold text-lg">✅ Bạn đã tham gia chuyến đi này!</p>
           </motion.div>
         )}
 
