@@ -244,4 +244,89 @@ describe('Phase 02 Itinerary API', () => {
       expect(day0Items[1].sortOrder).toBe(2);
     });
   });
+
+  // ─── Vote Session Flow ─────────────────────────────
+  describe('Vote Session Flow', () => {
+    let voteSessionId: string;
+    let voteOptionId: string;
+
+    it('POST /trips/:tripId/votes/sessions — leader creates an OPEN session', async () => {
+      const res = await request(app.getHttpServer())
+        .post(`/trips/${tripId}/votes/sessions`)
+        .set('Authorization', `Bearer ${leaderToken}`)
+        .send({
+          mode: 'NEW_OPTION',
+          deadline: new Date(Date.now() + 3600000).toISOString(), // 1hr from now
+          targetDayIndex: 0,
+        })
+        .expect(201);
+
+      voteSessionId = res.body.id;
+      expect(res.body.status).toBe('OPEN');
+      expect(res.body.mode).toBe('NEW_OPTION');
+    });
+
+    it('POST /vote-sessions/:sessionId/options — leader adds an option', async () => {
+      const res = await request(app.getHttpServer())
+        .post(`/vote-sessions/${voteSessionId}/options`)
+        .set('Authorization', `Bearer ${leaderToken}`)
+        .send({
+          title: 'Visit Dragon Bridge',
+          payload: { title: 'Visit Dragon Bridge', locationName: 'Dragon Bridge' },
+        })
+        .expect(201);
+
+      voteOptionId = res.body.id;
+      expect(res.body.status).toBe('ACTIVE');
+    });
+
+    it('POST /vote-sessions/:sessionId/ballot — member submits a ballot', async () => {
+      const res = await request(app.getHttpServer())
+        .post(`/vote-sessions/${voteSessionId}/ballot`)
+        .set('Authorization', `Bearer ${memberToken}`)
+        .send({ voteOptionId })
+        .expect(201);
+
+      expect(res.body.voteOptionId).toBe(voteOptionId);
+    });
+
+    it('GET /trips/:tripId/votes/sessions/:sessionId — retrieves session snapshot', async () => {
+      const res = await request(app.getHttpServer())
+        .get(`/trips/${tripId}/votes/sessions/${voteSessionId}`)
+        .set('Authorization', `Bearer ${leaderToken}`)
+        .expect(200);
+
+      expect(res.body.id).toBe(voteSessionId);
+      expect(res.body.ballots.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('POST /vote-sessions/:sessionId/approve — rejects if session already open', async () => {
+      await request(app.getHttpServer())
+        .post(`/vote-sessions/${voteSessionId}/approve`)
+        .set('Authorization', `Bearer ${leaderToken}`)
+        .expect(400);
+    });
+
+    it('member-created session starts as PENDING_APPROVAL', async () => {
+      const res = await request(app.getHttpServer())
+        .post(`/trips/${tripId}/votes/sessions`)
+        .set('Authorization', `Bearer ${memberToken}`)
+        .send({
+          mode: 'NEW_OPTION',
+          deadline: new Date(Date.now() + 7200000).toISOString(),
+          targetDayIndex: 1,
+        })
+        .expect(201);
+
+      expect(res.body.status).toBe('PENDING_APPROVAL');
+
+      // Leader approves
+      const approveRes = await request(app.getHttpServer())
+        .post(`/vote-sessions/${res.body.id}/approve`)
+        .set('Authorization', `Bearer ${leaderToken}`)
+        .expect(201);
+
+      expect(approveRes.body.status).toBe('OPEN');
+    });
+  });
 });
