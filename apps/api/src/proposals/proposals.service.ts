@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProposalDto } from './dto/create-proposal.dto';
-import { ItineraryProposalStatus } from '@prisma/client';
 
 @Injectable()
 export class ProposalsService {
@@ -101,7 +100,7 @@ export class ProposalsService {
         proposerId: userId,
         targetItemId: dto.targetItemId,
         type: dto.type,
-        payload: dto.payload,
+        payload: dto.payload as any,
         baseVersion: dto.baseVersion,
       },
       include: {
@@ -124,13 +123,13 @@ export class ProposalsService {
     const result = await this.prisma.itineraryProposal.updateMany({
       where: {
         targetItemId,
-        status: ItineraryProposalStatus.PENDING,
+        status: 'PENDING',
         NOT: {
           baseVersion: currentVersion,
         },
       },
       data: {
-        status: ItineraryProposalStatus.OUTDATED,
+        status: 'OUTDATED',
       },
     });
 
