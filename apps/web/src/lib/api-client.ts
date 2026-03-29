@@ -1,5 +1,17 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
+export class ApiRequestError extends Error {
+  status?: number;
+  code: 'network_error' | 'http_error';
+
+  constructor(message: string, code: 'network_error' | 'http_error', status?: number) {
+    super(message);
+    this.name = 'ApiRequestError';
+    this.code = code;
+    this.status = status;
+  }
+}
+
 // ─── Token Management ────────────────────────────────
 
 let accessToken: string | null = null;
@@ -38,26 +50,40 @@ async function request<T>(
     headers['Authorization'] = `Bearer ${accessToken}`;
   }
 
-  let response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-    headers,
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, {
+      ...options,
+      headers,
+    });
+  } catch {
+    throw new ApiRequestError('Không thể kết nối tới máy chủ', 'network_error');
+  }
 
   // Auto-refresh on 401
   if (response.status === 401 && getStoredRefreshToken()) {
     const refreshed = await refreshTokens();
     if (refreshed) {
       headers['Authorization'] = `Bearer ${accessToken}`;
-      response = await fetch(`${API_BASE_URL}${path}`, {
-        ...options,
-        headers,
-      });
+      try {
+        response = await fetch(`${API_BASE_URL}${path}`, {
+          ...options,
+          headers,
+        });
+      } catch {
+        throw new ApiRequestError('Không thể kết nối tới máy chủ', 'network_error');
+      }
     }
   }
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ message: 'Request failed' }));
-    throw new Error(error.message || `HTTP ${response.status}`);
+    throw new ApiRequestError(
+      error.message || `HTTP ${response.status}`,
+      'http_error',
+      response.status,
+    );
   }
 
   return response.json();
@@ -193,6 +219,10 @@ export const tripsApi = {
 
   async getByJoinCode(joinCode: string): Promise<Trip> {
     return request<Trip>(`/trips/${joinCode}`);
+  },
+
+  async getPrivateByJoinCode(joinCode: string): Promise<Trip> {
+    return request<Trip>(`/trips/${joinCode}/private`);
   },
 
   async join(joinCode: string): Promise<TripMember> {
@@ -437,6 +467,7 @@ export interface VoteSession {
 export interface CreateVoteSessionPayload {
   mode: 'NEW_OPTION' | 'REPLACE_ITEM';
   deadline: string;
+  description?: string;
   targetItemId?: string;
   targetDayIndex?: number;
   targetInsertAfterItemId?: string;
@@ -510,6 +541,13 @@ export interface TemplateListing {
   publishedBy: { id: string; name: string | null; avatarUrl: string | null };
 }
 
+export interface PublishedTemplateStatus {
+  id: string;
+  title: string;
+  status: string;
+  createdAt: string;
+}
+
 export interface CommunityTemplate extends TemplateListing {
   sourceTripId: string;
   publishedById: string;
@@ -549,6 +587,10 @@ export const templatesApi = {
     });
   },
 
+  async getPublishedForTrip(tripId: string): Promise<PublishedTemplateStatus | null> {
+    return request<PublishedTemplateStatus | null>(`/trips/${tripId}/templates/published`);
+  },
+
   async clone(templateId: string, body: {
     name: string;
     destination: string;
@@ -559,6 +601,114 @@ export const templatesApi = {
     return request<{ tripId: string; joinCode: string }>(`/templates/${templateId}/clone`, {
       method: 'POST',
       body: JSON.stringify(body),
+    });
+  },
+};
+
+// ─── Logistics Allocation ────────────────────────────
+
+export interface AllocationUnitMember {
+  assignmentId: string;
+  tripMemberId: string;
+  userId: string;
+  name: string | null;
+  avatarUrl: string | null;
+  source: string;
+  role: string;
+}
+
+export interface AllocationUnit {
+  id: string;
+  type: 'ROOM' | 'RIDE';
+  label: string;
+  capacity: number;
+  sortOrder: number;
+  note: string | null;
+  occupancy: number;
+  remainingCapacity: number;
+  isOverbooked: boolean;
+  overCapacityBy: number;
+  members: AllocationUnitMember[];
+}
+
+export interface AllocationSnapshotMember {
+  tripMemberId: string;
+  userId: string;
+  name: string | null;
+  avatarUrl: string | null;
+  role: string;
+}
+
+export interface AllocationSnapshot {
+  tripId: string;
+  isLeader: boolean;
+  currentTripMemberId: string;
+  roomUnits: AllocationUnit[];
+  rideUnits: AllocationUnit[];
+  totalMembers: number;
+  members: AllocationSnapshotMember[];
+}
+
+export const logisticsApi = {
+  async getAllocations(tripId: string): Promise<AllocationSnapshot> {
+    return request<AllocationSnapshot>(`/trips/${tripId}/logistics/allocations`);
+  },
+
+  async createUnit(
+    tripId: string,
+    body: { type: 'ROOM' | 'RIDE'; label: string; capacity: number; note?: string },
+  ): Promise<AllocationSnapshot> {
+    return request<AllocationSnapshot>(`/trips/${tripId}/logistics/units`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async updateUnit(
+    tripId: string,
+    unitId: string,
+    body: { label?: string; capacity?: number; note?: string },
+  ): Promise<AllocationSnapshot> {
+    return request<AllocationSnapshot>(`/trips/${tripId}/logistics/units/${unitId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async deleteUnit(tripId: string, unitId: string): Promise<AllocationSnapshot> {
+    return request<AllocationSnapshot>(`/trips/${tripId}/logistics/units/${unitId}`, {
+      method: 'DELETE',
+    });
+  },
+
+  async selfJoin(tripId: string, body: { unitId: string }): Promise<AllocationSnapshot> {
+    return request<AllocationSnapshot>(`/trips/${tripId}/logistics/assignments/self-join`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async leave(tripId: string, body: { type: 'ROOM' | 'RIDE' }): Promise<AllocationSnapshot> {
+    return request<AllocationSnapshot>(`/trips/${tripId}/logistics/assignments/leave`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async reassign(
+    tripId: string,
+    body: { tripMemberId: string; targetUnitId: string },
+  ): Promise<AllocationSnapshot> {
+    return request<AllocationSnapshot>(`/trips/${tripId}/logistics/assignments/reassign`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async autoFill(tripId: string, type: 'ROOM' | 'RIDE'): Promise<AllocationSnapshot> {
+    return request<AllocationSnapshot>(`/trips/${tripId}/logistics/auto-fill`, {
+      method: 'POST',
+      body: JSON.stringify({ type }),
     });
   },
 };

@@ -10,13 +10,20 @@ import {
   Loader2,
   Bell,
   RefreshCw,
+  Upload,
+  Vote,
+  BedDouble,
 } from 'lucide-react';
 import {
   itineraryApi,
   proposalsApi,
+  templatesApi,
+  votesApi,
   ItinerarySnapshot,
   Proposal,
+  PublishedTemplateStatus,
   Trip,
+  VoteSession,
 } from '../../lib/api-client';
 import { TimelineDaySection } from './TimelineDaySection';
 import { ItineraryComposerSheet } from './ItineraryComposerSheet';
@@ -24,9 +31,11 @@ import { ItineraryItemEditor } from './ItineraryItemEditor';
 import { DeleteItineraryItemDialog } from './DeleteItineraryItemDialog';
 import { ProposalComposerSheet } from './ProposalComposerSheet';
 import { ProposalInboxPanel } from './ProposalInboxPanel';
+import { PublishTemplateDialog } from '../templates/PublishTemplateDialog';
 import Link from 'next/link';
+import { LogisticsBoardTab } from './LogisticsBoardTab';
 
-type Tab = 'Lich trinh' | 'Ban do' | 'De xuat';
+type Tab = 'Lich trinh' | 'Ban do' | 'De xuat' | 'Phan phong';
 
 interface TripWorkspaceShellProps {
   trip: Trip;
@@ -56,6 +65,9 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
 
   // Proposal inbox states
   const [showProposalInbox, setShowProposalInbox] = useState(false);
+  const [showPublishTemplateDialog, setShowPublishTemplateDialog] = useState(false);
+  const [publishedTemplate, setPublishedTemplate] = useState<PublishedTemplateStatus | null>(null);
+  const [voteSessions, setVoteSessions] = useState<VoteSession[]>([]);
 
   const timelineRef = useRef<HTMLDivElement>(null);
   const currentItemRef = useRef<HTMLDivElement>(null);
@@ -71,6 +83,14 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
       ]);
       setSnapshot(snap);
       setProposals(props);
+      const sessions = await votesApi.listSessions(tripId).catch(() => []);
+      setVoteSessions(sessions);
+      if (snap.isLeader) {
+        const template = await templatesApi.getPublishedForTrip(tripId).catch(() => null);
+        setPublishedTemplate(template);
+      } else {
+        setPublishedTemplate(null);
+      }
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Lỗi tải dữ liệu');
@@ -82,6 +102,32 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      const hasOpenOverlay =
+        showComposer ||
+        !!editingItemId ||
+        !!deletingItemId ||
+        showProposalComposer ||
+        showProposalInbox ||
+        showPublishTemplateDialog;
+
+      if (!document.hidden && !hasOpenOverlay) {
+        fetchData();
+      }
+    }, 5000);
+
+    return () => window.clearInterval(intervalId);
+  }, [
+    deletingItemId,
+    editingItemId,
+    fetchData,
+    showComposer,
+    showProposalComposer,
+    showProposalInbox,
+    showPublishTemplateDialog,
+  ]);
 
   // Auto-scroll to current item after snapshot load
   useEffect(() => {
@@ -99,7 +145,57 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
     setSnapshot(newSnapshot);
   };
 
+  const handleReorderItem = useCallback(
+    async (itemId: string, dayIndex: number, targetIndex: number) => {
+      if (!snapshot) return;
+
+      const nextDays = snapshot.days.map((day) => ({
+        ...day,
+        items: [...day.items],
+      }));
+
+      let movedItem = null as (typeof nextDays)[number]['items'][number] | null;
+
+      for (const day of nextDays) {
+        const sourceIndex = day.items.findIndex((item) => item.id === itemId);
+        if (sourceIndex !== -1) {
+          movedItem = day.items[sourceIndex] ?? null;
+          day.items.splice(sourceIndex, 1);
+          break;
+        }
+      }
+
+      if (!movedItem) return;
+
+      const targetDay = nextDays.find((day) => day.dayIndex === dayIndex);
+      if (!targetDay) return;
+
+      const safeTargetIndex = Math.max(0, Math.min(targetIndex, targetDay.items.length));
+      targetDay.items.splice(safeTargetIndex, 0, movedItem);
+
+      const payload = nextDays.flatMap((day) =>
+        day.items.map((item, index) => ({
+          itemId: item.id,
+          dayIndex: day.dayIndex,
+          sortOrder: index + 1,
+        })),
+      );
+
+      try {
+        const reordered = await itineraryApi.reorder(tripId, { items: payload });
+        setSnapshot(reordered);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Không thể sắp xếp lại lịch trình');
+      }
+    },
+    [snapshot, tripId],
+  );
+
   const pendingProposalCount = proposals.filter((p) => p.status === 'PENDING').length;
+  const openVoteCount = voteSessions.filter(
+    (session) => session.status === 'OPEN' || session.status === 'PENDING_APPROVAL',
+  ).length;
 
   // Find the editing item from snapshot
   const editingItem = editingItemId
@@ -123,6 +219,11 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
       label: 'Đề xuất',
       icon: <MessageSquarePlus size={18} />,
       badge: pendingProposalCount,
+    },
+    {
+      key: 'Phan phong',
+      label: 'Phân phòng/xe',
+      icon: <BedDouble size={18} />,
     },
   ];
 
@@ -180,6 +281,62 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
         </button>
       </div>
 
+      {snapshot?.isLeader ? (
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Link
+            href={`/trip/${joinCode}/votes`}
+            className="flex items-center justify-between rounded-2xl border border-gray-100 bg-white px-4 py-4 shadow-sm transition-all hover:shadow-md"
+          >
+            <div>
+              <p className="text-sm font-black text-gray-900">Bình chọn hoạt động</p>
+              <p className="text-xs text-gray-500">Tạo vote session và xem kết quả trực tiếp</p>
+            </div>
+            <Vote size={18} className="text-brand-coral" />
+          </Link>
+
+          <button
+            onClick={() => {
+              if (!publishedTemplate) {
+                setShowPublishTemplateDialog(true);
+              }
+            }}
+            disabled={!!publishedTemplate}
+            className="flex items-center justify-between rounded-2xl border border-gray-100 bg-white px-4 py-4 text-left shadow-sm transition-all hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:shadow-sm"
+          >
+            <div>
+              <p className="text-sm font-black text-gray-900">
+                {publishedTemplate ? 'Đã chia sẻ template' : 'Xuất bản template'}
+              </p>
+              <p className="text-xs text-gray-500">
+                {publishedTemplate
+                  ? `Template hiện tại: ${publishedTemplate.title}`
+                  : 'Chia sẻ hành trình này lên thư viện cộng đồng'}
+              </p>
+            </div>
+            <Upload size={18} className="text-brand-blue" />
+          </button>
+        </div>
+      ) : (
+        <Link
+          href={`/trip/${joinCode}/votes`}
+          className="flex items-center justify-between rounded-2xl border border-gray-100 bg-white px-4 py-4 shadow-sm transition-all hover:shadow-md"
+        >
+          <div>
+            <p className="text-sm font-black text-gray-900">Đi tới khu bình chọn</p>
+            <p className="text-xs text-gray-500">Vuốt hoặc bấm để chọn phương án cho cả nhóm</p>
+          </div>
+          <Vote size={18} className="text-brand-coral" />
+        </Link>
+      )}
+
+      <Link
+        href={`/trip/${joinCode}/votes`}
+        className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-2xl bg-brand-coral px-4 py-3 text-sm font-black text-white shadow-2xl shadow-brand-coral/30 transition-all hover:-translate-y-0.5 hover:bg-brand-coral/90"
+      >
+        <Vote size={18} />
+        {openVoteCount > 0 ? `${openVoteCount} vote đang mở` : 'Mở bình chọn'}
+      </Link>
+
       {/* Tab Content */}
       <AnimatePresence mode="wait">
         {activeTab === 'Lich trinh' && snapshot && (
@@ -233,36 +390,40 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
                 </p>
               </div>
             ) : (
-              snapshot.days.map((day) => (
-                <TimelineDaySection
-                  key={day.dayIndex}
-                  day={day}
-                  tripStartDate={trip.startDate}
-                  canEdit={snapshot.canEdit}
-                  overlapWarnings={snapshot.overlapWarnings}
-                  currentItemRef={currentItemRef}
-                  joinCode={joinCode}
-                  onAddItem={(dayIndex, insertAfterId) => {
-                    setComposerDayIndex(dayIndex);
-                    setComposerInsertAfterId(insertAfterId);
-                    setShowComposer(true);
-                  }}
-                  onEditItem={(itemId) => setEditingItemId(itemId)}
-                  onDeleteItem={(itemId) => setDeletingItemId(itemId)}
-                  onProposeChange={(itemId, version) => {
-                    setProposalTargetItemId(itemId);
-                    setProposalTargetVersion(version);
-                    setShowProposalComposer(true);
-                  }}
-                />
-              ))
+              <div className="relative space-y-6">
+                <div className="absolute left-4 top-6 bottom-6 w-px bg-gradient-to-b from-brand-blue/30 via-brand-blue/20 to-brand-coral/10" />
+                {snapshot.days.map((day) => (
+                  <TimelineDaySection
+                    key={day.dayIndex}
+                    day={day}
+                    tripStartDate={trip.startDate}
+                    canEdit={snapshot.canEdit}
+                    overlapWarnings={snapshot.overlapWarnings}
+                    currentItemRef={currentItemRef}
+                    joinCode={joinCode}
+                    onAddItem={(dayIndex, insertAfterId) => {
+                      setComposerDayIndex(dayIndex);
+                      setComposerInsertAfterId(insertAfterId);
+                      setShowComposer(true);
+                    }}
+                    onEditItem={(itemId) => setEditingItemId(itemId)}
+                    onDeleteItem={(itemId) => setDeletingItemId(itemId)}
+                    onReorderItem={handleReorderItem}
+                    onProposeChange={(itemId, version) => {
+                      setProposalTargetItemId(itemId);
+                      setProposalTargetVersion(version);
+                      setShowProposalComposer(true);
+                    }}
+                  />
+                ))}
+              </div>
             )}
 
             {/* Proposal inbox badge for leaders */}
             {snapshot.isLeader && pendingProposalCount > 0 && (
               <button
                 onClick={() => setShowProposalInbox(true)}
-                className="fixed bottom-6 right-6 flex items-center gap-2 px-5 py-3.5 bg-brand-dark text-white rounded-2xl font-bold shadow-2xl shadow-brand-dark/30 hover:shadow-3xl transition-all active:scale-95 z-40"
+                className="fixed bottom-24 right-6 flex items-center gap-2 px-5 py-3.5 bg-brand-dark text-white rounded-2xl font-bold shadow-2xl shadow-brand-dark/30 hover:shadow-3xl transition-all active:scale-95 z-40"
               >
                 <Bell size={18} />
                 {pendingProposalCount} đề xuất mới
@@ -308,6 +469,17 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
             />
           </motion.div>
         )}
+
+        {activeTab === 'Phan phong' && (
+          <motion.div
+            key="logistics"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <LogisticsBoardTab tripId={tripId} />
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* Composer Sheet */}
@@ -315,6 +487,8 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
         open={showComposer}
         onClose={() => setShowComposer(false)}
         tripId={tripId}
+        tripStartDate={trip.startDate}
+        tripEndDate={trip.endDate}
         dayIndex={composerDayIndex}
         insertAfterItemId={composerInsertAfterId}
         onSuccess={handleSnapshotUpdate}
@@ -350,6 +524,8 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
         open={showProposalComposer}
         onClose={() => setShowProposalComposer(false)}
         tripId={tripId}
+        tripStartDate={trip.startDate}
+        tripEndDate={trip.endDate}
         targetItemId={proposalTargetItemId}
         targetVersion={proposalTargetVersion}
         onSuccess={() => {
@@ -367,6 +543,25 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
           onUpdate={fetchData}
           asModal
           onClose={() => setShowProposalInbox(false)}
+        />
+      )}
+
+      {snapshot?.isLeader && (
+        <PublishTemplateDialog
+          tripId={tripId}
+          tripName={trip.name}
+          open={showPublishTemplateDialog}
+          onClose={() => setShowPublishTemplateDialog(false)}
+          publishedTemplate={publishedTemplate}
+          onPublished={(template) => {
+            setPublishedTemplate({
+              id: template.id,
+              title: template.title,
+              status: template.status,
+              createdAt: template.createdAt,
+            });
+            setShowPublishTemplateDialog(false);
+          }}
         />
       )}
     </div>
