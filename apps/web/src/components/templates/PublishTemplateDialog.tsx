@@ -3,14 +3,15 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Shield, Loader2, AlertTriangle, Upload } from 'lucide-react';
-import { templatesApi } from '../../lib/api-client';
+import { CommunityTemplate, PublishedTemplateStatus, templatesApi } from '../../lib/api-client';
 
 interface PublishTemplateDialogProps {
   tripId: string;
   tripName: string;
   open: boolean;
   onClose: () => void;
-  onPublished: () => void;
+  publishedTemplate: PublishedTemplateStatus | null;
+  onPublished: (template: CommunityTemplate) => void;
 }
 
 export function PublishTemplateDialog({
@@ -18,6 +19,7 @@ export function PublishTemplateDialog({
   tripName,
   open,
   onClose,
+  publishedTemplate,
   onPublished,
 }: PublishTemplateDialogProps) {
   const [title, setTitle] = useState(tripName);
@@ -34,12 +36,12 @@ export function PublishTemplateDialog({
     setPublishing(true);
     setError(null);
     try {
-      await templatesApi.publish(tripId, {
+      const template = await templatesApi.publish(tripId, {
         title: title.trim(),
         summary: summary.trim() || undefined,
         coverNote: coverNote.trim() || undefined,
       });
-      onPublished();
+      onPublished(template);
       onClose();
     } catch (err) {
       setError(
@@ -112,8 +114,17 @@ export function PublishTemplateDialog({
                 </div>
               )}
 
+              {publishedTemplate && (
+                <div className="rounded-2xl border border-brand-green/20 bg-brand-green/10 p-4">
+                  <p className="text-sm font-bold text-brand-green">Chuyến đi này đã được chia sẻ</p>
+                  <p className="mt-1 text-xs text-gray-600">
+                    Template hiện tại là "{publishedTemplate.title}". Luồng này đang khóa để tránh tạo bản trùng lặp.
+                  </p>
+                </div>
+              )}
+
               {/* Form */}
-              <div className="space-y-4">
+              <div className={`space-y-4 ${publishedTemplate ? 'opacity-60' : ''}`}>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">
                     Tên mẫu
@@ -122,6 +133,7 @@ export function PublishTemplateDialog({
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="VD: Đà Lạt 3 ngày mộng mơ ✨"
+                    disabled={!!publishedTemplate}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all text-gray-900 text-sm"
                   />
                 </div>
@@ -135,6 +147,7 @@ export function PublishTemplateDialog({
                     onChange={(e) => setSummary(e.target.value)}
                     rows={2}
                     placeholder="Hành trình khám phá Đà Lạt phiên bản check-in..."
+                    disabled={!!publishedTemplate}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all text-gray-900 text-sm resize-none"
                   />
                 </div>
@@ -148,6 +161,7 @@ export function PublishTemplateDialog({
                     onChange={(e) => setCoverNote(e.target.value)}
                     rows={2}
                     placeholder="Tips cho những ai muốn dùng mẫu này..."
+                    disabled={!!publishedTemplate}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all text-gray-900 text-sm resize-none"
                   />
                 </div>
@@ -156,7 +170,7 @@ export function PublishTemplateDialog({
               {/* Publish Button */}
               <button
                 onClick={handlePublish}
-                disabled={publishing || !title.trim()}
+                disabled={publishing || !title.trim() || !!publishedTemplate}
                 className="w-full py-4 bg-gradient-to-r from-brand-green to-brand-blue text-white rounded-2xl font-black text-lg shadow-lg shadow-brand-green/20 hover:shadow-xl transition-all hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
               >
                 {publishing ? (
@@ -167,7 +181,7 @@ export function PublishTemplateDialog({
                 ) : (
                   <>
                     <Shield size={18} />
-                    Xuất bản mẫu hành trình
+                    {publishedTemplate ? 'Đã chia sẻ rồi' : 'Xuất bản mẫu hành trình'}
                   </>
                 )}
               </button>

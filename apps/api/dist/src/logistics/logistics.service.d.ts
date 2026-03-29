@@ -1,0 +1,516 @@
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateLogisticsUnitDto } from './dto/create-logistics-unit.dto';
+import { ReassignLogisticsMemberDto } from './dto/reassign-logistics-member.dto';
+import { SelfJoinLogisticsSlotDto } from './dto/self-join-logistics-slot.dto';
+import { LeaveLogisticsSlotDto } from './dto/leave-logistics-slot.dto';
+export declare class LogisticsService {
+    private prisma;
+    constructor(prisma: PrismaService);
+    private getMembershipOrFail;
+    private assertLeader;
+    getAllocationSnapshot(tripId: string, userId: string): Promise<{
+        tripId: string;
+        isLeader: boolean;
+        currentTripMemberId: string;
+        roomUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        rideUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        totalMembers: number;
+        members: {
+            tripMemberId: string;
+            userId: string;
+            name: string | null;
+            avatarUrl: string | null;
+            role: import(".prisma/client").$Enums.TripRole;
+        }[];
+    }>;
+    private mapUnitToSnapshot;
+    createUnit(tripId: string, userId: string, dto: CreateLogisticsUnitDto): Promise<{
+        tripId: string;
+        isLeader: boolean;
+        currentTripMemberId: string;
+        roomUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        rideUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        totalMembers: number;
+        members: {
+            tripMemberId: string;
+            userId: string;
+            name: string | null;
+            avatarUrl: string | null;
+            role: import(".prisma/client").$Enums.TripRole;
+        }[];
+    }>;
+    updateUnit(tripId: string, userId: string, unitId: string, dto: Partial<CreateLogisticsUnitDto>): Promise<{
+        tripId: string;
+        isLeader: boolean;
+        currentTripMemberId: string;
+        roomUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        rideUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        totalMembers: number;
+        members: {
+            tripMemberId: string;
+            userId: string;
+            name: string | null;
+            avatarUrl: string | null;
+            role: import(".prisma/client").$Enums.TripRole;
+        }[];
+    }>;
+    deleteUnit(tripId: string, userId: string, unitId: string): Promise<{
+        tripId: string;
+        isLeader: boolean;
+        currentTripMemberId: string;
+        roomUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        rideUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        totalMembers: number;
+        members: {
+            tripMemberId: string;
+            userId: string;
+            name: string | null;
+            avatarUrl: string | null;
+            role: import(".prisma/client").$Enums.TripRole;
+        }[];
+    }>;
+    selfJoin(tripId: string, userId: string, dto: SelfJoinLogisticsSlotDto): Promise<{
+        tripId: string;
+        isLeader: boolean;
+        currentTripMemberId: string;
+        roomUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        rideUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        totalMembers: number;
+        members: {
+            tripMemberId: string;
+            userId: string;
+            name: string | null;
+            avatarUrl: string | null;
+            role: import(".prisma/client").$Enums.TripRole;
+        }[];
+    }>;
+    leave(tripId: string, userId: string, dto: LeaveLogisticsSlotDto): Promise<{
+        tripId: string;
+        isLeader: boolean;
+        currentTripMemberId: string;
+        roomUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        rideUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        totalMembers: number;
+        members: {
+            tripMemberId: string;
+            userId: string;
+            name: string | null;
+            avatarUrl: string | null;
+            role: import(".prisma/client").$Enums.TripRole;
+        }[];
+    }>;
+    reassign(tripId: string, userId: string, dto: ReassignLogisticsMemberDto): Promise<{
+        tripId: string;
+        isLeader: boolean;
+        currentTripMemberId: string;
+        roomUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        rideUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        totalMembers: number;
+        members: {
+            tripMemberId: string;
+            userId: string;
+            name: string | null;
+            avatarUrl: string | null;
+            role: import(".prisma/client").$Enums.TripRole;
+        }[];
+    }>;
+    autoFill(tripId: string, userId: string, type: 'ROOM' | 'RIDE'): Promise<{
+        tripId: string;
+        isLeader: boolean;
+        currentTripMemberId: string;
+        roomUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        rideUnits: {
+            id: string;
+            type: string;
+            label: string;
+            capacity: number;
+            rideKind: string | null;
+            plateNumber: string | null;
+            seatLabels: string[];
+            sortOrder: number;
+            note: string | null;
+            occupancy: number;
+            remainingCapacity: number;
+            isOverbooked: boolean;
+            overCapacityBy: number;
+            members: {
+                assignmentId: string;
+                tripMemberId: string;
+                userId: string;
+                name: string | null;
+                avatarUrl: string | null;
+                seatLabel: string | null;
+                source: string;
+                role: string;
+            }[];
+        }[];
+        totalMembers: number;
+        members: {
+            tripMemberId: string;
+            userId: string;
+            name: string | null;
+            avatarUrl: string | null;
+            role: import(".prisma/client").$Enums.TripRole;
+        }[];
+    }>;
+}

@@ -63,6 +63,7 @@ vi.mock('../../lib/api-client', () => ({
   templatesApi: {
     list: vi.fn().mockResolvedValue([]),
     get: vi.fn().mockResolvedValue(null),
+    getPublishedForTrip: vi.fn().mockResolvedValue(null),
     publish: vi.fn().mockResolvedValue({}),
     clone: vi.fn().mockResolvedValue({ tripId: 'new-trip', joinCode: 'NEW123' }),
   },
@@ -125,6 +126,7 @@ describe('PublishTemplateDialog', () => {
         tripName="My Trip"
         open={true}
         onClose={vi.fn()}
+        publishedTemplate={null}
         onPublished={vi.fn()}
       />,
     );
@@ -139,6 +141,7 @@ describe('PublishTemplateDialog', () => {
         tripName="My Trip"
         open={false}
         onClose={vi.fn()}
+        publishedTemplate={null}
         onPublished={vi.fn()}
       />,
     );
@@ -151,6 +154,7 @@ describe('PublishTemplateDialog', () => {
         tripName="My Trip"
         open={true}
         onClose={vi.fn()}
+        publishedTemplate={null}
         onPublished={vi.fn()}
       />,
     );

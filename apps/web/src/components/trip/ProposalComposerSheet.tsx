@@ -1,30 +1,70 @@
 'use client';
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Clock, MapPin, StickyNote, Plus, Loader2 } from 'lucide-react';
+import { type ReactNode, useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Clock, Loader2, MapPin, Plus, StickyNote, X } from 'lucide-react';
 import { proposalsApi, ProposalType } from '../../lib/api-client';
+import { LocationPicker } from './LocationPicker';
 
-const proposalTypes: { value: ProposalType; label: string; icon: React.ReactNode; description: string }[] = [
-  { value: 'ADD_ITEM', label: 'Thêm hoạt động', icon: <Plus size={16} />, description: 'Đề xuất hoạt động mới' },
-  { value: 'UPDATE_TIME', label: 'Đổi giờ', icon: <Clock size={16} />, description: 'Đề xuất đổi giờ bắt đầu' },
-  { value: 'UPDATE_LOCATION', label: 'Đổi địa điểm', icon: <MapPin size={16} />, description: 'Đề xuất đổi địa điểm' },
-  { value: 'UPDATE_NOTE', label: 'Sửa ghi chú', icon: <StickyNote size={16} />, description: 'Đề xuất sửa ghi chú' },
-];
+const proposalTypeConfig: Record<
+  ProposalType,
+  { label: string; icon: ReactNode; description: string }
+> = {
+  ADD_ITEM: {
+    label: 'Thêm hoạt động',
+    icon: <Plus size={16} />,
+    description: 'Đề xuất hoạt động mới',
+  },
+  UPDATE_TIME: {
+    label: 'Đổi giờ',
+    icon: <Clock size={16} />,
+    description: 'Đề xuất đổi giờ bắt đầu',
+  },
+  UPDATE_LOCATION: {
+    label: 'Đổi địa điểm',
+    icon: <MapPin size={16} />,
+    description: 'Đề xuất đổi địa điểm',
+  },
+  UPDATE_NOTE: {
+    label: 'Sửa ghi chú',
+    icon: <StickyNote size={16} />,
+    description: 'Đề xuất sửa ghi chú',
+  },
+};
 
 interface ProposalComposerSheetProps {
   open: boolean;
   onClose: () => void;
   tripId: string;
+  tripStartDate: string;
+  tripEndDate: string;
   targetItemId?: string;
   targetVersion?: number;
   onSuccess: () => void;
+}
+
+function timeToMinutes(time: string): number {
+  const [hours = 0, minutes = 0] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+function toInputDate(date: string): string {
+  return date.slice(0, 10);
+}
+
+function dateToDayIndex(selectedDate: string, tripStartDate: string): number {
+  const tripStart = new Date(`${tripStartDate.slice(0, 10)}T00:00:00`);
+  const picked = new Date(`${selectedDate}T00:00:00`);
+  const diff = picked.getTime() - tripStart.getTime();
+  return Math.max(0, Math.round(diff / (1000 * 60 * 60 * 24)));
 }
 
 export function ProposalComposerSheet({
   open,
   onClose,
   tripId,
+  tripStartDate,
+  tripEndDate,
   targetItemId,
   targetVersion,
   onSuccess,
@@ -34,74 +74,93 @@ export function ProposalComposerSheet({
   );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
 
-  // ADD_ITEM fields
   const [newTitle, setNewTitle] = useState('');
-  const [newDayIndex, setNewDayIndex] = useState(0);
+  const [newDate, setNewDate] = useState(toInputDate(tripStartDate));
   const [newStartTime, setNewStartTime] = useState('');
-  const [newLocationName, setNewLocationName] = useState('');
+  const [newLocationText, setNewLocationText] = useState('');
+  const [newLat, setNewLat] = useState<number | undefined>();
+  const [newLng, setNewLng] = useState<number | undefined>();
   const [newNote, setNewNote] = useState('');
 
-  // UPDATE_TIME fields
-  const [proposedStartMinute, setProposedStartMinute] = useState('');
-
-  // UPDATE_LOCATION fields
-  const [proposedLocationName, setProposedLocationName] = useState('');
-  const [proposedLocationAddress, setProposedLocationAddress] = useState('');
-
-  // UPDATE_NOTE fields
+  const [proposedStartTime, setProposedStartTime] = useState('');
+  const [proposedLocationText, setProposedLocationText] = useState('');
+  const [proposedLat, setProposedLat] = useState<number | undefined>();
+  const [proposedLng, setProposedLng] = useState<number | undefined>();
   const [proposedNote, setProposedNote] = useState('');
+
+  const availableTypes = useMemo<ProposalType[]>(
+    () => (targetItemId ? ['UPDATE_TIME', 'UPDATE_LOCATION', 'UPDATE_NOTE'] : ['ADD_ITEM']),
+    [targetItemId],
+  );
+
+  useEffect(() => {
+    setSelectedType(targetItemId ? 'UPDATE_TIME' : 'ADD_ITEM');
+  }, [targetItemId, open]);
 
   const resetForm = () => {
     setNewTitle('');
-    setNewDayIndex(0);
+    setNewDate(toInputDate(tripStartDate));
     setNewStartTime('');
-    setNewLocationName('');
+    setNewLocationText('');
+    setNewLat(undefined);
+    setNewLng(undefined);
     setNewNote('');
-    setProposedStartMinute('');
-    setProposedLocationName('');
-    setProposedLocationAddress('');
+    setProposedStartTime('');
+    setProposedLocationText('');
+    setProposedLat(undefined);
+    setProposedLng(undefined);
     setProposedNote('');
     setError(null);
+    setShowLocationPicker(false);
   };
 
   const buildPayload = (): Record<string, unknown> => {
-    switch (selectedType) {
-      case 'ADD_ITEM':
-        return {
-          title: newTitle,
-          dayIndex: newDayIndex,
-          startMinute: newStartTime ? timeToMinutes(newStartTime) : undefined,
-          locationName: newLocationName || undefined,
-          shortNote: newNote || undefined,
-        };
-      case 'UPDATE_TIME':
-        return {
-          startMinute: proposedStartMinute ? timeToMinutes(proposedStartMinute) : undefined,
-        };
-      case 'UPDATE_LOCATION':
-        return {
-          locationName: proposedLocationName || undefined,
-          locationAddress: proposedLocationAddress || undefined,
-        };
-      case 'UPDATE_NOTE':
-        return {
-          shortNote: proposedNote || undefined,
-        };
+    if (selectedType === 'ADD_ITEM') {
+      return {
+        title: newTitle,
+        dayIndex: dateToDayIndex(newDate, tripStartDate),
+        startMinute: newStartTime ? timeToMinutes(newStartTime) : undefined,
+        locationName: newLocationText || undefined,
+        locationAddress: newLocationText || undefined,
+        lat: newLat,
+        lng: newLng,
+        shortNote: newNote || undefined,
+      };
     }
+
+    if (selectedType === 'UPDATE_TIME') {
+      return {
+        startMinute: proposedStartTime ? timeToMinutes(proposedStartTime) : undefined,
+      };
+    }
+
+    if (selectedType === 'UPDATE_LOCATION') {
+      return {
+        locationName: proposedLocationText || undefined,
+        locationAddress: proposedLocationText || undefined,
+        lat: proposedLat,
+        lng: proposedLng,
+      };
+    }
+
+    return {
+      shortNote: proposedNote || undefined,
+    };
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     setSaving(true);
     setError(null);
 
     try {
       await proposalsApi.createProposal(tripId, {
         type: selectedType,
-        targetItemId: selectedType !== 'ADD_ITEM' ? targetItemId : undefined,
+        targetItemId: selectedType === 'ADD_ITEM' ? undefined : targetItemId,
         payload: buildPayload(),
-        baseVersion: selectedType !== 'ADD_ITEM' ? targetVersion : undefined,
+        baseVersion: selectedType === 'ADD_ITEM' ? undefined : targetVersion,
       });
       resetForm();
       onSuccess();
@@ -112,10 +171,7 @@ export function ProposalComposerSheet({
     }
   };
 
-  // Filter available types based on whether we have a target item
-  const availableTypes = targetItemId
-    ? proposalTypes.filter((t) => t.value !== 'ADD_ITEM')
-    : proposalTypes;
+  const activeType = proposalTypeConfig[selectedType];
 
   return (
     <AnimatePresence>
@@ -125,7 +181,7 @@ export function ProposalComposerSheet({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50"
+            className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm"
             onClick={onClose}
           />
           <motion.div
@@ -133,47 +189,51 @@ export function ProposalComposerSheet({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl max-h-[85vh] overflow-y-auto"
+            className="fixed bottom-0 left-0 right-0 z-50 max-h-[88vh] overflow-y-auto rounded-t-3xl bg-white shadow-2xl"
           >
-            <div className="p-6 space-y-5">
+            <div className="space-y-5 p-6">
               <div className="flex justify-center">
-                <div className="w-10 h-1 bg-gray-300 rounded-full" />
+                <div className="h-1 w-10 rounded-full bg-gray-300" />
               </div>
 
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-black text-gray-900">Gửi đề xuất</h2>
-                <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl">
+                <div>
+                  <h2 className="text-xl font-black text-gray-900">Gửi đề xuất</h2>
+                  <p className="text-sm text-gray-500">{activeType.description}</p>
+                </div>
+                <button onClick={onClose} className="rounded-xl p-2 hover:bg-gray-100">
                   <X size={20} className="text-gray-500" />
                 </button>
               </div>
 
               {error && (
-                <div className="p-3 bg-brand-coral/10 text-brand-coral rounded-xl text-sm font-medium border border-brand-coral/20">
+                <div className="rounded-xl border border-brand-coral/20 bg-brand-coral/10 p-3 text-sm font-medium text-brand-coral">
                   {error}
                 </div>
               )}
 
-              {/* Type Selector */}
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid gap-2">
                 {availableTypes.map((type) => (
                   <button
-                    key={type.value}
+                    key={type}
                     type="button"
-                    onClick={() => setSelectedType(type.value)}
-                    className={`flex items-center gap-2 p-3 rounded-xl border-2 text-sm font-bold transition-all ${
-                      selectedType === type.value
+                    onClick={() => {
+                      setSelectedType(type);
+                      setError(null);
+                    }}
+                    className={`flex items-center gap-2 rounded-xl border-2 p-3 text-sm font-bold transition-all ${
+                      selectedType === type
                         ? 'border-brand-blue bg-brand-blue/5 text-brand-blue'
                         : 'border-gray-100 text-gray-500 hover:border-gray-200'
                     }`}
                   >
-                    {type.icon}
-                    {type.label}
+                    {proposalTypeConfig[type].icon}
+                    {proposalTypeConfig[type].label}
                   </button>
                 ))}
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Dynamic fields per type */}
                 {selectedType === 'ADD_ITEM' && (
                   <>
                     <input
@@ -181,73 +241,123 @@ export function ProposalComposerSheet({
                       onChange={(e) => setNewTitle(e.target.value)}
                       placeholder="Tên hoạt động *"
                       required
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400"
+                      className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder:text-gray-400"
                     />
+
                     <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1">Ngày</label>
+                      <label className="block">
+                        <span className="mb-1 block text-xs font-bold text-gray-600">Ngày</span>
                         <input
-                          type="number"
-                          min={0}
-                          value={newDayIndex}
-                          onChange={(e) => setNewDayIndex(parseInt(e.target.value) || 0)}
-                          className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+                          type="date"
+                          min={toInputDate(tripStartDate)}
+                          max={toInputDate(tripEndDate)}
+                          value={newDate}
+                          onChange={(e) => setNewDate(e.target.value)}
+                          className="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm"
                         />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1">Giờ</label>
+                      </label>
+                      <label className="block">
+                        <span className="mb-1 block text-xs font-bold text-gray-600">Giờ</span>
                         <input
                           type="time"
                           value={newStartTime}
                           onChange={(e) => setNewStartTime(e.target.value)}
-                          className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm"
+                          className="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm"
                         />
-                      </div>
+                      </label>
                     </div>
+
                     <input
-                      value={newLocationName}
-                      onChange={(e) => setNewLocationName(e.target.value)}
-                      placeholder="Địa điểm"
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400"
+                      value={newLocationText}
+                      onChange={(e) => setNewLocationText(e.target.value)}
+                      placeholder="Địa chỉ / địa điểm"
+                      className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder:text-gray-400"
                     />
+
+                    <button
+                      type="button"
+                      onClick={() => setShowLocationPicker((value) => !value)}
+                      className="w-full rounded-xl border border-brand-blue/20 bg-brand-blue/5 px-4 py-3 text-sm font-bold text-brand-blue"
+                    >
+                      {showLocationPicker ? 'Ẩn chọn vị trí trên bản đồ' : 'Chọn địa điểm trên bản đồ'}
+                    </button>
+
+                    {showLocationPicker && (
+                      <LocationPicker
+                        initialLat={newLat}
+                        initialLng={newLng}
+                        value={newLocationText}
+                        onValueChange={setNewLocationText}
+                        onCancel={() => setShowLocationPicker(false)}
+                        onConfirm={(location) => {
+                          setNewLat(location.lat);
+                          setNewLng(location.lng);
+                          if (location.name) {
+                            setNewLocationText(location.name);
+                          }
+                          setShowLocationPicker(false);
+                        }}
+                      />
+                    )}
+
                     <textarea
                       value={newNote}
                       onChange={(e) => setNewNote(e.target.value)}
                       placeholder="Ghi chú"
                       rows={2}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 resize-none"
+                      className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder:text-gray-400"
                     />
                   </>
                 )}
 
                 {selectedType === 'UPDATE_TIME' && (
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-1.5">Giờ mới đề xuất</label>
+                  <label className="block">
+                    <span className="mb-1.5 block text-sm font-bold text-gray-700">Giờ mới đề xuất</span>
                     <input
                       type="time"
-                      value={proposedStartMinute}
-                      onChange={(e) => setProposedStartMinute(e.target.value)}
+                      value={proposedStartTime}
+                      onChange={(e) => setProposedStartTime(e.target.value)}
                       required
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900"
+                      className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900"
                     />
-                  </div>
+                  </label>
                 )}
 
                 {selectedType === 'UPDATE_LOCATION' && (
                   <>
                     <input
-                      value={proposedLocationName}
-                      onChange={(e) => setProposedLocationName(e.target.value)}
-                      placeholder="Tên địa điểm mới *"
+                      value={proposedLocationText}
+                      onChange={(e) => setProposedLocationText(e.target.value)}
+                      placeholder="Địa chỉ / địa điểm mới *"
                       required
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400"
+                      className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder:text-gray-400"
                     />
-                    <input
-                      value={proposedLocationAddress}
-                      onChange={(e) => setProposedLocationAddress(e.target.value)}
-                      placeholder="Địa chỉ (tuỳ chọn)"
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400"
-                    />
+
+                    <button
+                      type="button"
+                      onClick={() => setShowLocationPicker((value) => !value)}
+                      className="w-full rounded-xl border border-brand-blue/20 bg-brand-blue/5 px-4 py-3 text-sm font-bold text-brand-blue"
+                    >
+                      {showLocationPicker ? 'Ẩn chọn vị trí trên bản đồ' : 'Chọn địa điểm trên bản đồ'}
+                    </button>
+
+                    {showLocationPicker && (
+                      <LocationPicker
+                        initialLat={proposedLat}
+                        initialLng={proposedLng}
+                        value={proposedLocationText}
+                        onValueChange={setProposedLocationText}
+                        onCancel={() => setShowLocationPicker(false)}
+                        onConfirm={(location) => {
+                          setProposedLat(location.lat);
+                          setProposedLng(location.lng);
+                          if (location.name) {
+                            setProposedLocationText(location.name);
+                          }
+                          setShowLocationPicker(false);
+                        }}
+                      />
+                    )}
                   </>
                 )}
 
@@ -258,14 +368,14 @@ export function ProposalComposerSheet({
                     placeholder="Ghi chú mới *"
                     required
                     rows={3}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 resize-none"
+                    className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 placeholder:text-gray-400"
                   />
                 )}
 
                 <button
                   type="submit"
                   disabled={saving}
-                  className="w-full py-3.5 bg-gradient-to-r from-brand-blue to-brand-green text-white rounded-xl font-bold shadow-lg transition-all active:scale-[0.98] disabled:opacity-60 flex items-center justify-center gap-2"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-blue to-brand-green py-3.5 font-bold text-white shadow-lg transition-all active:scale-[0.98] disabled:opacity-60"
                 >
                   {saving && <Loader2 size={18} className="animate-spin" />}
                   {saving ? 'Đang gửi...' : 'Gửi đề xuất 💡'}
@@ -277,11 +387,4 @@ export function ProposalComposerSheet({
       )}
     </AnimatePresence>
   );
-}
-
-function timeToMinutes(time: string): number {
-  const parts = time.split(':').map(Number);
-  const h = parts[0] ?? 0;
-  const m = parts[1] ?? 0;
-  return h * 60 + m;
 }

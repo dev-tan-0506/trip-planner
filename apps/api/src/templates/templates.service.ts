@@ -2,6 +2,7 @@ import {
   Injectable,
   ForbiddenException,
   NotFoundException,
+  ConflictException,
 } from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -18,6 +19,27 @@ export class TemplatesService {
 
   // ─── Publish ───────────────────────────────────────
 
+  async getPublishedTemplateForTrip(tripId: string, userId: string) {
+    const member = await this.prisma.tripMember.findUnique({
+      where: { userId_tripId: { userId, tripId } },
+    });
+
+    if (!member || member.role !== 'LEADER') {
+      throw new ForbiddenException('Only the trip leader can view template publish status');
+    }
+
+    return this.prisma.communityTemplate.findFirst({
+      where: { sourceTripId: tripId, status: 'PUBLISHED' },
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        title: true,
+        status: true,
+        createdAt: true,
+      },
+    });
+  }
+
   async publishTemplate(tripId: string, userId: string, dto: PublishTemplateDto) {
     // Only leaders can publish
     const member = await this.prisma.tripMember.findUnique({
@@ -25,6 +47,15 @@ export class TemplatesService {
     });
     if (!member || member.role !== 'LEADER') {
       throw new ForbiddenException('Only the trip leader can publish a template');
+    }
+
+    const existingTemplate = await this.prisma.communityTemplate.findFirst({
+      where: { sourceTripId: tripId, status: 'PUBLISHED' },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (existingTemplate) {
+      throw new ConflictException('Trip này đã được chia sẻ thành template rồi');
     }
 
     // Fetch trip + itinerary items
@@ -58,6 +89,7 @@ export class TemplatesService {
         coverNote: dto.coverNote,
         daysCount,
         sanitizedSnapshot: sanitizedSnapshot as any,
+        status: 'PUBLISHED',
       },
     });
   }

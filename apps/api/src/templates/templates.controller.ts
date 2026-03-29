@@ -5,13 +5,13 @@ import {
   Param,
   Body,
   UseGuards,
-  Req,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { TemplatesService } from './templates.service';
 import { PublishTemplateDto } from './dto/publish-template.dto';
 import { CloneTemplateDto } from './dto/clone-template.dto';
+import { CurrentUser, JwtPayload } from '../auth/decorators/current-user.decorator';
 
 @Controller('trips/:tripId/templates')
 @ApiTags('Community Templates')
@@ -20,14 +20,23 @@ import { CloneTemplateDto } from './dto/clone-template.dto';
 export class TripTemplatesController {
   constructor(private readonly templatesService: TemplatesService) {}
 
+  @Get('published')
+  @ApiOperation({ summary: 'Get current published template status for this trip' })
+  async getPublishedTemplate(
+    @Param('tripId') tripId: string,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.templatesService.getPublishedTemplateForTrip(tripId, user.sub);
+  }
+
   @Post('publish')
   @ApiOperation({ summary: 'Publish a sanitized community template from this trip' })
   async publish(
     @Param('tripId') tripId: string,
     @Body() dto: PublishTemplateDto,
-    @Req() req: any,
+    @CurrentUser() user: JwtPayload,
   ) {
-    return this.templatesService.publishTemplate(tripId, req.user.id, dto);
+    return this.templatesService.publishTemplate(tripId, user.sub, dto);
   }
 }
 
@@ -55,8 +64,8 @@ export class TemplatesController {
   async clone(
     @Param('templateId') templateId: string,
     @Body() dto: CloneTemplateDto,
-    @Req() req: any,
+    @CurrentUser() user: JwtPayload,
   ) {
-    return this.templatesService.cloneTemplate(templateId, req.user.id, dto);
+    return this.templatesService.cloneTemplate(templateId, user.sub, dto);
   }
 }

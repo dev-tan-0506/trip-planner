@@ -1,4 +1,8 @@
+import { io, type Socket } from 'socket.io-client';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_ORIGIN = API_BASE_URL.replace(/\/api$/, '');
+const WS_BASE_URL = process.env.NEXT_PUBLIC_WS_URL || API_ORIGIN;
 
 export class ApiRequestError extends Error {
   status?: number;
@@ -10,6 +14,14 @@ export class ApiRequestError extends Error {
     this.code = code;
     this.status = status;
   }
+}
+
+export function toApiAssetUrl(path: string | null | undefined): string | null {
+  if (!path) return null;
+  if (/^https?:\/\//.test(path) || path.startsWith('data:')) {
+    return path;
+  }
+  return `${API_ORIGIN}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
 // ─── Token Management ────────────────────────────────
@@ -615,6 +627,7 @@ export interface AllocationUnitMember {
   avatarUrl: string | null;
   source: string;
   role: string;
+  seatLabel?: string | null;
 }
 
 export interface AllocationUnit {
@@ -622,6 +635,9 @@ export interface AllocationUnit {
   type: 'ROOM' | 'RIDE';
   label: string;
   capacity: number;
+  rideKind?: 'MOTORBIKE' | 'CAR' | 'BUS' | null;
+  plateNumber?: string | null;
+  seatLabels?: string[];
   sortOrder: number;
   note: string | null;
   occupancy: number;
@@ -656,7 +672,15 @@ export const logisticsApi = {
 
   async createUnit(
     tripId: string,
-    body: { type: 'ROOM' | 'RIDE'; label: string; capacity: number; note?: string },
+    body: {
+      type: 'ROOM' | 'RIDE';
+      label: string;
+      capacity: number;
+      note?: string;
+      rideKind?: 'MOTORBIKE' | 'CAR' | 'BUS';
+      plateNumber?: string;
+      seatLabels?: string[];
+    },
   ): Promise<AllocationSnapshot> {
     return request<AllocationSnapshot>(`/trips/${tripId}/logistics/units`, {
       method: 'POST',
@@ -681,7 +705,10 @@ export const logisticsApi = {
     });
   },
 
-  async selfJoin(tripId: string, body: { unitId: string }): Promise<AllocationSnapshot> {
+  async selfJoin(
+    tripId: string,
+    body: { unitId: string; seatLabel?: string },
+  ): Promise<AllocationSnapshot> {
     return request<AllocationSnapshot>(`/trips/${tripId}/logistics/assignments/self-join`, {
       method: 'POST',
       body: JSON.stringify(body),
@@ -697,7 +724,7 @@ export const logisticsApi = {
 
   async reassign(
     tripId: string,
-    body: { tripMemberId: string; targetUnitId: string },
+    body: { tripMemberId: string; targetUnitId: string; targetSeatLabel?: string },
   ): Promise<AllocationSnapshot> {
     return request<AllocationSnapshot>(`/trips/${tripId}/logistics/assignments/reassign`, {
       method: 'POST',
@@ -713,3 +740,250 @@ export const logisticsApi = {
   },
 };
 
+// ─── Checklists API ──────────────────────────────────
+
+export type ChecklistGroupKind = 'SHARED_CATEGORY' | 'PERSONAL_TASKS' | 'DOCUMENTS';
+export type ChecklistItemStatus = 'TODO' | 'DONE';
+
+export interface ChecklistAssignee {
+  tripMemberId: string;
+  userId: string;
+  name: string | null;
+  avatarUrl: string | null;
+}
+
+export interface ChecklistItem {
+  id: string;
+  title: string;
+  notes: string | null;
+  status: ChecklistItemStatus;
+  sortOrder: number;
+  canToggleSelf?: boolean;
+  proofUrl?: string | null;
+  proofSubmittedAt?: string | null;
+  assignee: ChecklistAssignee | null;
+  completedAt: string | null;
+}
+
+export interface ChecklistGroupSnapshot {
+  id: string;
+  title: string;
+  kind: ChecklistGroupKind;
+  sortOrder: number;
+  itemCount: number;
+  completedCount: number;
+  items: ChecklistItem[];
+}
+
+export interface ChecklistMyItem {
+  itemId: string;
+  groupId: string;
+  groupTitle: string;
+  title: string;
+  notes: string | null;
+  status: ChecklistItemStatus;
+  sortOrder: number;
+}
+
+export interface ChecklistSnapshot {
+  tripId: string;
+  isLeader: boolean;
+  currentTripMemberId: string;
+  sharedCategories: ChecklistGroupSnapshot[];
+  personalTasks: ChecklistGroupSnapshot[];
+  documentGroups: ChecklistGroupSnapshot[];
+  myItems: ChecklistMyItem[];
+  totalItems: number;
+  completedItems: number;
+}
+
+export const checklistsApi = {
+  async getSnapshot(tripId: string): Promise<ChecklistSnapshot> {
+    return request<ChecklistSnapshot>(`/trips/${tripId}/checklists`);
+  },
+
+  async createGroup(
+    tripId: string,
+    body: { title: string; kind: ChecklistGroupKind },
+  ): Promise<ChecklistSnapshot> {
+    return request<ChecklistSnapshot>(`/trips/${tripId}/checklists/groups`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async deleteGroup(tripId: string, groupId: string): Promise<ChecklistSnapshot> {
+    return request<ChecklistSnapshot>(`/trips/${tripId}/checklists/groups/${groupId}`, {
+      method: 'DELETE',
+    });
+  },
+
+  async createItem(
+    tripId: string,
+    body: {
+      groupId: string;
+      title: string;
+      notes?: string;
+      assigneeTripMemberId?: string;
+      applyToAllMembers?: boolean;
+    },
+  ): Promise<ChecklistSnapshot> {
+    return request<ChecklistSnapshot>(`/trips/${tripId}/checklists/items`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async updateItem(
+    tripId: string,
+    itemId: string,
+    body: {
+      title?: string;
+      notes?: string;
+      assigneeTripMemberId?: string;
+    },
+  ): Promise<ChecklistSnapshot> {
+    return request<ChecklistSnapshot>(`/trips/${tripId}/checklists/items/${itemId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async toggleItem(tripId: string, itemId: string): Promise<ChecklistSnapshot> {
+    return request<ChecklistSnapshot>(`/trips/${tripId}/checklists/items/${itemId}/toggle`, {
+      method: 'POST',
+    });
+  },
+
+  async deleteItem(tripId: string, itemId: string): Promise<ChecklistSnapshot> {
+    return request<ChecklistSnapshot>(`/trips/${tripId}/checklists/items/${itemId}`, {
+      method: 'DELETE',
+    });
+  },
+
+  async submitProof(
+    tripId: string,
+    itemId: string,
+    body: { imageDataUrl: string },
+  ): Promise<ChecklistSnapshot> {
+    return request<ChecklistSnapshot>(`/trips/${tripId}/checklists/items/${itemId}/proof`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+};
+
+// ─── Attendance API ──────────────────────────────────
+
+export type AttendanceSessionStatus = 'OPEN' | 'CLOSED';
+export type AttendanceLocationStatus = 'GRANTED' | 'DENIED' | 'UNAVAILABLE';
+
+export interface AttendanceMemberRow {
+  tripMemberId: string;
+  userId: string;
+  name: string | null;
+  avatarUrl: string | null;
+  role: 'LEADER' | 'MEMBER';
+  hasSubmitted: boolean;
+  submittedAt: string | null;
+  status: 'ARRIVED' | 'MISSING' | 'NO_LOCATION';
+  photoUrl: string | null;
+  lat: number | null;
+  lng: number | null;
+  accuracyMeters: number | null;
+  locationStatus: AttendanceLocationStatus | null;
+}
+
+export interface AttendanceSessionSnapshot {
+  id: string;
+  tripId: string;
+  title: string;
+  meetingLabel: string;
+  meetingAddress: string;
+  lat: number | null;
+  lng: number | null;
+  opensAt: string;
+  closesAt: string;
+  status: AttendanceSessionStatus;
+}
+
+export interface AttendanceSnapshot {
+  tripId: string;
+  isLeader: boolean;
+  currentTripMemberId: string;
+  session: AttendanceSessionSnapshot | null;
+  counts: {
+    arrived: number;
+    missing: number;
+    noLocation: number;
+  };
+  mapPoints: Array<{
+    tripMemberId: string;
+    name: string | null;
+    lat: number;
+    lng: number;
+    status: 'ARRIVED' | 'NO_LOCATION';
+  }>;
+  members: AttendanceMemberRow[];
+}
+
+export interface AttendanceSocketJoinPayload {
+  tripId: string;
+  userId: string;
+  sessionId?: string | null;
+}
+
+export function connectAttendanceSocket(): Socket {
+  return io(`${WS_BASE_URL}/attendance`, {
+    transports: ['websocket', 'polling'],
+    reconnection: true,
+    reconnectionDelay: 1000,
+    reconnectionAttempts: 10,
+  });
+}
+
+export const attendanceApi = {
+  async getCurrentSession(tripId: string): Promise<AttendanceSnapshot> {
+    return request<AttendanceSnapshot>(`/trips/${tripId}/attendance/sessions/current`);
+  },
+
+  async createSession(
+    tripId: string,
+    body: {
+      title: string;
+      meetingLabel: string;
+      meetingAddress: string;
+      lat?: number;
+      lng?: number;
+      opensAt: string;
+      closesAt: string;
+    },
+  ): Promise<AttendanceSnapshot> {
+    return request<AttendanceSnapshot>(`/trips/${tripId}/attendance/sessions`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async submitProof(
+    sessionId: string,
+    body: {
+      imageDataUrl?: string;
+      lat?: number;
+      lng?: number;
+      accuracyMeters?: number;
+      locationStatus: AttendanceLocationStatus;
+    },
+  ): Promise<AttendanceSnapshot> {
+    return request<AttendanceSnapshot>(`/attendance/sessions/${sessionId}/submissions`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async closeSession(sessionId: string): Promise<AttendanceSnapshot> {
+    return request<AttendanceSnapshot>(`/attendance/sessions/${sessionId}/close`, {
+      method: 'POST',
+    });
+  },
+};

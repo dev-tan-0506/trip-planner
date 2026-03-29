@@ -13,7 +13,6 @@ import {
   Crown,
   Compass,
   Share2,
-  Copy,
   Check,
   UserPlus,
   ArrowLeft,
@@ -37,15 +36,27 @@ export default function TripPage() {
   useEffect(() => {
     async function fetchTrip() {
       try {
-        const data = await tripsApi.getByJoinCode(joinCode);
-        setTrip(data);
+        const publicTrip = await tripsApi.getByJoinCode(joinCode);
+        let resolvedTrip = publicTrip;
+        let memberStatus = false;
 
-        // Check if current user already joined
         if (user) {
-          const memberStatus = data.members.some((m) => m.user.id === user.id);
-          setJoined(memberStatus);
-          setIsMember(memberStatus);
+          try {
+            const privateTrip = await tripsApi.getPrivateByJoinCode(joinCode);
+            const privateMemberStatus = privateTrip.members.some((m) => m.user.id === user.id);
+
+            if (privateMemberStatus) {
+              resolvedTrip = privateTrip;
+              memberStatus = true;
+            }
+          } catch {
+            memberStatus = false;
+          }
         }
+
+        setTrip(resolvedTrip);
+        setJoined(memberStatus);
+        setIsMember(memberStatus);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Không tìm thấy chuyến đi');
       } finally {
@@ -68,8 +79,7 @@ export default function TripPage() {
       await tripsApi.join(joinCode);
       setJoined(true);
       setIsMember(true);
-      // Refresh trip data to show updated member list
-      const updated = await tripsApi.getByJoinCode(joinCode);
+      const updated = await tripsApi.getPrivateByJoinCode(joinCode);
       setTrip(updated);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Không thể tham gia chuyến đi');
@@ -244,7 +254,7 @@ export default function TripPage() {
               {leader && (
                 <span className="flex items-center gap-1.5">
                   <Crown size={16} className="text-brand-yellow" />
-                  {leader.user.name || 'Trưởng đoàn'}
+                  {leader.user.name || 'Leader'}
                 </span>
               )}
             </div>
@@ -297,10 +307,12 @@ export default function TripPage() {
                       : 'bg-gradient-to-br from-brand-blue to-brand-green'
                   }`}
                 >
-                  {(member.user.name || '?').charAt(0).toUpperCase()}
+                  {(member.user.name || `T${i + 1}`).charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-bold text-gray-900 truncate">{member.user.name || 'Ẩn danh'}</p>
+                  <p className="font-bold text-gray-900 truncate">
+                    {member.user.name || `Thành viên ${i + 1}`}
+                  </p>
                   <p className="text-xs text-gray-500">
                     {member.role === 'LEADER' ? '👑 Trưởng đoàn' : '🎒 Thành viên'}
                   </p>

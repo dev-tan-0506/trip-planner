@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Users, Plus, ArrowRightLeft, AlertTriangle } from 'lucide-react';
 import { MemberChip } from './MemberChip';
 
@@ -11,6 +12,7 @@ interface UnitMember {
   avatarUrl: string | null;
   source: string;
   role: string;
+  seatLabel?: string | null;
 }
 
 interface AllocationUnitCardProps {
@@ -18,6 +20,9 @@ interface AllocationUnitCardProps {
   type: 'ROOM' | 'RIDE';
   label: string;
   capacity: number;
+  rideKind?: 'MOTORBIKE' | 'CAR' | 'BUS' | null;
+  plateNumber?: string | null;
+  seatLabels?: string[];
   occupancy: number;
   remainingCapacity: number;
   isOverbooked: boolean;
@@ -26,9 +31,9 @@ interface AllocationUnitCardProps {
   members: UnitMember[];
   isLeader: boolean;
   currentTripMemberId: string;
-  onSelfJoin?: (unitId: string) => void;
+  onSelfJoin?: (unitId: string, seatLabel?: string) => void;
   onLeave?: (type: 'ROOM' | 'RIDE') => void;
-  onReassign?: (tripMemberId: string, targetUnitId: string) => void;
+  onReassign?: (tripMemberId: string, targetUnitId: string, targetSeatLabel?: string) => void;
   onDelete?: (unitId: string) => void;
 }
 
@@ -37,6 +42,9 @@ export function AllocationUnitCard({
   type,
   label,
   capacity,
+  rideKind,
+  plateNumber,
+  seatLabels = [],
   occupancy,
   remainingCapacity,
   isOverbooked,
@@ -50,6 +58,7 @@ export function AllocationUnitCard({
   onReassign,
   onDelete,
 }: AllocationUnitCardProps) {
+  const [selectedSeat, setSelectedSeat] = useState('');
   const isFull = remainingCapacity <= 0 && !isOverbooked;
   const isCurrentMemberHere = members.some(
     (m) => m.tripMemberId === currentTripMemberId,
@@ -69,6 +78,10 @@ export function AllocationUnitCard({
     ? 'ring-2 ring-brand-coral/30 border-brand-coral/40'
     : '';
 
+  const availableSeats = seatLabels.filter(
+    (seat) => !members.some((member) => member.seatLabel === seat),
+  );
+
   return (
     <div
       className={`rounded-2xl border p-4 transition-all shadow-sm hover:shadow-md ${typeColors} ${overBookedStyles}`}
@@ -81,6 +94,11 @@ export function AllocationUnitCard({
           >
             {type === 'ROOM' ? 'Phòng' : 'Xe'}
           </span>
+          {type === 'RIDE' && rideKind && (
+            <span className="inline-flex rounded-lg bg-white/70 px-2 py-0.5 text-[11px] font-bold text-gray-600">
+              {rideKind === 'MOTORBIKE' ? 'Xe máy' : rideKind === 'BUS' ? 'Xe khách' : 'Ô tô'}
+            </span>
+          )}
           <h3 className="font-black text-gray-900 text-sm">{label}</h3>
         </div>
         <div className="flex items-center gap-1">
@@ -113,6 +131,14 @@ export function AllocationUnitCard({
       {note && (
         <p className="text-xs text-gray-500 mb-3 leading-relaxed">{note}</p>
       )}
+      {type === 'RIDE' && (plateNumber || seatLabels.length > 0) && (
+        <div className="mb-3 space-y-1 text-xs text-gray-500">
+          {plateNumber && <p>Biển số: <span className="font-bold text-gray-700">{plateNumber}</span></p>}
+          {seatLabels.length > 0 && (
+            <p>Tên ghế: <span className="font-bold text-gray-700">{seatLabels.join(', ')}</span></p>
+          )}
+        </div>
+      )}
 
       {/* Members */}
       <div className="flex flex-wrap gap-1.5 mb-3 min-h-[32px]">
@@ -122,7 +148,7 @@ export function AllocationUnitCard({
           members.map((member) => (
             <MemberChip
               key={member.assignmentId}
-              name={member.name}
+              name={member.seatLabel ? `${member.name ?? 'Thành viên'} · ${member.seatLabel}` : member.name}
               avatarUrl={member.avatarUrl}
               source={member.source}
               role={member.role}
@@ -140,13 +166,30 @@ export function AllocationUnitCard({
       {/* Actions */}
       <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
         {!isLeader && !isCurrentMemberHere && remainingCapacity > 0 && (
-          <button
-            onClick={() => onSelfJoin?.(id)}
-            className="flex items-center gap-1 px-3 py-1.5 bg-brand-green/10 text-brand-green text-xs font-bold rounded-xl hover:bg-brand-green/20 transition-colors"
-          >
-            <Plus size={12} />
-            Vào chỗ này
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            {type === 'RIDE' && seatLabels.length > 0 && (
+              <select
+                value={selectedSeat}
+                onChange={(event) => setSelectedSeat(event.target.value)}
+                className="rounded-xl border border-gray-200 bg-white px-2 py-1.5 text-xs font-semibold text-gray-600"
+              >
+                <option value="">Chọn ghế</option>
+                {availableSeats.map((seat) => (
+                  <option key={seat} value={seat}>
+                    {seat}
+                  </option>
+                ))}
+              </select>
+            )}
+            <button
+              onClick={() => onSelfJoin?.(id, selectedSeat || undefined)}
+              disabled={type === 'RIDE' && seatLabels.length > 0 && !selectedSeat}
+              className="flex items-center gap-1 px-3 py-1.5 bg-brand-green/10 text-brand-green text-xs font-bold rounded-xl hover:bg-brand-green/20 transition-colors disabled:opacity-50"
+            >
+              <Plus size={12} />
+              Vào chỗ này
+            </button>
+          </div>
         )}
 
         {!isLeader && isCurrentMemberHere && (

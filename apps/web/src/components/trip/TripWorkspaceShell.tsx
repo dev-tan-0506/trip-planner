@@ -34,8 +34,10 @@ import { ProposalInboxPanel } from './ProposalInboxPanel';
 import { PublishTemplateDialog } from '../templates/PublishTemplateDialog';
 import Link from 'next/link';
 import { LogisticsBoardTab } from './LogisticsBoardTab';
+import { ChecklistTab } from './ChecklistTab';
+import { AttendanceTab } from './AttendanceTab';
 
-type Tab = 'Lich trinh' | 'Ban do' | 'De xuat' | 'Phan phong';
+type Tab = 'Lich trinh' | 'Ban do' | 'De xuat' | 'Phan phong' | 'Checklist' | 'Check-in';
 
 interface TripWorkspaceShellProps {
   trip: Trip;
@@ -68,6 +70,7 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
   const [showPublishTemplateDialog, setShowPublishTemplateDialog] = useState(false);
   const [publishedTemplate, setPublishedTemplate] = useState<PublishedTemplateStatus | null>(null);
   const [voteSessions, setVoteSessions] = useState<VoteSession[]>([]);
+  const [attendanceOverlayOpen, setAttendanceOverlayOpen] = useState(false);
 
   const timelineRef = useRef<HTMLDivElement>(null);
   const currentItemRef = useRef<HTMLDivElement>(null);
@@ -111,7 +114,8 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
         !!deletingItemId ||
         showProposalComposer ||
         showProposalInbox ||
-        showPublishTemplateDialog;
+        showPublishTemplateDialog ||
+        attendanceOverlayOpen;
 
       if (!document.hidden && !hasOpenOverlay) {
         fetchData();
@@ -127,6 +131,7 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
     showProposalComposer,
     showProposalInbox,
     showPublishTemplateDialog,
+    attendanceOverlayOpen,
   ]);
 
   // Auto-scroll to current item after snapshot load
@@ -224,6 +229,16 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
       key: 'Phan phong',
       label: 'Phân phòng/xe',
       icon: <BedDouble size={18} />,
+    },
+    {
+      key: 'Checklist',
+      label: 'Checklist',
+      icon: <CalendarDays size={18} />,
+    },
+    {
+      key: 'Check-in',
+      label: 'Check-in',
+      icon: <MapIcon size={18} />,
     },
   ];
 
@@ -478,6 +493,31 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
             exit={{ opacity: 0, y: -10 }}
           >
             <LogisticsBoardTab tripId={tripId} />
+          </motion.div>
+        )}
+
+        {activeTab === 'Checklist' && (
+          <motion.div
+            key="checklist"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <ChecklistTab tripId={tripId} members={trip.members} />
+          </motion.div>
+        )}
+
+        {activeTab === 'Check-in' && (
+          <motion.div
+            key="attendance"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <AttendanceTab
+              tripId={tripId}
+              onOverlayChange={setAttendanceOverlayOpen}
+            />
           </motion.div>
         )}
       </AnimatePresence>

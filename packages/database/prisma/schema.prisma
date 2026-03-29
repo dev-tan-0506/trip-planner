@@ -67,6 +67,7 @@ model Trip {
   allocationAssignments AllocationAssignment[]
   checklistGroups      ChecklistGroup[]
   checklistItems       ChecklistItem[]
+  attendanceSessions   AttendanceSession[]
 }
 
 enum TripRole {
@@ -87,6 +88,8 @@ model TripMember {
   logisticsAssignments        AllocationAssignment[] @relation("AssignedMember")
   createdLogisticsAssignments AllocationAssignment[] @relation("AssignmentCreator")
   assignedChecklistItems      ChecklistItem[]        @relation("AssignedChecklistItems")
+  createdAttendanceSessions   AttendanceSession[]    @relation("AttendanceSessionCreator")
+  attendanceSubmissions       AttendanceSubmission[] @relation("AttendanceSubmissionMember")
 
   @@unique([userId, tripId])
 }
@@ -293,6 +296,12 @@ enum LogisticsUnitType {
   RIDE
 }
 
+enum LogisticsRideKind {
+  MOTORBIKE
+  CAR
+  BUS
+}
+
 enum LogisticsAssignmentSource {
   LEADER
   SELF_JOIN
@@ -305,6 +314,9 @@ model LogisticsUnit {
   type      LogisticsUnitType
   label     String
   capacity  Int
+  rideKind  LogisticsRideKind?
+  plateNumber String?
+  seatLabels String[]
   sortOrder Int
   note      String?
   createdAt DateTime           @default(now())
@@ -322,6 +334,7 @@ model AllocationAssignment {
   tripId                String
   unitId                String
   tripMemberId          String
+  seatLabel             String?
   createdByTripMemberId String?
   source                LogisticsAssignmentSource  @default(LEADER)
   createdAt             DateTime                   @default(now())
@@ -342,6 +355,7 @@ model AllocationAssignment {
 enum ChecklistGroupKind {
   SHARED_CATEGORY
   PERSONAL_TASKS
+  DOCUMENTS
 }
 
 enum ChecklistItemStatus {
@@ -370,6 +384,8 @@ model ChecklistItem {
   groupId              String
   title                String
   notes                String?
+  proofUrl             String?
+  proofSubmittedAt     DateTime?
   assigneeTripMemberId String?
   status               ChecklistItemStatus @default(TODO)
   sortOrder            Int
@@ -383,4 +399,58 @@ model ChecklistItem {
 
   @@index([tripId, status])
   @@unique([groupId, sortOrder])
+}
+
+// ─── Logistics: Attendance ───────────────────────────
+
+enum AttendanceSessionStatus {
+  OPEN
+  CLOSED
+}
+
+enum AttendanceLocationStatus {
+  GRANTED
+  DENIED
+  UNAVAILABLE
+}
+
+model AttendanceSession {
+  id                    String                  @id @default(cuid())
+  tripId                String
+  createdByTripMemberId String
+  title                 String
+  meetingLabel          String
+  meetingAddress        String
+  lat                   Float?
+  lng                   Float?
+  opensAt               DateTime
+  closesAt              DateTime
+  status                AttendanceSessionStatus @default(OPEN)
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+
+  trip          Trip                   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  createdBy     TripMember             @relation("AttendanceSessionCreator", fields: [createdByTripMemberId], references: [id], onDelete: Cascade)
+  submissions   AttendanceSubmission[]
+
+  @@index([tripId, status])
+}
+
+model AttendanceSubmission {
+  id             String                   @id @default(cuid())
+  sessionId      String
+  tripMemberId   String
+  photoUrl       String?
+  submittedAt    DateTime                 @default(now())
+  lat            Float?
+  lng            Float?
+  accuracyMeters Float?
+  locationStatus AttendanceLocationStatus @default(UNAVAILABLE)
+  createdAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+
+  session        AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  member         TripMember        @relation("AttendanceSubmissionMember", fields: [tripMemberId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, tripMemberId])
 }

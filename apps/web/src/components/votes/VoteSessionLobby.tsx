@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useMemo, useState } from 'react';
 import {
   VoteSession,
   CreateVoteSessionPayload,
+  CreateVoteOptionPayload,
+  ItineraryItem,
 } from '../../lib/api-client';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Clock,
   Plus,
@@ -18,14 +20,21 @@ import {
   Zap,
   Lock,
   Eye,
+  Search,
+  FileText,
+  MapPin,
 } from 'lucide-react';
 
 interface VoteSessionLobbyProps {
   sessions: VoteSession[];
   tripId: string;
   isLeader: boolean;
+  itineraryItems: ItineraryItem[];
   onSelectSession: (sessionId: string) => void;
-  onCreateSession: (payload: CreateVoteSessionPayload) => Promise<void>;
+  onCreateSession: (payload: {
+    session: CreateVoteSessionPayload;
+    options: CreateVoteOptionPayload[];
+  }) => Promise<VoteSession>;
   onApproveSession: (sessionId: string) => Promise<void>;
 }
 
@@ -82,9 +91,29 @@ function getStatusBadge(status: string) {
   }
 }
 
+function timeToMinutes(time: string): number {
+  const [hours = 0, minutes = 0] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+type DraftOption = {
+  title: string;
+  startTime: string;
+  locationText: string;
+  shortNote: string;
+};
+
+const emptyOption = (): DraftOption => ({
+  title: '',
+  startTime: '',
+  locationText: '',
+  shortNote: '',
+});
+
 export function VoteSessionLobby({
   sessions,
   isLeader,
+  itineraryItems,
   onSelectSession,
   onCreateSession,
   onApproveSession,
@@ -92,7 +121,11 @@ export function VoteSessionLobby({
   const [showCreate, setShowCreate] = useState(false);
   const [createMode, setCreateMode] = useState<'NEW_OPTION' | 'REPLACE_ITEM'>('NEW_OPTION');
   const [deadline, setDeadline] = useState('');
+  const [description, setDescription] = useState('');
   const [targetDayIndex, setTargetDayIndex] = useState<number>(0);
+  const [targetItemId, setTargetItemId] = useState('');
+  const [itemSearch, setItemSearch] = useState('');
+  const [options, setOptions] = useState<DraftOption[]>([emptyOption(), emptyOption()]);
   const [creating, setCreating] = useState(false);
 
   const pendingSessions = sessions.filter((s) => s.status === 'PENDING_APPROVAL');
@@ -101,17 +134,61 @@ export function VoteSessionLobby({
     (s) => s.status === 'CLOSED' || s.status === 'LEADER_DECISION_REQUIRED',
   );
 
+  const filteredItems = useMemo(() => {
+    const q = itemSearch.trim().toLowerCase();
+    if (!q) return itineraryItems;
+
+    return itineraryItems.filter((item) => {
+      return (
+        item.title.toLowerCase().includes(q) ||
+        (item.locationName || '').toLowerCase().includes(q) ||
+        (item.locationAddress || '').toLowerCase().includes(q)
+      );
+    });
+  }, [itemSearch, itineraryItems]);
+
+  const validOptionCount = options.filter((option) => option.title.trim()).length;
+  const canCreate =
+    !!deadline &&
+    validOptionCount >= 2 &&
+    (createMode === 'NEW_OPTION' || !!targetItemId.trim());
+
   const handleCreate = async () => {
-    if (!deadline) return;
+    if (!canCreate) return;
+
     setCreating(true);
     try {
       await onCreateSession({
-        mode: createMode,
-        deadline: new Date(deadline).toISOString(),
-        targetDayIndex: createMode === 'NEW_OPTION' ? targetDayIndex : undefined,
+        session: {
+          mode: createMode,
+          deadline: new Date(deadline).toISOString(),
+          description: description.trim() || undefined,
+          targetDayIndex: createMode === 'NEW_OPTION' ? targetDayIndex : undefined,
+          targetItemId: createMode === 'REPLACE_ITEM' ? targetItemId.trim() : undefined,
+        },
+        options: options
+          .filter((option) => option.title.trim())
+          .map((option) => ({
+            title: option.title.trim(),
+            payload: {
+              title: option.title.trim(),
+              startMinute: option.startTime ? timeToMinutes(option.startTime) : undefined,
+              locationName: option.locationText.trim() || undefined,
+              locationAddress: option.locationText.trim() || undefined,
+              shortNote: option.shortNote.trim() || undefined,
+              voteDescription: description.trim() || undefined,
+            },
+          })),
       });
+
       setShowCreate(false);
+      setCreateMode('NEW_OPTION');
       setDeadline('');
+      setDescription('');
+      setTargetDayIndex(0);
+      setTargetItemId('');
+      setItemSearch('');
+      setOptions([emptyOption(), emptyOption()]);
     } finally {
       setCreating(false);
     }
@@ -119,7 +196,6 @@ export function VoteSessionLobby({
 
   return (
     <div className="space-y-6">
-      {/* Hero Section */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -132,7 +208,7 @@ export function VoteSessionLobby({
           </div>
           <h1 className="text-2xl font-black">Bình chọn cùng nhau! 🗳️</h1>
           <p className="text-white/80 text-sm mt-1">
-            Vuốt trái hoặc phải để chọn phương án yêu thích
+            Tạo vote với mục đích rõ ràng, thêm các phương án, rồi cả nhóm cùng chọn.
           </p>
           <div className="flex items-center gap-4 mt-4 text-sm">
             <span className="flex items-center gap-1">
@@ -145,7 +221,6 @@ export function VoteSessionLobby({
         </div>
       </motion.div>
 
-      {/* Create Session Button */}
       <motion.button
         initial={{ y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -157,7 +232,6 @@ export function VoteSessionLobby({
         Tạo phiên bình chọn mới
       </motion.button>
 
-      {/* Create Form */}
       <AnimatePresence>
         {showCreate && (
           <motion.div
@@ -168,6 +242,19 @@ export function VoteSessionLobby({
           >
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 space-y-4">
               <h3 className="font-black text-gray-900">Tạo bình chọn ✨</h3>
+
+              <div>
+                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  Vote này để làm gì?
+                </label>
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  rows={2}
+                  placeholder="Ví dụ: Cả nhóm chọn quán ăn tối hoặc chọn hoạt động thay thế tối nay"
+                  className="w-full mt-1 px-4 py-2.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-brand-coral focus:ring-1 focus:ring-brand-coral/30 outline-none text-sm resize-none"
+                />
+              </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <button
@@ -195,7 +282,7 @@ export function VoteSessionLobby({
               {createMode === 'NEW_OPTION' && (
                 <div>
                   <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    Ngày (Day Index)
+                    Ngày cần chèn hoạt động
                   </label>
                   <input
                     type="number"
@@ -204,6 +291,50 @@ export function VoteSessionLobby({
                     onChange={(e) => setTargetDayIndex(Number(e.target.value))}
                     className="w-full mt-1 px-4 py-2.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-brand-coral focus:ring-1 focus:ring-brand-coral/30 outline-none text-sm"
                   />
+                </div>
+              )}
+
+              {createMode === 'REPLACE_ITEM' && (
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    Chọn activity cần thay thế
+                  </label>
+                  <div className="relative">
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="text"
+                      value={itemSearch}
+                      onChange={(e) => setItemSearch(e.target.value)}
+                      placeholder="Tìm theo tên hoặc địa điểm"
+                      className="w-full pl-9 pr-4 py-2.5 bg-gray-50 rounded-xl border border-gray-200 focus:border-brand-blue focus:ring-1 focus:ring-brand-blue/30 outline-none text-sm"
+                    />
+                  </div>
+                  <div className="max-h-52 space-y-2 overflow-y-auto">
+                    {filteredItems.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => setTargetItemId(item.id)}
+                        className={`w-full rounded-xl border p-3 text-left transition-all ${
+                          targetItemId === item.id
+                            ? 'border-brand-blue bg-brand-blue/5'
+                            : 'border-gray-200 bg-white hover:border-gray-300'
+                        }`}
+                      >
+                        <p className="text-sm font-bold text-gray-900">{item.title}</p>
+                        <p className="mt-1 text-xs text-gray-500">
+                          Ngày {item.dayIndex + 1}
+                          {item.startTime ? ` · ${item.startTime}` : ''}
+                          {item.locationName ? ` · ${item.locationName}` : ''}
+                        </p>
+                      </button>
+                    ))}
+                    {filteredItems.length === 0 && (
+                      <p className="rounded-xl bg-gray-50 px-3 py-2 text-xs text-gray-400">
+                        Không tìm thấy activity phù hợp.
+                      </p>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -219,9 +350,116 @@ export function VoteSessionLobby({
                 />
               </div>
 
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    Các option để cả nhóm chọn
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setOptions((current) => [...current, emptyOption()])}
+                    className="text-xs font-bold text-brand-coral"
+                  >
+                    + Thêm option
+                  </button>
+                </div>
+
+                {options.map((option, index) => (
+                  <div key={index} className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-bold text-gray-800">Option {index + 1}</p>
+                      {options.length > 2 && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setOptions((current) =>
+                              current.filter((_, optionIndex) => optionIndex !== index),
+                            )
+                          }
+                          className="text-xs font-bold text-brand-coral"
+                        >
+                          Xóa
+                        </button>
+                      )}
+                    </div>
+
+                    <input
+                      type="text"
+                      value={option.title}
+                      onChange={(e) =>
+                        setOptions((current) =>
+                          current.map((entry, optionIndex) =>
+                            optionIndex === index ? { ...entry, title: e.target.value } : entry,
+                          ),
+                        )
+                      }
+                      placeholder="Tên option"
+                      className="w-full px-4 py-2.5 bg-white rounded-xl border border-gray-200 outline-none text-sm"
+                    />
+
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div>
+                        <label className="mb-1 flex items-center gap-1 text-xs font-bold text-gray-500">
+                          <Clock size={12} /> Giờ
+                        </label>
+                        <input
+                          type="time"
+                          value={option.startTime}
+                          onChange={(e) =>
+                            setOptions((current) =>
+                              current.map((entry, optionIndex) =>
+                                optionIndex === index ? { ...entry, startTime: e.target.value } : entry,
+                              ),
+                            )
+                          }
+                          className="w-full px-4 py-2.5 bg-white rounded-xl border border-gray-200 outline-none text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 flex items-center gap-1 text-xs font-bold text-gray-500">
+                          <MapPin size={12} /> Địa chỉ / địa điểm
+                        </label>
+                        <input
+                          type="text"
+                          value={option.locationText}
+                          onChange={(e) =>
+                            setOptions((current) =>
+                              current.map((entry, optionIndex) =>
+                                optionIndex === index ? { ...entry, locationText: e.target.value } : entry,
+                              ),
+                            )
+                          }
+                          placeholder="Ví dụ: Chợ đêm Sơn Trà"
+                          className="w-full px-4 py-2.5 bg-white rounded-xl border border-gray-200 outline-none text-sm"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="mb-1 flex items-center gap-1 text-xs font-bold text-gray-500">
+                        <FileText size={12} /> Mô tả option
+                      </label>
+                      <textarea
+                        value={option.shortNote}
+                        onChange={(e) =>
+                          setOptions((current) =>
+                            current.map((entry, optionIndex) =>
+                              optionIndex === index ? { ...entry, shortNote: e.target.value } : entry,
+                            ),
+                          )
+                        }
+                        rows={2}
+                        placeholder="Giải thích ngắn gọn vì sao nên chọn option này"
+                        className="w-full px-4 py-2.5 bg-white rounded-xl border border-gray-200 outline-none text-sm resize-none"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               <button
                 onClick={handleCreate}
-                disabled={!deadline || creating}
+                disabled={!canCreate || creating}
                 className="w-full px-6 py-3 bg-brand-coral text-white rounded-xl font-bold hover:bg-brand-coral/90 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {creating ? (
@@ -238,7 +476,6 @@ export function VoteSessionLobby({
         )}
       </AnimatePresence>
 
-      {/* Pending Approval (Leader) */}
       {isLeader && pendingSessions.length > 0 && (
         <section className="space-y-3">
           <h2 className="text-sm font-black text-gray-500 uppercase tracking-wider flex items-center gap-2">
@@ -247,6 +484,9 @@ export function VoteSessionLobby({
           </h2>
           {pendingSessions.map((session, i) => {
             const badge = getStatusBadge(session.status);
+            const sessionDescription =
+              (session.options[0]?.payload?.voteDescription as string | undefined) || null;
+
             return (
               <motion.div
                 key={session.id}
@@ -257,18 +497,17 @@ export function VoteSessionLobby({
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border ${badge.color}`}
-                    >
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border ${badge.color}`}>
                       {badge.icon} {badge.label}
                     </span>
                     <p className="mt-1 font-bold text-gray-900 text-sm">
                       {session.mode === 'NEW_OPTION' ? '🆕 Thêm hoạt động mới' : '🔄 Thay thế hoạt động'}
                     </p>
+                    {sessionDescription && (
+                      <p className="mt-1 text-xs text-gray-500">{sessionDescription}</p>
+                    )}
                   </div>
-                  <span className="text-xs text-gray-400">
-                    {session.createdBy.name || 'Ẩn danh'}
-                  </span>
+                  <span className="text-xs text-gray-400">{session.createdBy.name || 'Ẩn danh'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -293,7 +532,6 @@ export function VoteSessionLobby({
         </section>
       )}
 
-      {/* Active Sessions */}
       {activeSessions.length > 0 && (
         <section className="space-y-3">
           <h2 className="text-sm font-black text-gray-500 uppercase tracking-wider flex items-center gap-2">
@@ -302,6 +540,8 @@ export function VoteSessionLobby({
           </h2>
           {activeSessions.map((session, i) => {
             const badge = getStatusBadge(session.status);
+            const sessionDescription =
+              (session.options[0]?.payload?.voteDescription as string | undefined) || null;
             return (
               <motion.button
                 key={session.id}
@@ -313,9 +553,7 @@ export function VoteSessionLobby({
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border ${badge.color}`}
-                    >
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border ${badge.color}`}>
                       {badge.icon} {badge.label}
                     </span>
                     <p className="mt-1 font-bold text-gray-900 text-sm">
@@ -325,6 +563,9 @@ export function VoteSessionLobby({
                           ? '⚡ Vòng hòa'
                           : '🔄 Thay thế hoạt động'}
                     </p>
+                    {sessionDescription && (
+                      <p className="mt-1 text-xs text-gray-500">{sessionDescription}</p>
+                    )}
                   </div>
                   <div className="text-right">
                     <span className="text-xs font-bold text-brand-coral">
@@ -350,7 +591,6 @@ export function VoteSessionLobby({
         </section>
       )}
 
-      {/* Closed / Decision Required */}
       {closedSessions.length > 0 && (
         <section className="space-y-3">
           <h2 className="text-sm font-black text-gray-500 uppercase tracking-wider flex items-center gap-2">
@@ -369,14 +609,10 @@ export function VoteSessionLobby({
                 className="w-full text-left bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-2 hover:shadow-md transition-all active:scale-[0.99] opacity-80 hover:opacity-100"
               >
                 <div className="flex items-start justify-between">
-                  <span
-                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border ${badge.color}`}
-                  >
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border ${badge.color}`}>
                     {badge.icon} {badge.label}
                   </span>
-                  <span className="text-xs text-gray-400">
-                    {session.ballots.length} phiếu
-                  </span>
+                  <span className="text-xs text-gray-400">{session.ballots.length} phiếu</span>
                 </div>
                 <p className="font-bold text-gray-700 text-sm">
                   {session.mode === 'NEW_OPTION'
@@ -391,20 +627,19 @@ export function VoteSessionLobby({
         </section>
       )}
 
-      {/* Empty State */}
       {sessions.length === 0 && (
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 text-center space-y-3"
+          className="text-center py-12 space-y-3"
         >
-          <div className="text-5xl">🗳️</div>
-          <h3 className="text-lg font-black text-gray-900">
-            Chưa có bình chọn nào
-          </h3>
-          <p className="text-sm text-gray-500">
-            Tạo phiên bình chọn mới để mọi người cùng quyết định!
+          <div className="inline-flex items-center justify-center p-4 bg-gray-100 rounded-full">
+            <Vote size={32} className="text-gray-400" />
+          </div>
+          <p className="text-gray-500 font-bold">Chưa có phiên bình chọn nào</p>
+          <p className="text-sm text-gray-400">
+            Tạo vote đầu tiên với mô tả rõ ràng và ít nhất 2 phương án để cả nhóm cùng chọn.
           </p>
         </motion.div>
       )}

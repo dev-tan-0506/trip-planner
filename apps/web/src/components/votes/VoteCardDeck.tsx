@@ -61,6 +61,8 @@ function SwipeCard({
   const payload = option.payload as Record<string, unknown>;
   const locationName = typeof payload.locationName === 'string' ? payload.locationName : null;
   const shortNote = typeof payload.shortNote === 'string' ? payload.shortNote : null;
+  const voteDescription =
+    typeof payload.voteDescription === 'string' ? payload.voteDescription : null;
 
   return (
     <motion.div
@@ -104,6 +106,9 @@ function SwipeCard({
               <h2 className="text-2xl font-black text-gray-900 leading-tight">
                 {option.title}
               </h2>
+              {voteDescription && (
+                <p className="mx-auto max-w-sm text-sm text-gray-500">{voteDescription}</p>
+              )}
               {locationName && (
                 <p className="text-sm text-gray-500 flex items-center justify-center gap-1">
                   📍 {locationName}

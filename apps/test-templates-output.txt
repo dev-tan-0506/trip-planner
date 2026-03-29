@@ -1,0 +1,32 @@
+FAIL src/templates/templates.service.spec.ts
+  TemplatesService
+    publishTemplate
+      ΓêÜ should reject non-leader publish attempts (14 ms)
+      ΓêÜ should create sanitizedSnapshot without member data, joinCode, votes, or proposals (3 ms)
+    cloneTemplate
+      ├ù should create a new trip with caller as LEADER (4 ms)
+      ΓêÜ should deep-copy itinerary items with no FK back to source trip (2 ms)
+      ΓêÜ should increment cloneCount on successful clone (2 ms)
+
+  ΓùÅ TemplatesService ΓÇ║ cloneTemplate ΓÇ║ should create a new trip with caller as LEADER
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "NEWCODE1"
+    Received: "BQXPOABC"
+
+      163 |       });
+      164 |
+    > 165 |       expect(result.joinCode).toBe('NEWCODE1');
+          |                               ^
+      166 |
+      167 |       // Verify trip created with LEADER membership
+      168 |       expect(prisma.trip.create).toHaveBeenCalledWith(
+
+      at Object.<anonymous> (templates/templates.service.spec.ts:165:31)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 4 passed, 5 total
+Snapshots:   0 total
+Time:        2.481 s, estimated 3 s
+Ran all test suites matching /src\\templates\\templates.service.spec.ts/i.

@@ -1,0 +1,44 @@
+
+[1m[46m RUN [49m[22m [36mv4.1.2 [39m[90mC:/Users/quoct/OneDrive/Desktop/code/inan/apps/web[39m
+
+stderr | src/components/votes/__tests__/vote-session.test.tsx > VoteCardDeck > calls onVote with current option id when vote button clicked
+An update to VoteCardDeck inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VoteCardDeck inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VoteCardDeck inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ [32mΓ£ô[39m src/components/votes/__tests__/vote-session.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 106[2mms[22m[39m
+ [32mΓ£ô[39m src/components/templates/__tests__/template-library.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 103[2mms[22m[39m
+ [32mΓ£ô[39m src/components/trip/__tests__/trip-workspace.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 180[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m22 passed[39m[22m[90m (22)[39m
+[2m   Start at [22m 14:58:41
+[2m   Duration [22m 1.78s[2m (transform 358ms, setup 449ms, import 933ms, tests 389ms, environment 2.47s)[22m
+

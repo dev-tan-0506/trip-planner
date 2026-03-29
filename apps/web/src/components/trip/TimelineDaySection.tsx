@@ -1,6 +1,6 @@
 'use client';
 
-import { RefObject } from 'react';
+import { RefObject, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Clock,
@@ -11,6 +11,9 @@ import {
   MessageSquarePlus,
   AlertTriangle,
   Map as MapIcon,
+  GripVertical,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import type { DayGroup, OverlapWarning, ItineraryItem } from '../../lib/api-client';
 import Link from 'next/link';
@@ -52,6 +55,7 @@ interface TimelineDaySectionProps {
   onAddItem: (dayIndex: number, insertAfterId?: string) => void;
   onEditItem: (itemId: string) => void;
   onDeleteItem: (itemId: string) => void;
+  onReorderItem: (itemId: string, dayIndex: number, targetIndex: number) => void;
   onProposeChange: (itemId: string, version: number) => void;
 }
 
@@ -77,6 +81,10 @@ function ItemCard({
   onDelete,
   onPropose,
   onAddAfter,
+  onDragStart,
+  onDragEnd,
+  onMoveUp,
+  onMoveDown,
 }: {
   item: ItineraryItem;
   canEdit: boolean;
@@ -89,6 +97,10 @@ function ItemCard({
   onDelete: () => void;
   onPropose: () => void;
   onAddAfter: () => void;
+  onDragStart: () => void;
+  onDragEnd: () => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
 }) {
   const config = progressConfig[item.progress];
 
@@ -97,9 +109,12 @@ function ItemCard({
       ref={isCurrent ? currentItemRef : undefined}
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
+      draggable={canEdit}
+      onDragStart={canEdit ? onDragStart : undefined}
+      onDragEnd={canEdit ? onDragEnd : undefined}
       className={`relative bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-all group border-l-4 ${config.cardClass} ${
         isCurrent ? 'ring-2 ring-brand-green/30 shadow-md' : ''
-      }`}
+      } ${canEdit ? 'cursor-grab active:cursor-grabbing' : ''}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0 space-y-2">
@@ -147,7 +162,15 @@ function ItemCard({
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+          {canEdit && (
+            <span
+              className="p-1.5 text-gray-300"
+              title="Giữ và kéo để đổi thứ tự"
+            >
+              <GripVertical size={14} />
+            </span>
+          )}
           {item.lat != null && item.lng != null && (
             <Link
               href={`/trip/${joinCode}/map?focusItemId=${item.id}`}
@@ -180,6 +203,20 @@ function ItemCard({
               >
                 <Plus size={14} />
               </button>
+              <button
+                onClick={onMoveUp}
+                className="p-1.5 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-lg transition-all"
+                title="Đưa lên trên"
+              >
+                <ArrowUp size={14} />
+              </button>
+              <button
+                onClick={onMoveDown}
+                className="p-1.5 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-lg transition-all"
+                title="Đưa xuống dưới"
+              >
+                <ArrowDown size={14} />
+              </button>
             </>
           ) : (
             <button
@@ -206,15 +243,18 @@ export function TimelineDaySection({
   onAddItem,
   onEditItem,
   onDeleteItem,
+  onReorderItem,
   onProposeChange,
 }: TimelineDaySectionProps) {
+  const [draggedItemId, setDraggedItemId] = useState<string | null>(null);
+  const [dropIndex, setDropIndex] = useState<number | null>(null);
   const dayLabel = getDayLabel(day.dayIndex, tripStartDate);
 
   return (
-    <div className="space-y-3">
+    <div className="relative space-y-3 pl-10">
       {/* Day Header */}
-      <div className="flex items-center gap-3">
-        <div className="flex items-center justify-center w-10 h-10 bg-brand-dark text-white rounded-xl font-black text-sm shadow-md">
+      <div className="relative flex items-center gap-3">
+        <div className="absolute -left-10 top-1 flex h-8 w-8 items-center justify-center rounded-full border-4 border-white bg-brand-dark text-sm font-black text-white shadow-md">
           {day.dayIndex + 1}
         </div>
         <div>
@@ -246,28 +286,90 @@ export function TimelineDaySection({
           )}
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="relative space-y-2">
           {day.items.map((item) => {
             const overlap = overlapWarnings.find((w) => w.itemId === item.id);
             const isCurrent = item.progress === 'dang di';
+            const itemIndex = day.items.findIndex((dayItem) => dayItem.id === item.id);
 
             return (
-              <ItemCard
-                key={item.id}
-                item={item}
-                canEdit={canEdit}
-                hasOverlap={!!overlap}
-                overlapMessage={overlap?.message}
-                isCurrent={isCurrent}
-                currentItemRef={currentItemRef}
-                joinCode={joinCode}
-                onEdit={() => onEditItem(item.id)}
-                onDelete={() => onDeleteItem(item.id)}
-                onPropose={() => onProposeChange(item.id, item.version)}
-                onAddAfter={() => onAddItem(day.dayIndex, item.id)}
-              />
+              <div key={item.id} className="relative space-y-2 pb-3 last:pb-0">
+                <div className="absolute -left-[34px] top-6 flex h-5 w-5 items-center justify-center rounded-full border-2 border-brand-blue/20 bg-white shadow-sm">
+                  <div className="h-2.5 w-2.5 rounded-full bg-brand-blue" />
+                </div>
+                {canEdit && (
+                  <div
+                    onDragOver={(event) => {
+                      event.preventDefault();
+                      event.dataTransfer.dropEffect = 'move';
+                      setDropIndex(itemIndex);
+                    }}
+                    onDragLeave={() => setDropIndex((current) => (current === itemIndex ? null : current))}
+                    onDrop={(event) => {
+                      event.preventDefault();
+                      if (draggedItemId) {
+                        onReorderItem(draggedItemId, day.dayIndex, itemIndex);
+                      }
+                      setDraggedItemId(null);
+                      setDropIndex(null);
+                    }}
+                    className={`h-4 rounded-full transition-all ${
+                      dropIndex === itemIndex ? 'bg-brand-blue/30' : 'bg-transparent'
+                    }`}
+                  />
+                )}
+
+                <div className="relative">
+                  <ItemCard
+                    item={item}
+                    canEdit={canEdit}
+                    hasOverlap={!!overlap}
+                    overlapMessage={overlap?.message}
+                    isCurrent={isCurrent}
+                    currentItemRef={currentItemRef}
+                    joinCode={joinCode}
+                    onEdit={() => onEditItem(item.id)}
+                    onDelete={() => onDeleteItem(item.id)}
+                    onPropose={() => onProposeChange(item.id, item.version)}
+                    onAddAfter={() => onAddItem(day.dayIndex, item.id)}
+                    onDragStart={() => setDraggedItemId(item.id)}
+                    onDragEnd={() => {
+                      setDraggedItemId(null);
+                      setDropIndex(null);
+                    }}
+                    onMoveUp={() => onReorderItem(item.id, day.dayIndex, Math.max(itemIndex - 1, 0))}
+                    onMoveDown={() => onReorderItem(item.id, day.dayIndex, Math.min(itemIndex + 1, day.items.length - 1))}
+                  />
+                </div>
+              </div>
             );
           })}
+
+          {canEdit && (
+            <div
+              onDragOver={(event) => {
+                event.preventDefault();
+                event.dataTransfer.dropEffect = 'move';
+                setDropIndex(day.items.length);
+              }}
+              onDragLeave={() => setDropIndex((current) => (current === day.items.length ? null : current))}
+              onDrop={(event) => {
+                event.preventDefault();
+                if (draggedItemId) {
+                  onReorderItem(draggedItemId, day.dayIndex, day.items.length);
+                }
+                setDraggedItemId(null);
+                setDropIndex(null);
+              }}
+              className={`rounded-xl border-2 border-dashed px-4 py-2 text-center text-xs font-bold transition-all ${
+                dropIndex === day.items.length
+                  ? 'border-brand-blue bg-brand-blue/10 text-brand-blue'
+                  : 'border-transparent text-gray-400'
+              }`}
+            >
+              Kéo thả hoạt động vào đây để đổi thứ tự
+            </div>
+          )}
         </div>
       )}
     </div>

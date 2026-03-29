@@ -2,6 +2,7 @@ import {
   Injectable,
   ForbiddenException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateItineraryItemDto } from './dto/create-itinerary-item.dto';
@@ -120,6 +121,79 @@ function computeProgress(
 export class ItineraryService {
   constructor(private prisma: PrismaService) {}
 
+  private getTripDurationDays(startDate: Date, endDate: Date): number {
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(endDate);
+    end.setHours(0, 0, 0, 0);
+    return Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+  }
+
+  private ensureDayIndexInRange(dayIndex: number, startDate: Date, endDate: Date) {
+    const totalDays = this.getTripDurationDays(startDate, endDate);
+    if (dayIndex < 0 || dayIndex >= totalDays) {
+      throw new BadRequestException(
+        `dayIndex must be between 0 and ${Math.max(totalDays - 1, 0)} for this trip`,
+      );
+    }
+  }
+
+  private compareItemsForTimeline(
+    a: { startMinute: number | null; sortOrder: number; createdAt?: Date },
+    b: { startMinute: number | null; sortOrder: number; createdAt?: Date },
+  ) {
+    if (a.startMinute !== null && b.startMinute !== null) {
+      if (a.startMinute !== b.startMinute) {
+        return a.startMinute - b.startMinute;
+      }
+      return a.sortOrder - b.sortOrder;
+    }
+
+    if (a.startMinute !== null) return -1;
+    if (b.startMinute !== null) return 1;
+
+    if (a.sortOrder !== b.sortOrder) {
+      return a.sortOrder - b.sortOrder;
+    }
+
+    if (a.createdAt && b.createdAt) {
+      return a.createdAt.getTime() - b.createdAt.getTime();
+    }
+
+    return 0;
+  }
+
+  private async normalizeDaySortOrders(
+    tripId: string,
+    dayIndex: number,
+  ): Promise<void> {
+    const items = await this.prisma.itineraryItem.findMany({
+      where: { tripId, dayIndex },
+      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+    });
+
+    if (items.length <= 1) {
+      return;
+    }
+
+    const sorted = [...items].sort((a, b) => this.compareItemsForTimeline(a, b));
+
+    await this.prisma.$transaction([
+      ...sorted.map((item, index) =>
+        this.prisma.itineraryItem.update({
+          where: { id: item.id },
+          data: { sortOrder: 1000 + index },
+        }),
+      ),
+      ...sorted.map((item, index) =>
+        this.prisma.itineraryItem.update({
+          where: { id: item.id },
+          data: { sortOrder: index + 1 },
+        }),
+      ),
+    ]);
+  }
+
   /**
    * Verify user is a trip member and return their role.
    */
@@ -165,6 +239,7 @@ export class ItineraryService {
   private async getNextSortOrder(
     tripId: string,
     dayIndex: number,
+    startMinute: number | null,
     insertAfterItemId?: string,
   ): Promise<number> {
     if (insertAfterItemId) {
@@ -183,6 +258,30 @@ export class ItineraryService {
           data: { sortOrder: { increment: 1 } },
         });
         return afterItem.sortOrder + 1;
+      }
+    }
+
+    if (startMinute !== null) {
+      const dayItems = await this.prisma.itineraryItem.findMany({
+        where: { tripId, dayIndex },
+        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+      });
+
+      const nextTimedItem = [...dayItems]
+        .sort((a, b) => this.compareItemsForTimeline(a, b))
+        .find((item) => item.startMinute === null || item.startMinute > startMinute);
+
+      if (nextTimedItem) {
+        await this.prisma.itineraryItem.updateMany({
+          where: {
+            tripId,
+            dayIndex,
+            sortOrder: { gte: nextTimedItem.sortOrder },
+          },
+          data: { sortOrder: { increment: 1 } },
+        });
+
+        return nextTimedItem.sortOrder;
       }
     }
 
@@ -268,6 +367,8 @@ export class ItineraryService {
       },
     });
 
+    const totalDays = this.getTripDurationDays(trip.startDate, trip.endDate);
+
     // Group by day
     const dayMap = new Map<number, ItineraryItemWithProgress[]>();
 
@@ -307,9 +408,10 @@ export class ItineraryService {
     }
 
     // Sort days and build response
-    const days: DayGroup[] = Array.from(dayMap.entries())
-      .sort(([a], [b]) => a - b)
-      .map(([dayIndex, dayItems]) => ({ dayIndex, items: dayItems }));
+    const days: DayGroup[] = Array.from({ length: totalDays }, (_, dayIndex) => ({
+      dayIndex,
+      items: dayMap.get(dayIndex) ?? [],
+    }));
 
     // Overlap warnings
     const overlapWarnings = this.detectOverlaps(
@@ -354,16 +456,28 @@ export class ItineraryService {
   ) {
     await this.requireLeader(tripId, userId);
 
-    const sortOrder = await this.getNextSortOrder(
-      tripId,
-      dto.dayIndex,
-      dto.insertAfterItemId,
-    );
+    const trip = await this.prisma.trip.findUnique({
+      where: { id: tripId },
+      select: { startDate: true, endDate: true },
+    });
+
+    if (!trip) {
+      throw new NotFoundException('Trip not found');
+    }
+
+    this.ensureDayIndexInRange(dto.dayIndex, trip.startDate, trip.endDate);
 
     const startMinute =
       dto.startTime !== undefined ? timeToMinutes(dto.startTime) : null;
 
-    const item = await this.prisma.itineraryItem.create({
+    const sortOrder = await this.getNextSortOrder(
+      tripId,
+      dto.dayIndex,
+      startMinute,
+      dto.insertAfterItemId,
+    );
+
+    await this.prisma.itineraryItem.create({
       data: {
         tripId,
         dayIndex: dto.dayIndex,
@@ -378,6 +492,10 @@ export class ItineraryService {
         shortNote: dto.shortNote,
       },
     });
+
+    if (!dto.insertAfterItemId) {
+      await this.normalizeDaySortOrders(tripId, dto.dayIndex);
+    }
 
     return this.getTripItinerarySnapshot(tripId, userId);
   }
@@ -401,10 +519,22 @@ export class ItineraryService {
       throw new NotFoundException('Itinerary item not found');
     }
 
+    const trip = await this.prisma.trip.findUnique({
+      where: { id: tripId },
+      select: { startDate: true, endDate: true },
+    });
+
+    if (!trip) {
+      throw new NotFoundException('Trip not found');
+    }
+
     const updateData: Record<string, unknown> = {};
 
     if (dto.title !== undefined) updateData.title = dto.title;
-    if (dto.dayIndex !== undefined) updateData.dayIndex = dto.dayIndex;
+    if (dto.dayIndex !== undefined) {
+      this.ensureDayIndexInRange(dto.dayIndex, trip.startDate, trip.endDate);
+      updateData.dayIndex = dto.dayIndex;
+    }
     if (dto.startTime !== undefined) {
       updateData.startMinute = timeToMinutes(dto.startTime);
     }
@@ -422,6 +552,13 @@ export class ItineraryService {
       where: { id: itemId },
       data: updateData,
     });
+
+    if (dto.dayIndex !== undefined && dto.dayIndex !== existing.dayIndex) {
+      await this.normalizeDaySortOrders(tripId, existing.dayIndex);
+      await this.normalizeDaySortOrders(tripId, dto.dayIndex);
+    } else if (dto.startTime !== undefined) {
+      await this.normalizeDaySortOrders(tripId, existing.dayIndex);
+    }
 
     return this.getTripItinerarySnapshot(tripId, userId);
   }

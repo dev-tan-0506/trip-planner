@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class ReassignLogisticsMemberDto {
   @IsString()
@@ -6,4 +6,8 @@ export class ReassignLogisticsMemberDto {
 
   @IsString()
   targetUnitId!: string;
+
+  @IsString()
+  @IsOptional()
+  targetSeatLabel?: string;
 }

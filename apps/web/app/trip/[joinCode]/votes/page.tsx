@@ -1,13 +1,15 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
 import {
   tripsApi,
   votesApi,
   Trip,
   VoteSession,
+  itineraryApi,
+  ItineraryItem,
 } from '../../../../src/lib/api-client';
 import { useAuthStore } from '../../../../src/store/useAuthStore';
 import { VoteSessionLobby } from '../../../../src/components/votes/VoteSessionLobby';
@@ -28,13 +30,13 @@ const WS_BASE_URL = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:3001';
 
 export default function VotesPage() {
   const params = useParams();
-  const router = useRouter();
   const joinCode = params.joinCode as string;
   const { user, isHydrated } = useAuthStore();
 
   const [trip, setTrip] = useState<Trip | null>(null);
   const [sessions, setSessions] = useState<VoteSession[]>([]);
   const [activeSession, setActiveSession] = useState<VoteSession | null>(null);
+  const [itineraryItems, setItineraryItems] = useState<ItineraryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [connected, setConnected] = useState(false);
@@ -46,10 +48,16 @@ export default function VotesPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const tripData = await tripsApi.getByJoinCode(joinCode);
+        const tripData = user
+          ? await tripsApi.getPrivateByJoinCode(joinCode)
+          : await tripsApi.getByJoinCode(joinCode);
         setTrip(tripData);
-        const sessionsData = await votesApi.listSessions(tripData.id);
+        const [sessionsData, itinerarySnapshot] = await Promise.all([
+          votesApi.listSessions(tripData.id),
+          itineraryApi.getSnapshot(tripData.id),
+        ]);
         setSessions(sessionsData);
+        setItineraryItems(itinerarySnapshot.days.flatMap((day) => day.items));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Không thể tải dữ liệu');
       } finally {
@@ -57,7 +65,7 @@ export default function VotesPage() {
       }
     }
     if (isHydrated) loadData();
-  }, [joinCode, isHydrated]);
+  }, [joinCode, isHydrated, user]);
 
   // WebSocket connection lifecycle
   useEffect(() => {
@@ -288,7 +296,16 @@ export default function VotesPage() {
                   userId={user?.id || ''}
                   onVote={async (optionId) => {
                     await votesApi.submitBallot(activeSession.id, optionId);
-                    // Snapshot will be updated via socket
+                    const updated = await votesApi.getSession(
+                      trip.id,
+                      activeSession.id,
+                    );
+                    setActiveSession(updated);
+                    setSessions((prev) =>
+                      prev.map((session) =>
+                        session.id === updated.id ? updated : session,
+                      ),
+                    );
                   }}
                   onBack={leaveSessionRoom}
                 />
@@ -306,10 +323,15 @@ export default function VotesPage() {
                 sessions={sessions}
                 tripId={trip.id}
                 isLeader={!!isLeader}
+                itineraryItems={itineraryItems}
                 onSelectSession={joinSessionRoom}
-                onCreateSession={async (payload) => {
-                  await votesApi.createSession(trip.id, payload);
+                onCreateSession={async ({ session, options }) => {
+                  const createdSession = await votesApi.createSession(trip.id, session);
+                  await Promise.all(
+                    options.map((option) => votesApi.createOption(createdSession.id, option)),
+                  );
                   await refreshSessions();
+                  return createdSession;
                 }}
                 onApproveSession={async (sessionId) => {
                   await votesApi.approveSession(sessionId);

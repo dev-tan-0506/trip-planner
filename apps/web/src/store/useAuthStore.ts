@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { authApi, UserProfile } from '../lib/api-client';
+import { authApi, ApiRequestError, UserProfile } from '../lib/api-client';
 
 interface AuthState {
   user: UserProfile | null;
@@ -32,7 +32,11 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({ user: null, isLoading: false, isHydrated: true });
       }
     } catch (error) {
-      console.error('Failed to restore session:', error);
+      if (error instanceof ApiRequestError && error.code === 'network_error') {
+        set({ user: null, isLoading: false, isHydrated: true, error: null });
+        return;
+      }
+
       set({ user: null, isLoading: false, isHydrated: true, error: 'Session expired' });
     }
   },

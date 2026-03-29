@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { IsArray, IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
 
 export class CreateLogisticsUnitDto {
   @IsEnum(['ROOM', 'RIDE'])
@@ -14,4 +14,16 @@ export class CreateLogisticsUnitDto {
   @IsString()
   @IsOptional()
   note?: string;
+
+  @IsEnum(['MOTORBIKE', 'CAR', 'BUS'])
+  @IsOptional()
+  rideKind?: 'MOTORBIKE' | 'CAR' | 'BUS';
+
+  @IsString()
+  @IsOptional()
+  plateNumber?: string;
+
+  @IsArray()
+  @IsOptional()
+  seatLabels?: string[];
 }

@@ -27,6 +27,9 @@ export function LogisticsBoardTab({ tripId }: LogisticsBoardTabProps) {
   const [newLabel, setNewLabel] = useState('');
   const [newCapacity, setNewCapacity] = useState(4);
   const [newNote, setNewNote] = useState('');
+  const [newRideKind, setNewRideKind] = useState<'MOTORBIKE' | 'CAR' | 'BUS'>('CAR');
+  const [newPlateNumber, setNewPlateNumber] = useState('');
+  const [newSeatLabels, setNewSeatLabels] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const fetchData = useCallback(async () => {
@@ -53,14 +56,26 @@ export function LogisticsBoardTab({ tripId }: LogisticsBoardTabProps) {
       const data = await logisticsApi.createUnit(tripId, {
         type: creating,
         label: newLabel.trim(),
-        capacity: newCapacity,
+        capacity: creating === 'RIDE' && newRideKind === 'MOTORBIKE' ? 2 : newCapacity,
         note: newNote.trim() || undefined,
+        rideKind: creating === 'RIDE' ? newRideKind : undefined,
+        plateNumber: creating === 'RIDE' ? newPlateNumber.trim() || undefined : undefined,
+        seatLabels:
+          creating === 'RIDE' && newRideKind === 'BUS'
+            ? newSeatLabels
+                .split(',')
+                .map((value) => value.trim())
+                .filter(Boolean)
+            : undefined,
       });
       setSnapshot(data);
       setCreating(null);
       setNewLabel('');
       setNewCapacity(4);
       setNewNote('');
+      setNewRideKind('CAR');
+      setNewPlateNumber('');
+      setNewSeatLabels('');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Không tạo được');
     } finally {
@@ -68,9 +83,9 @@ export function LogisticsBoardTab({ tripId }: LogisticsBoardTabProps) {
     }
   };
 
-  const handleSelfJoin = async (unitId: string) => {
+  const handleSelfJoin = async (unitId: string, seatLabel?: string) => {
     try {
-      const data = await logisticsApi.selfJoin(tripId, { unitId });
+      const data = await logisticsApi.selfJoin(tripId, { unitId, seatLabel });
       setSnapshot(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Không thể vào chỗ này');
@@ -86,12 +101,13 @@ export function LogisticsBoardTab({ tripId }: LogisticsBoardTabProps) {
     }
   };
 
-  const handleReassign = async (tripMemberId: string, targetUnitId: string) => {
+  const handleReassign = async (tripMemberId: string, targetUnitId: string, targetSeatLabel?: string) => {
     if (!tripMemberId || !targetUnitId) return;
     try {
       const data = await logisticsApi.reassign(tripId, {
         tripMemberId,
         targetUnitId,
+        targetSeatLabel,
       });
       setSnapshot(data);
     } catch (err) {
@@ -181,14 +197,14 @@ export function LogisticsBoardTab({ tripId }: LogisticsBoardTabProps) {
             className="flex items-center gap-2 px-4 py-2.5 bg-white rounded-2xl border border-brand-blue/20 text-brand-blue text-sm font-bold shadow-sm hover:shadow-md hover:border-brand-blue/40 transition-all"
           >
             <BedDouble size={16} />
-            Tạo chỗ mới
+            Tạo phòng
           </button>
           <button
             onClick={() => setCreating('RIDE')}
             className="flex items-center gap-2 px-4 py-2.5 bg-white rounded-2xl border border-brand-yellow/20 text-brand-coral text-sm font-bold shadow-sm hover:shadow-md hover:border-brand-yellow/40 transition-all"
           >
             <Car size={16} />
-            Tạo chỗ mới
+            Tạo xe
           </button>
           {hasUnits && (
             <>
@@ -264,6 +280,49 @@ export function LogisticsBoardTab({ tripId }: LogisticsBoardTabProps) {
                   />
                 </div>
               </div>
+              {creating === 'RIDE' && (
+                <div className="grid gap-3 md:grid-cols-3">
+                  <div>
+                    <label className="text-xs text-gray-500 font-semibold">Loại xe</label>
+                    <select
+                      value={newRideKind}
+                      onChange={(event) => {
+                        const nextKind = event.target.value as 'MOTORBIKE' | 'CAR' | 'BUS';
+                        setNewRideKind(nextKind);
+                        if (nextKind === 'MOTORBIKE') {
+                          setNewCapacity(2);
+                        }
+                      }}
+                      className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/30"
+                    >
+                      <option value="CAR">Ô tô</option>
+                      <option value="MOTORBIKE">Xe máy</option>
+                      <option value="BUS">Xe khách</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-500 font-semibold">Biển số</label>
+                    <input
+                      type="text"
+                      value={newPlateNumber}
+                      onChange={(event) => setNewPlateNumber(event.target.value)}
+                      placeholder="Ví dụ 43A-123.45"
+                      className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/30"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-500 font-semibold">Tên ghế</label>
+                    <input
+                      type="text"
+                      value={newSeatLabels}
+                      onChange={(event) => setNewSeatLabels(event.target.value)}
+                      placeholder="A1, A2, A3..."
+                      disabled={newRideKind !== 'BUS'}
+                      className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-blue/30 disabled:bg-gray-50"
+                    />
+                  </div>
+                </div>
+              )}
               <div className="flex gap-2 pt-1">
                 <button
                   onClick={handleCreateUnit}
@@ -315,7 +374,7 @@ export function LogisticsBoardTab({ tripId }: LogisticsBoardTabProps) {
 
       {/* Room units */}
       {roomUnits.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-y-3 rounded-3xl border border-brand-blue/10 bg-brand-blue/5 p-4">
           <h3 className="text-sm font-black text-gray-700 flex items-center gap-2">
             <BedDouble size={16} className="text-brand-blue" />
             Phòng ({roomUnits.length})
@@ -340,7 +399,7 @@ export function LogisticsBoardTab({ tripId }: LogisticsBoardTabProps) {
 
       {/* Ride units */}
       {rideUnits.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-y-3 rounded-3xl border border-brand-yellow/20 bg-brand-yellow/5 p-4">
           <h3 className="text-sm font-black text-gray-700 flex items-center gap-2">
             <Car size={16} className="text-brand-coral" />
             Xe ({rideUnits.length})

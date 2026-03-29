@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import "leaflet/dist/leaflet.css";
 import { AuthHydration } from "../src/components/ui/AuthHydration";
 
 const plusJakarta = Plus_Jakarta_Sans({

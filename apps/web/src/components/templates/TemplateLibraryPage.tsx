@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Compass, Search, Loader2, BookOpen } from 'lucide-react';
+import { Compass, Search, Loader2, BookOpen, Upload } from 'lucide-react';
 import Link from 'next/link';
 import { templatesApi, TemplateListing } from '../../lib/api-client';
 import { TemplatePreviewCard } from './TemplatePreviewCard';
@@ -40,6 +40,13 @@ export function TemplateLibraryPage() {
               Mẫu hành trình
             </span>
           </Link>
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-2 rounded-2xl bg-brand-blue px-4 py-2 text-sm font-bold text-white shadow-sm transition-all hover:bg-brand-blue/90"
+          >
+            <Upload size={16} />
+            Chia sẻ từ chuyến đi của bạn
+          </Link>
         </div>
       </header>
 
@@ -58,6 +65,9 @@ export function TemplateLibraryPage() {
           </h1>
           <p className="text-gray-500 max-w-md mx-auto">
             Tìm mẫu hành trình từ cộng đồng, clone về và chỉnh theo ý bạn chỉ trong 1 click!
+          </p>
+          <p className="text-sm text-gray-400">
+            Muốn đăng mẫu mới? Mở một chuyến đi mà bạn là leader rồi bấm xuất bản template.
           </p>
         </motion.div>
 

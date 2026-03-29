@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, AlertTriangle, Loader2 } from 'lucide-react';
+import { X, AlertTriangle, Loader2, MapPin } from 'lucide-react';
 import { itineraryApi, ItinerarySnapshot, ItineraryItem, OverlapWarning } from '../../lib/api-client';
+import { LocationPicker } from './LocationPicker';
 
 interface ItineraryItemEditorProps {
   open: boolean;
@@ -24,18 +25,22 @@ export function ItineraryItemEditor({
 }: ItineraryItemEditorProps) {
   const [title, setTitle] = useState(item.title);
   const [startTime, setStartTime] = useState(item.startTime || '');
-  const [locationName, setLocationName] = useState(item.locationName || '');
+  const [locationText, setLocationText] = useState(item.locationAddress || item.locationName || '');
   const [shortNote, setShortNote] = useState(item.shortNote || '');
-  const [locationAddress, setLocationAddress] = useState(item.locationAddress || '');
+  const [lat, setLat] = useState<number | undefined>(item.lat ?? undefined);
+  const [lng, setLng] = useState<number | undefined>(item.lng ?? undefined);
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setTitle(item.title);
     setStartTime(item.startTime || '');
-    setLocationName(item.locationName || '');
+    setLocationText(item.locationAddress || item.locationName || '');
     setShortNote(item.shortNote || '');
-    setLocationAddress(item.locationAddress || '');
+    setLat(item.lat ?? undefined);
+    setLng(item.lng ?? undefined);
+    setShowLocationPicker(false);
   }, [item]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -49,9 +54,11 @@ export function ItineraryItemEditor({
       const snapshot = await itineraryApi.updateItem(tripId, item.id, {
         title: title.trim(),
         startTime: startTime || undefined,
-        locationName: locationName || undefined,
+        locationName: locationText || undefined,
         shortNote: shortNote || undefined,
-        locationAddress: locationAddress || undefined,
+        locationAddress: locationText || undefined,
+        lat,
+        lng,
       });
       onSuccess(snapshot);
       onClose();
@@ -121,7 +128,7 @@ export function ItineraryItemEditor({
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <div>
                     <label className="block text-xs font-bold text-gray-600 mb-1">Giờ bắt đầu</label>
                     <input
@@ -132,22 +139,54 @@ export function ItineraryItemEditor({
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-600 mb-1">Địa điểm</label>
+                    <label className="block text-xs font-bold text-gray-600 mb-1">Địa chỉ / địa điểm</label>
                     <input
-                      value={locationName}
-                      onChange={(e) => setLocationName(e.target.value)}
+                      value={locationText}
+                      onChange={(e) => setLocationText(e.target.value)}
                       className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm"
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-gray-600 mb-1">Địa chỉ</label>
-                  <input
-                    value={locationAddress}
-                    onChange={(e) => setLocationAddress(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm"
-                  />
+                <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4 space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-bold text-gray-800">Ghim địa điểm trên bản đồ</p>
+                      <p className="text-xs text-gray-500">Nhập tay hoặc chọn trên bản đồ đều dùng chung một field.</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowLocationPicker((value) => !value)}
+                      className="rounded-xl border border-brand-blue/20 bg-white px-3 py-2 text-xs font-bold text-brand-blue"
+                    >
+                      {showLocationPicker ? 'Ẩn bản đồ' : 'Chọn trên bản đồ'}
+                    </button>
+                  </div>
+
+                  {showLocationPicker && (
+                    <LocationPicker
+                      initialLat={lat}
+                      initialLng={lng}
+                      value={locationText}
+                      onValueChange={setLocationText}
+                      onCancel={() => setShowLocationPicker(false)}
+                      onConfirm={(location) => {
+                        setLat(location.lat);
+                        setLng(location.lng);
+                        if (location.name) {
+                          setLocationText(location.name);
+                        }
+                        setShowLocationPicker(false);
+                      }}
+                    />
+                  )}
+
+                  {(lat != null && lng != null) && (
+                    <p className="text-xs text-gray-500 flex items-center gap-1">
+                      <MapPin size={12} />
+                      {lat.toFixed(5)}, {lng.toFixed(5)}
+                    </p>
+                  )}
                 </div>
 
                 <div>

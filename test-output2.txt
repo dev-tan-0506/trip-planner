@@ -1,0 +1,320 @@
+
+[1m[46m RUN [49m[22m [36mv4.1.2 [39m[90mC:/Users/quoct/OneDrive/Desktop/code/inan/apps/web[39m
+
+stderr | src/components/votes/__tests__/vote-session.test.tsx > VoteCardDeck > calls onVote with current option id when vote button clicked
+An update to VoteCardDeck inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VoteCardDeck inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VoteCardDeck inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ [31mΓ¥»[39m src/components/votes/__tests__/vote-session.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 106[2mms[22m[39m
+     [32mΓ£ô[39m renders desktop fallback buttons for skip and vote[32m 41[2mms[22m[39m
+[31m     [31m├ù[31m shows the first option card title[39m[32m 13[2mms[22m[39m
+     [32mΓ£ô[39m renders interim results section while session is open[32m 7[2mms[22m[39m
+     [32mΓ£ô[39m calls onVote with current option id when vote button clicked[32m 16[2mms[22m[39m
+     [32mΓ£ô[39m shows already-voted indicator when user ballot exists[32m 8[2mms[22m[39m
+     [32mΓ£ô[39m marks user choice with checkmark in interim results[32m 6[2mms[22m[39m
+     [32mΓ£ô[39m shows REPLACE_ITEM comparison with current and winning activities[32m 8[2mms[22m[39m
+     [32mΓ£ô[39m shows leader decision buttons for LEADER_DECISION_REQUIRED[32m 5[2mms[22m[39m
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 1 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  src/components/votes/__tests__/vote-session.test.tsx > VoteCardDeck > shows the first option card title
+TestingLibraryElementError: Found multiple elements with the text: Option A
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-2xl font-black text-gray-900 leading-tight"
+>
+  Option A
+</h2>
+
+Ignored nodes: comments, script, style
+<span
+  class="font-bold text-gray-700"
+>
+  Option A
+</span>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-4"
+    >
+      <div
+        class="flex items-center justify-between"
+      >
+        <button
+          class="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-gray-700 transition-colors"
+        >
+          <span
+            data-testid="icon-ArrowLeft"
+            size="16"
+          />
+           Quay lß║íi
+        </button>
+        <div
+          class="flex items-center gap-3"
+        >
+          <span
+            class="flex items-center gap-1 text-xs font-bold text-brand-coral bg-brand-coral/10 px-2.5 py-1 rounded-full"
+          >
+            <span
+              data-testid="icon-Timer"
+              size="12"
+            />
+             
+            59 ph├║t
+          </span>
+          <span
+            class="text-xs text-gray-400"
+          >
+            1
+            /
+            2
+          </span>
+        </div>
+      </div>
+      <div
+        class="relative h-[420px] sm:h-[480px]"
+      >
+        <div
+          class="absolute inset-0 cursor-grab active:cursor-grabbing touch-none"
+        >
+          <div
+            class="relative h-full bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
+          >
+            <div
+              class="absolute inset-0 bg-brand-coral/10 rounded-3xl z-10 flex items-center justify-center pointer-events-none"
+            >
+              <div
+                class="bg-brand-coral/20 p-5 rounded-full"
+              >
+                <span
+                  class="text-brand-coral"
+                  data-testid="icon-ThumbsDown"
+                  size="48"
+                />
+              </div>
+            </div>
+            <div
+              class="absolute inset-0 bg-brand-green/10 rounded-3xl z-10 flex items-center justify-center pointer-events-none"
+            >
+              <div
+                class="bg-brand-green/20 p-5 rounded-full"
+              >
+                <span
+                  class="text-brand-green"
+                  data-testid="icon-ThumbsUp"
+                  size="48"
+                />
+              </div>
+            </div>
+            <div
+              class="relative z-0 h-full flex flex-col p-6"
+            >
+              <div
+                class="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-brand-coral/5 to-transparent rounded-t-3xl"
+              />
+              <div
+                class="relative flex-1 flex flex-col justify-center items-center text-center space-y-6"
+              >
+                <div
+                  class="space-y-2"
+                >
+                  <h2
+                    class="text-2xl font-black text-gray-900 leading-tight"
+                  >
+                    Option A
+                  </h2>
+                  <p
+                    class="text-sm text-gray-500 flex items-center justify-center gap-1"
+                  >
+                    ≡ƒôì 
+                    Place A
+                  </p>
+                </div>
+                <div
+                  class="flex items-center gap-1 text-xs text-gray-400"
+                >
+                  <span
+                    data-testid="icon-Users"
+                    size="12"
+                  />
+                  3
+                   phiß║┐u
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between text-xs text-gray-400 pt-4"
+              >
+                <span
+                  class="flex items-center gap-1"
+                >
+                  <span
+                    data-testid="icon-ChevronLeft"
+                    size="14"
+                  />
+                   Khong chon
+                </span>
+                <span
+                  class="text-gray-300"
+                >
+                  Vuß╗æt tr├íi hoß║╖c phß║úi
+                </span>
+                <span
+                  class="flex items-center gap-1"
+                >
+                  Chon phuong an nay 
+                  <span
+                    data-testid="icon-ChevronRight"
+                    size="14"
+                  />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-center gap-3"
+      >
+        <button
+          class="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-brand-coral/20 text-brand-coral rounded-2xl font-bold text-sm hover:bg-brand-coral/5 transition-all active:scale-[0.98] disabled:opacity-50"
+        >
+          <span
+            data-testid="icon-ThumbsDown"
+            size="18"
+          />
+          Khong chon
+        </button>
+        <button
+          class="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-brand-green text-white rounded-2xl font-bold text-sm hover:bg-brand-green/90 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-brand-green/20"
+        >
+          <span
+            data-testid="icon-ThumbsUp"
+            size="18"
+          />
+          Chon phuong an nay
+        </button>
+      </div>
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-2"
+      >
+        <h4
+          class="text-xs font-black text-gray-500 uppercase tracking-wider"
+        >
+          Kß║┐t quß║ú tß║ím thß╗¥i
+        </h4>
+        <div
+          class="space-y-1"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <span
+              class="font-bold text-gray-700"
+            >
+              Option A
+            </span>
+            <span
+              class="text-xs text-gray-400"
+            >
+              3
+               phiß║┐u (
+              60
+              %)
+            </span>
+          </div>
+          <div
+            class="h-1.5 bg-gray-100 rounded-full overflow-hidden"
+          >
+            <div
+              class="h-full rounded-full bg-brand-coral/60"
+            />
+          </div>
+        </div>
+        <div
+          class="space-y-1"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <span
+              class="font-bold text-gray-700"
+            >
+              Option B
+            </span>
+            <span
+              class="text-xs text-gray-400"
+            >
+              2
+               phiß║┐u (
+              40
+              %)
+            </span>
+          </div>
+          <div
+            class="h-1.5 bg-gray-100 rounded-full overflow-hidden"
+          >
+            <div
+              class="h-full rounded-full bg-brand-coral/60"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+ Γ¥» Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ Γ¥» getElementError ../../node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ Γ¥» getMultipleElementsFoundError ../../node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ Γ¥» ../../node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ Γ¥» ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ Γ¥» src/components/votes/__tests__/vote-session.test.tsx:156:19
+    154|     );
+    155|
+    156|     expect(screen.getByText('Option A')).toBeInTheDocument();
+       |                   ^
+    157|   });
+    158|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/1]ΓÄ»
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 14:18:50
+[2m   Duration [22m 1.46s[2m (transform 86ms, setup 123ms, import 200ms, tests 106ms, environment 855ms)[22m
+

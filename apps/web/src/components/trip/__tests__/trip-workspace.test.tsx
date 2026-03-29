@@ -143,11 +143,14 @@ vi.mock('../../../lib/api-client', async () => {
       acceptProposal: vi.fn(),
       rejectProposal: vi.fn(),
     },
+    templatesApi: {
+      getPublishedForTrip: vi.fn().mockResolvedValue(null),
+    },
   };
 });
 
 // Import mocked modules
-import { itineraryApi, proposalsApi } from '../../../lib/api-client';
+import { itineraryApi, proposalsApi, templatesApi } from '../../../lib/api-client';
 
 describe('TripWorkspaceShell', () => {
   beforeEach(() => {
@@ -158,6 +161,7 @@ describe('TripWorkspaceShell', () => {
     beforeEach(() => {
       vi.mocked(itineraryApi.getSnapshot).mockResolvedValue(mockSnapshot);
       vi.mocked(proposalsApi.listProposals).mockResolvedValue(mockProposals);
+      vi.mocked(templatesApi.getPublishedForTrip).mockResolvedValue(null);
     });
 
     it('should show read-only view for members without structural controls', async () => {
@@ -192,6 +196,7 @@ describe('TripWorkspaceShell', () => {
     beforeEach(() => {
       vi.mocked(itineraryApi.getSnapshot).mockResolvedValue(mockLeaderSnapshot);
       vi.mocked(proposalsApi.listProposals).mockResolvedValue(mockProposals);
+      vi.mocked(templatesApi.getPublishedForTrip).mockResolvedValue(null);
     });
 
     it('should show leader-only structural buttons', async () => {
@@ -211,6 +216,7 @@ describe('TripWorkspaceShell', () => {
     beforeEach(() => {
       vi.mocked(itineraryApi.getSnapshot).mockResolvedValue(mockSnapshot);
       vi.mocked(proposalsApi.listProposals).mockResolvedValue([]);
+      vi.mocked(templatesApi.getPublishedForTrip).mockResolvedValue(null);
     });
 
     it('should render map launch link with focusItemId for geolocated items', async () => {

@@ -1,0 +1,1065 @@
+
+[1m[46m RUN [49m[22m [36mv4.1.2 [39m[90mC:/Users/quoct/OneDrive/Desktop/code/inan/apps/web[39m
+
+ [31mΓ¥»[39m src/components/votes/__tests__/vote-session.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 105[2mms[22m[39m
+[31m     [31m├ù[31m renders desktop fallback buttons "Khong chon" and "Chon phuong an nay"[39m[32m 46[2mms[22m[39m
+[31m     [31m├ù[31m shows the first option card with touch swipe hints[39m[32m 8[2mms[22m[39m
+     [32mΓ£ô[39m renders interim results showing vote counts while session is open[32m 7[2mms[22m[39m
+[31m     [31m├ù[31m calls onVote when desktop "Chon phuong an nay" button is clicked[39m[32m 13[2mms[22m[39m
+     [32mΓ£ô[39m shows "already voted" indicator when user ballot exists[32m 8[2mms[22m[39m
+     [32mΓ£ô[39m marks the user choice in interim results showing latest active vote counts[32m 6[2mms[22m[39m
+[31m     [31m├ù[31m renders results with REPLACE_ITEM showing currentItem[39m[32m 8[2mms[22m[39m
+     [32mΓ£ô[39m shows leader decision buttons for LEADER_DECISION_REQUIRED status[32m 6[2mms[22m[39m
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 4 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  src/components/votes/__tests__/vote-session.test.tsx > VoteCardDeck > renders desktop fallback buttons "Khong chon" and "Chon phuong an nay"
+TestingLibraryElementError: Found multiple elements with the text: Khong chon
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<span
+  class="flex items-center gap-1"
+>
+  <span
+    data-testid="icon-ChevronLeft"
+    size="14"
+  />
+   Khong chon
+</span>
+
+Ignored nodes: comments, script, style
+<button
+  class="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-brand-coral/20 text-brand-coral rounded-2xl font-bold text-sm hover:bg-brand-coral/5 transition-all active:scale-[0.98] disabled:opacity-50"
+>
+  <span
+    data-testid="icon-ThumbsDown"
+    size="18"
+  />
+  Khong chon
+</button>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-4"
+    >
+      <div
+        class="flex items-center justify-between"
+      >
+        <button
+          class="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-gray-700 transition-colors"
+        >
+          <span
+            data-testid="icon-ArrowLeft"
+            size="16"
+          />
+           Quay lß║íi
+        </button>
+        <div
+          class="flex items-center gap-3"
+        >
+          <span
+            class="flex items-center gap-1 text-xs font-bold text-brand-coral bg-brand-coral/10 px-2.5 py-1 rounded-full"
+          >
+            <span
+              data-testid="icon-Timer"
+              size="12"
+            />
+             
+            59 ph├║t
+          </span>
+          <span
+            class="text-xs text-gray-400"
+          >
+            1
+            /
+            2
+          </span>
+        </div>
+      </div>
+      <div
+        class="relative h-[420px] sm:h-[480px]"
+      >
+        <div
+          class="absolute inset-0 cursor-grab active:cursor-grabbing touch-none"
+        >
+          <div
+            class="relative h-full bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
+          >
+            <div
+              class="absolute inset-0 bg-brand-coral/10 rounded-3xl z-10 flex items-center justify-center pointer-events-none"
+            >
+              <div
+                class="bg-brand-coral/20 p-5 rounded-full"
+              >
+                <span
+                  class="text-brand-coral"
+                  data-testid="icon-ThumbsDown"
+                  size="48"
+                />
+              </div>
+            </div>
+            <div
+              class="absolute inset-0 bg-brand-green/10 rounded-3xl z-10 flex items-center justify-center pointer-events-none"
+            >
+              <div
+                class="bg-brand-green/20 p-5 rounded-full"
+              >
+                <span
+                  class="text-brand-green"
+                  data-testid="icon-ThumbsUp"
+                  size="48"
+                />
+              </div>
+            </div>
+            <div
+              class="relative z-0 h-full flex flex-col p-6"
+            >
+              <div
+                class="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-brand-coral/5 to-transparent rounded-t-3xl"
+              />
+              <div
+                class="relative flex-1 flex flex-col justify-center items-center text-center space-y-6"
+              >
+                <div
+                  class="space-y-2"
+                >
+                  <h2
+                    class="text-2xl font-black text-gray-900 leading-tight"
+                  >
+                    Option A
+                  </h2>
+                  <p
+                    class="text-sm text-gray-500 flex items-center justify-center gap-1"
+                  >
+                    ≡ƒôì 
+                    Place A
+                  </p>
+                </div>
+                <div
+                  class="flex items-center gap-1 text-xs text-gray-400"
+                >
+                  <span
+                    data-testid="icon-Users"
+                    size="12"
+                  />
+                  3
+                   phiß║┐u
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between text-xs text-gray-400 pt-4"
+              >
+                <span
+                  class="flex items-center gap-1"
+                >
+                  <span
+                    data-testid="icon-ChevronLeft"
+                    size="14"
+                  />
+                   Khong chon
+                </span>
+                <span
+                  class="text-gray-300"
+                >
+                  Vuß╗æt tr├íi hoß║╖c phß║úi
+                </span>
+                <span
+                  class="flex items-center gap-1"
+                >
+                  Chon phuong an nay 
+                  <span
+                    data-testid="icon-ChevronRight"
+                    size="14"
+                  />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-center gap-3"
+      >
+        <button
+          class="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-brand-coral/20 text-brand-coral rounded-2xl font-bold text-sm hover:bg-brand-coral/5 transition-all active:scale-[0.98] disabled:opacity-50"
+        >
+          <span
+            data-testid="icon-ThumbsDown"
+            size="18"
+          />
+          Khong chon
+        </button>
+        <button
+          class="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-brand-green text-white rounded-2xl font-bold text-sm hover:bg-brand-green/90 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-brand-green/20"
+        >
+          <span
+            data-testid="icon-ThumbsUp"
+            size="18"
+          />
+          Chon phuong an nay
+        </button>
+      </div>
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-2"
+      >
+        <h4
+          class="text-xs font-black text-gray-500 uppercase tracking-wider"
+        >
+          Kß║┐t quß║ú tß║ím thß╗¥i
+        </h4>
+        <div
+          class="space-y-1"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <span
+              class="font-bold text-gray-700"
+            >
+              Option A
+            </span>
+            <span
+              class="text-xs text-gray-400"
+            >
+              3
+               phiß║┐u (
+              60
+              %)
+            </span>
+          </div>
+          <div
+            class="h-1.5 bg-gray-100 rounded-full overflow-hidden"
+          >
+            <div
+              class="h-full rounded-full bg-brand-coral/60"
+            />
+          </div>
+        </div>
+        <div
+          class="space-y-1"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <span
+              class="font-bold text-gray-700"
+            >
+              Option B
+            </span>
+            <span
+              class="text-xs text-gray-400"
+            >
+              2
+               phiß║┐u (
+              40
+              %)
+            </span>
+          </div>
+          <div
+            class="h-1.5 bg-gray-100 rounded-full overflow-hidden"
+          >
+            <div
+              class="h-full rounded-full bg-brand-coral/60"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+ Γ¥» Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ Γ¥» getElementError ../../node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ Γ¥» getMultipleElementsFoundError ../../node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ Γ¥» ../../node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ Γ¥» ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ Γ¥» src/components/votes/__tests__/vote-session.test.tsx:140:19
+    138|     );
+    139|
+    140|     expect(screen.getByText('Khong chon')).toBeInTheDocument();
+       |                   ^
+    141|     expect(screen.getByText('Chon phuong an nay')).toBeInTheDocument();
+    142|   });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/4]ΓÄ»
+
+ FAIL  src/components/votes/__tests__/vote-session.test.tsx > VoteCardDeck > shows the first option card with touch swipe hints
+TestingLibraryElementError: Found multiple elements with the text: Option A
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-2xl font-black text-gray-900 leading-tight"
+>
+  Option A
+</h2>
+
+Ignored nodes: comments, script, style
+<span
+  class="font-bold text-gray-700"
+>
+  Option A
+</span>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-4"
+    >
+      <div
+        class="flex items-center justify-between"
+      >
+        <button
+          class="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-gray-700 transition-colors"
+        >
+          <span
+            data-testid="icon-ArrowLeft"
+            size="16"
+          />
+           Quay lß║íi
+        </button>
+        <div
+          class="flex items-center gap-3"
+        >
+          <span
+            class="flex items-center gap-1 text-xs font-bold text-brand-coral bg-brand-coral/10 px-2.5 py-1 rounded-full"
+          >
+            <span
+              data-testid="icon-Timer"
+              size="12"
+            />
+             
+            59 ph├║t
+          </span>
+          <span
+            class="text-xs text-gray-400"
+          >
+            1
+            /
+            2
+          </span>
+        </div>
+      </div>
+      <div
+        class="relative h-[420px] sm:h-[480px]"
+      >
+        <div
+          class="absolute inset-0 cursor-grab active:cursor-grabbing touch-none"
+        >
+          <div
+            class="relative h-full bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
+          >
+            <div
+              class="absolute inset-0 bg-brand-coral/10 rounded-3xl z-10 flex items-center justify-center pointer-events-none"
+            >
+              <div
+                class="bg-brand-coral/20 p-5 rounded-full"
+              >
+                <span
+                  class="text-brand-coral"
+                  data-testid="icon-ThumbsDown"
+                  size="48"
+                />
+              </div>
+            </div>
+            <div
+              class="absolute inset-0 bg-brand-green/10 rounded-3xl z-10 flex items-center justify-center pointer-events-none"
+            >
+              <div
+                class="bg-brand-green/20 p-5 rounded-full"
+              >
+                <span
+                  class="text-brand-green"
+                  data-testid="icon-ThumbsUp"
+                  size="48"
+                />
+              </div>
+            </div>
+            <div
+              class="relative z-0 h-full flex flex-col p-6"
+            >
+              <div
+                class="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-brand-coral/5 to-transparent rounded-t-3xl"
+              />
+              <div
+                class="relative flex-1 flex flex-col justify-center items-center text-center space-y-6"
+              >
+                <div
+                  class="space-y-2"
+                >
+                  <h2
+                    class="text-2xl font-black text-gray-900 leading-tight"
+                  >
+                    Option A
+                  </h2>
+                  <p
+                    class="text-sm text-gray-500 flex items-center justify-center gap-1"
+                  >
+                    ≡ƒôì 
+                    Place A
+                  </p>
+                </div>
+                <div
+                  class="flex items-center gap-1 text-xs text-gray-400"
+                >
+                  <span
+                    data-testid="icon-Users"
+                    size="12"
+                  />
+                  3
+                   phiß║┐u
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between text-xs text-gray-400 pt-4"
+              >
+                <span
+                  class="flex items-center gap-1"
+                >
+                  <span
+                    data-testid="icon-ChevronLeft"
+                    size="14"
+                  />
+                   Khong chon
+                </span>
+                <span
+                  class="text-gray-300"
+                >
+                  Vuß╗æt tr├íi hoß║╖c phß║úi
+                </span>
+                <span
+                  class="flex items-center gap-1"
+                >
+                  Chon phuong an nay 
+                  <span
+                    data-testid="icon-ChevronRight"
+                    size="14"
+                  />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-center gap-3"
+      >
+        <button
+          class="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-brand-coral/20 text-brand-coral rounded-2xl font-bold text-sm hover:bg-brand-coral/5 transition-all active:scale-[0.98] disabled:opacity-50"
+        >
+          <span
+            data-testid="icon-ThumbsDown"
+            size="18"
+          />
+          Khong chon
+        </button>
+        <button
+          class="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-brand-green text-white rounded-2xl font-bold text-sm hover:bg-brand-green/90 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-brand-green/20"
+        >
+          <span
+            data-testid="icon-ThumbsUp"
+            size="18"
+          />
+          Chon phuong an nay
+        </button>
+      </div>
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-2"
+      >
+        <h4
+          class="text-xs font-black text-gray-500 uppercase tracking-wider"
+        >
+          Kß║┐t quß║ú tß║ím thß╗¥i
+        </h4>
+        <div
+          class="space-y-1"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <span
+              class="font-bold text-gray-700"
+            >
+              Option A
+            </span>
+            <span
+              class="text-xs text-gray-400"
+            >
+              3
+               phiß║┐u (
+              60
+              %)
+            </span>
+          </div>
+          <div
+            class="h-1.5 bg-gray-100 rounded-full overflow-hidden"
+          >
+            <div
+              class="h-full rounded-full bg-brand-coral/60"
+            />
+          </div>
+        </div>
+        <div
+          class="space-y-1"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <span
+              class="font-bold text-gray-700"
+            >
+              Option B
+            </span>
+            <span
+              class="text-xs text-gray-400"
+            >
+              2
+               phiß║┐u (
+              40
+              %)
+            </span>
+          </div>
+          <div
+            class="h-1.5 bg-gray-100 rounded-full overflow-hidden"
+          >
+            <div
+              class="h-full rounded-full bg-brand-coral/60"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+ Γ¥» Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ Γ¥» getElementError ../../node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ Γ¥» getMultipleElementsFoundError ../../node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ Γ¥» ../../node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ Γ¥» ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ Γ¥» src/components/votes/__tests__/vote-session.test.tsx:155:19
+    153|     );
+    154|
+    155|     expect(screen.getByText('Option A')).toBeInTheDocument();
+       |                   ^
+    156|   });
+    157|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/4]ΓÄ»
+
+ FAIL  src/components/votes/__tests__/vote-session.test.tsx > VoteCardDeck > calls onVote when desktop "Chon phuong an nay" button is clicked
+TestingLibraryElementError: Found multiple elements with the text: Chon phuong an nay
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<span
+  class="flex items-center gap-1"
+>
+  Chon phuong an nay 
+  <span
+    data-testid="icon-ChevronRight"
+    size="14"
+  />
+</span>
+
+Ignored nodes: comments, script, style
+<button
+  class="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-brand-green text-white rounded-2xl font-bold text-sm hover:bg-brand-green/90 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-brand-green/20"
+>
+  <span
+    data-testid="icon-ThumbsUp"
+    size="18"
+  />
+  Chon phuong an nay
+</button>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-4"
+    >
+      <div
+        class="flex items-center justify-between"
+      >
+        <button
+          class="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-gray-700 transition-colors"
+        >
+          <span
+            data-testid="icon-ArrowLeft"
+            size="16"
+          />
+           Quay lß║íi
+        </button>
+        <div
+          class="flex items-center gap-3"
+        >
+          <span
+            class="flex items-center gap-1 text-xs font-bold text-brand-coral bg-brand-coral/10 px-2.5 py-1 rounded-full"
+          >
+            <span
+              data-testid="icon-Timer"
+              size="12"
+            />
+             
+            59 ph├║t
+          </span>
+          <span
+            class="text-xs text-gray-400"
+          >
+            1
+            /
+            2
+          </span>
+        </div>
+      </div>
+      <div
+        class="relative h-[420px] sm:h-[480px]"
+      >
+        <div
+          class="absolute inset-0 cursor-grab active:cursor-grabbing touch-none"
+        >
+          <div
+            class="relative h-full bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
+          >
+            <div
+              class="absolute inset-0 bg-brand-coral/10 rounded-3xl z-10 flex items-center justify-center pointer-events-none"
+            >
+              <div
+                class="bg-brand-coral/20 p-5 rounded-full"
+              >
+                <span
+                  class="text-brand-coral"
+                  data-testid="icon-ThumbsDown"
+                  size="48"
+                />
+              </div>
+            </div>
+            <div
+              class="absolute inset-0 bg-brand-green/10 rounded-3xl z-10 flex items-center justify-center pointer-events-none"
+            >
+              <div
+                class="bg-brand-green/20 p-5 rounded-full"
+              >
+                <span
+                  class="text-brand-green"
+                  data-testid="icon-ThumbsUp"
+                  size="48"
+                />
+              </div>
+            </div>
+            <div
+              class="relative z-0 h-full flex flex-col p-6"
+            >
+              <div
+                class="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-brand-coral/5 to-transparent rounded-t-3xl"
+              />
+              <div
+                class="relative flex-1 flex flex-col justify-center items-center text-center space-y-6"
+              >
+                <div
+                  class="space-y-2"
+                >
+                  <h2
+                    class="text-2xl font-black text-gray-900 leading-tight"
+                  >
+                    Option A
+                  </h2>
+                  <p
+                    class="text-sm text-gray-500 flex items-center justify-center gap-1"
+                  >
+                    ≡ƒôì 
+                    Place A
+                  </p>
+                </div>
+                <div
+                  class="flex items-center gap-1 text-xs text-gray-400"
+                >
+                  <span
+                    data-testid="icon-Users"
+                    size="12"
+                  />
+                  3
+                   phiß║┐u
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between text-xs text-gray-400 pt-4"
+              >
+                <span
+                  class="flex items-center gap-1"
+                >
+                  <span
+                    data-testid="icon-ChevronLeft"
+                    size="14"
+                  />
+                   Khong chon
+                </span>
+                <span
+                  class="text-gray-300"
+                >
+                  Vuß╗æt tr├íi hoß║╖c phß║úi
+                </span>
+                <span
+                  class="flex items-center gap-1"
+                >
+                  Chon phuong an nay 
+                  <span
+                    data-testid="icon-ChevronRight"
+                    size="14"
+                  />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-center gap-3"
+      >
+        <button
+          class="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-brand-coral/20 text-brand-coral rounded-2xl font-bold text-sm hover:bg-brand-coral/5 transition-all active:scale-[0.98] disabled:opacity-50"
+        >
+          <span
+            data-testid="icon-ThumbsDown"
+            size="18"
+          />
+          Khong chon
+        </button>
+        <button
+          class="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-brand-green text-white rounded-2xl font-bold text-sm hover:bg-brand-green/90 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-brand-green/20"
+        >
+          <span
+            data-testid="icon-ThumbsUp"
+            size="18"
+          />
+          Chon phuong an nay
+        </button>
+      </div>
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-2"
+      >
+        <h4
+          class="text-xs font-black text-gray-500 uppercase tracking-wider"
+        >
+          Kß║┐t quß║ú tß║ím thß╗¥i
+        </h4>
+        <div
+          class="space-y-1"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <span
+              class="font-bold text-gray-700"
+            >
+              Option A
+            </span>
+            <span
+              class="text-xs text-gray-400"
+            >
+              3
+               phiß║┐u (
+              60
+              %)
+            </span>
+          </div>
+          <div
+            class="h-1.5 bg-gray-100 rounded-full overflow-hidden"
+          >
+            <div
+              class="h-full rounded-full bg-brand-coral/60"
+            />
+          </div>
+        </div>
+        <div
+          class="space-y-1"
+        >
+          <div
+            class="flex items-center justify-between text-sm"
+          >
+            <span
+              class="font-bold text-gray-700"
+            >
+              Option B
+            </span>
+            <span
+              class="text-xs text-gray-400"
+            >
+              2
+               phiß║┐u (
+              40
+              %)
+            </span>
+          </div>
+          <div
+            class="h-1.5 bg-gray-100 rounded-full overflow-hidden"
+          >
+            <div
+              class="h-full rounded-full bg-brand-coral/60"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+ Γ¥» Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ Γ¥» getElementError ../../node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ Γ¥» getMultipleElementsFoundError ../../node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ Γ¥» ../../node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ Γ¥» ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ Γ¥» src/components/votes/__tests__/vote-session.test.tsx:183:28
+    181|     );
+    182|
+    183|     fireEvent.click(screen.getByText('Chon phuong an nay'));
+       |                            ^
+    184|     expect(mockOnVote).toHaveBeenCalledWith('opt-a');
+    185|   });
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[3/4]ΓÄ»
+
+ FAIL  src/components/votes/__tests__/vote-session.test.tsx > VoteResultsPanel > renders results with REPLACE_ITEM showing currentItem
+TestingLibraryElementError: Found multiple elements with the text: Better Activity
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<p
+  class="font-bold text-gray-900 text-sm"
+>
+  Better Activity
+</p>
+
+Ignored nodes: comments, script, style
+<p
+  class="text-2xl font-black text-white mt-2"
+>
+  Better Activity
+</p>
+
+Ignored nodes: comments, script, style
+<span
+  class="font-bold text-sm text-brand-green"
+>
+  Better Activity
+</span>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-5"
+    >
+      <div
+        class="flex items-center justify-between"
+      >
+        <button
+          class="flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-gray-700 transition-colors"
+        >
+          <span
+            data-testid="icon-ArrowLeft"
+            size="16"
+          />
+           Quay lß║íi
+        </button>
+        <span
+          class="text-xs text-gray-400"
+        >
+          5
+           phiß║┐u ─æ├ú bß║ºu
+        </span>
+      </div>
+      <div
+        class="bg-white rounded-3xl shadow-lg border border-gray-100 p-5 space-y-4"
+      >
+        <h3
+          class="text-xs font-black text-gray-500 uppercase tracking-wider flex items-center gap-1.5"
+        >
+          <span
+            data-testid="icon-Replace"
+            size="12"
+          />
+           So s├ính
+        </h3>
+        <div
+          class="grid grid-cols-2 gap-3"
+        >
+          <div
+            class="bg-gray-50 rounded-2xl p-4 border border-gray-200 space-y-2"
+          >
+            <span
+              class="text-[10px] font-black text-gray-400 uppercase"
+            >
+              Hiß╗çn tß║íi
+            </span>
+            <p
+              class="font-bold text-gray-900 text-sm"
+            >
+              Current Activity
+            </p>
+            <p
+              class="text-xs text-gray-500 flex items-center gap-1"
+            >
+              <span
+                data-testid="icon-MapPin"
+                size="10"
+              />
+               
+              Old Location
+            </p>
+          </div>
+          <div
+            class="bg-brand-green/5 rounded-2xl p-4 border border-brand-green/20 space-y-2"
+          >
+            <span
+              class="text-[10px] font-black text-brand-green uppercase"
+            >
+              Ng╞░ß╗¥i thß║»ng
+            </span>
+            <p
+              class="font-bold text-gray-900 text-sm"
+            >
+              Better Activity
+            </p>
+            <p
+              class="text-xs text-brand-green font-bold"
+            >
+              4
+               phiß║┐u
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        class="bg-gradient-to-br from-brand-yellow via-brand-yellow/90 to-brand-coral/60 rounded-3xl p-6 text-center relative overflow-hidden"
+      >
+        <div
+          class="absolute top-0 left-0 w-20 h-20 bg-white/20 rounded-full filter blur-2xl"
+        />
+        <div
+          class="absolute bottom-0 right-0 w-24 h-24 bg-white/10 rounded-full filter blur-2xl"
+        />
+        <div
+          class="relative z-10"
+        >
+          <div
+            class="inline-flex items-center justify-center p-3 bg-white/20 rounded-full mb-3"
+          >
+            <span
+              class="text-white"
+              data-testid="icon-Trophy"
+              size="32"
+            />
+          </div>
+          <h2
+            class="text-xl font-black text-white"
+          >
+            ≡ƒÄë Kß║┐t quß║ú
+          </h2>
+          <p
+            class="text-2xl font-black text-white mt-2"
+          >
+            Better Activity
+          </p>
+          <p
+            class="text-white/80 text-sm mt-1"
+          >
+            4
+            /
+            5
+             phiß║┐u
+          </p>
+        </div>
+      </div>
+      <div
+        class="bg-white rounded-3xl shadow-lg border border-gray-100 p-5 space-y-4"
+      >
+        <h3
+          class="text-xs font-black text-gray-500 uppercase tracking-wider flex items-center gap-1.5"
+        >
+          <span
+            data-testid="icon-BarChart3"
+            size="12"
+          />
+           Chi tiß║┐t kß║┐t quß║ú
+        </h3>
+        <div
+          class="space-y-3"
+        >
+          <div
+            class="space-y-1.5"
+          >
+            <div
+              class="flex items-center justify-between"
+            >
+              <div
+                class="flex items-center gap-2"
+              >
+                <span
+                  class="text-brand-yellow"
+                  data-testid="icon-Trophy"
+                  size="14"
+                />
+                <span
+                  class="font-bold text-sm text-brand-green"
+                >
+                  Better Activity
+                </span>
+              </div>
+              <span
+                class="text-xs font-bold text-gray-500"
+              >
+                4
+                 (
+                80
+                %)
+              </span>
+            </div>
+            <div
+              class="h-2.5 bg-gray-100 rounded-full overflow-hidden"
+            >
+              <div
+                class="h-full rounded-full bg-gradient-to-r from-brand-green to-brand-green/80"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+ Γ¥» Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ Γ¥» getElementError ../../node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ Γ¥» getMultipleElementsFoundError ../../node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ Γ¥» ../../node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ Γ¥» ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ Γ¥» src/components/votes/__tests__/vote-session.test.tsx:274:19
+    272|     expect(screen.getByText('Current Activity')).toBeInTheDocument();
+    273|     expect(screen.getByText('Hiß╗çn tß║íi')).toBeInTheDocument();
+    274|     expect(screen.getByText('Better Activity')).toBeInTheDocument();
+       |                   ^
+    275|   });
+    276|
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[4/4]ΓÄ»
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 14:16:27
+[2m   Duration [22m 1.36s[2m (transform 76ms, setup 111ms, import 184ms, tests 105ms, environment 792ms)[22m
+

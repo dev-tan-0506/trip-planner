@@ -88,11 +88,15 @@ export class LogisticsService {
       type: string;
       label: string;
       capacity: number;
+      rideKind: string | null;
+      plateNumber: string | null;
+      seatLabels: string[];
       sortOrder: number;
       note: string | null;
       assignments: Array<{
         id: string;
         tripMemberId: string;
+        seatLabel: string | null;
         source: string;
         member: {
           id: string;
@@ -113,6 +117,9 @@ export class LogisticsService {
       type: unit.type,
       label: unit.label,
       capacity: unit.capacity,
+      rideKind: unit.rideKind,
+      plateNumber: unit.plateNumber,
+      seatLabels: unit.seatLabels,
       sortOrder: unit.sortOrder,
       note: unit.note,
       occupancy,
@@ -125,6 +132,7 @@ export class LogisticsService {
         userId: a.member.user.id,
         name: a.member.user.name,
         avatarUrl: a.member.user.avatarUrl,
+        seatLabel: a.seatLabel,
         source: a.source,
         role: a.member.role,
       })),
@@ -150,6 +158,9 @@ export class LogisticsService {
         type: dto.type,
         label: dto.label,
         capacity: dto.capacity,
+        rideKind: dto.type === 'RIDE' ? dto.rideKind ?? 'CAR' : null,
+        plateNumber: dto.type === 'RIDE' ? dto.plateNumber ?? null : null,
+        seatLabels: dto.type === 'RIDE' ? dto.seatLabels ?? [] : [],
         sortOrder,
         note: dto.note,
       },
@@ -181,6 +192,9 @@ export class LogisticsService {
       data: {
         ...(dto.label !== undefined && { label: dto.label }),
         ...(dto.capacity !== undefined && { capacity: dto.capacity }),
+        ...(dto.rideKind !== undefined && { rideKind: dto.rideKind }),
+        ...(dto.plateNumber !== undefined && { plateNumber: dto.plateNumber }),
+        ...(dto.seatLabels !== undefined && { seatLabels: dto.seatLabels }),
         ...(dto.note !== undefined && { note: dto.note }),
       },
     });
@@ -244,11 +258,25 @@ export class LogisticsService {
         throw new BadRequestException('This slot is full');
       }
 
+      if (freshUnit.type === 'RIDE' && freshUnit.seatLabels.length > 0) {
+        if (!dto.seatLabel || !freshUnit.seatLabels.includes(dto.seatLabel)) {
+          throw new BadRequestException('Please choose a valid seat');
+        }
+
+        const takenSeat = freshUnit.assignments.find(
+          (assignment) => assignment.seatLabel === dto.seatLabel,
+        );
+        if (takenSeat) {
+          throw new BadRequestException('This seat is already taken');
+        }
+      }
+
       await tx.allocationAssignment.create({
         data: {
           tripId,
           unitId: dto.unitId,
           tripMemberId: member.id,
+          seatLabel: dto.seatLabel,
           createdByTripMemberId: member.id,
           source: 'SELF_JOIN',
         },
@@ -321,6 +349,7 @@ export class LogisticsService {
         tripId,
         unitId: dto.targetUnitId,
         tripMemberId: dto.tripMemberId,
+        seatLabel: dto.targetSeatLabel ?? null,
         createdByTripMemberId: member.id,
         source: 'LEADER',
       },

@@ -1,49 +1,84 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronDown, Clock, MapPin, StickyNote, Loader2 } from 'lucide-react';
+import { X, Clock, MapPin, StickyNote, Loader2, CalendarDays } from 'lucide-react';
 import { itineraryApi, ItinerarySnapshot } from '../../lib/api-client';
+import { LocationPicker } from './LocationPicker';
 
 interface ItineraryComposerSheetProps {
   open: boolean;
   onClose: () => void;
   tripId: string;
+  tripStartDate: string;
+  tripEndDate: string;
   dayIndex: number;
   insertAfterItemId?: string;
   onSuccess: (snapshot: ItinerarySnapshot) => void;
+}
+
+function toInputDate(date: string): string {
+  return date.slice(0, 10);
+}
+
+function dateToDayIndex(selectedDate: string, tripStartDate: string): number {
+  const tripStart = new Date(`${tripStartDate.slice(0, 10)}T00:00:00`);
+  const picked = new Date(`${selectedDate}T00:00:00`);
+  const diff = picked.getTime() - tripStart.getTime();
+  return Math.max(0, Math.round(diff / (1000 * 60 * 60 * 24)));
+}
+
+function addDaysToInputDate(startDate: string, dayOffset: number): string {
+  const date = new Date(`${startDate.slice(0, 10)}T00:00:00`);
+  date.setDate(date.getDate() + dayOffset);
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 export function ItineraryComposerSheet({
   open,
   onClose,
   tripId,
+  tripStartDate,
+  tripEndDate,
   dayIndex,
   insertAfterItemId,
   onSuccess,
 }: ItineraryComposerSheetProps) {
   const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState('');
-  const [locationName, setLocationName] = useState('');
+  const [locationText, setLocationText] = useState('');
   const [shortNote, setShortNote] = useState('');
-  const [showDetailed, setShowDetailed] = useState(false);
-  const [locationAddress, setLocationAddress] = useState('');
-  const [placeId, setPlaceId] = useState('');
-  const [lat, setLat] = useState('');
-  const [lng, setLng] = useState('');
+  const [selectedDate, setSelectedDate] = useState(toInputDate(tripStartDate));
+  const [lat, setLat] = useState<number | undefined>();
+  const [lng, setLng] = useState<number | undefined>();
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const initialDate = useMemo(() => {
+    return addDaysToInputDate(tripStartDate, dayIndex);
+  }, [dayIndex, tripStartDate]);
+
+  useEffect(() => {
+    if (open) {
+      setSelectedDate(initialDate);
+      setShowLocationPicker(false);
+      setError(null);
+    }
+  }, [initialDate, open]);
 
   const resetForm = () => {
     setTitle('');
     setStartTime('');
-    setLocationName('');
+    setLocationText('');
     setShortNote('');
-    setShowDetailed(false);
-    setLocationAddress('');
-    setPlaceId('');
-    setLat('');
-    setLng('');
+    setSelectedDate(initialDate);
+    setLat(undefined);
+    setLng(undefined);
+    setShowLocationPicker(false);
     setError(null);
   };
 
@@ -57,15 +92,15 @@ export function ItineraryComposerSheet({
     try {
       const snapshot = await itineraryApi.createItem(tripId, {
         title: title.trim(),
-        dayIndex,
-        insertAfterItemId,
+        dayIndex: dateToDayIndex(selectedDate, tripStartDate),
+        insertAfterItemId:
+          selectedDate === initialDate ? insertAfterItemId : undefined,
         startTime: startTime || undefined,
-        locationName: locationName || undefined,
+        locationName: locationText || undefined,
         shortNote: shortNote || undefined,
-        locationAddress: locationAddress || undefined,
-        placeId: placeId || undefined,
-        lat: lat ? parseFloat(lat) : undefined,
-        lng: lng ? parseFloat(lng) : undefined,
+        locationAddress: locationText || undefined,
+        lat,
+        lng,
       });
       resetForm();
       onSuccess(snapshot);
@@ -104,7 +139,7 @@ export function ItineraryComposerSheet({
               {/* Header */}
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-black text-gray-900">
-                  Thêm hoạt động · Ngày {dayIndex + 1}
+                  Thêm hoạt động mới
                 </h2>
                 <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
                   <X size={20} className="text-gray-500" />
@@ -133,7 +168,20 @@ export function ItineraryComposerSheet({
                 </div>
 
                 {/* Quick mode fields */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-600 mb-1 flex items-center gap-1">
+                      <CalendarDays size={12} /> Ngày
+                    </label>
+                    <input
+                      type="date"
+                      min={toInputDate(tripStartDate)}
+                      max={toInputDate(tripEndDate)}
+                      value={selectedDate}
+                      onChange={(e) => setSelectedDate(e.target.value)}
+                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/30 text-gray-900 text-sm"
+                    />
+                  </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-600 mb-1 flex items-center gap-1">
                       <Clock size={12} /> Giờ bắt đầu
@@ -145,17 +193,62 @@ export function ItineraryComposerSheet({
                       className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/30 text-gray-900 text-sm"
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-600 mb-1 flex items-center gap-1">
-                      <MapPin size={12} /> Địa điểm
-                    </label>
-                    <input
-                      value={locationName}
-                      onChange={(e) => setLocationName(e.target.value)}
-                      placeholder="VD: Quán 123 Hai Bà Trưng"
-                      className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/30 text-gray-900 text-sm placeholder:text-gray-400"
-                    />
+                </div>
+
+                <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4 space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-bold text-gray-800">Địa điểm</p>
+                      <p className="text-xs text-gray-500">
+                        Có thể nhập tay hoặc chọn trực tiếp trên bản đồ
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowLocationPicker((value) => !value)}
+                      className="rounded-xl border border-brand-blue/20 bg-white px-3 py-2 text-xs font-bold text-brand-blue"
+                    >
+                      {showLocationPicker ? 'Ẩn bản đồ' : 'Chọn trên bản đồ'}
+                    </button>
                   </div>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-600 mb-1 flex items-center gap-1">
+                        <MapPin size={12} /> Tên địa điểm
+                      </label>
+                      <input
+                        value={locationText}
+                        onChange={(e) => setLocationText(e.target.value)}
+                        placeholder="VD: Chợ đêm Sơn Trà, 123 Hai Bà Trưng"
+                        className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/30 text-gray-900 text-sm placeholder:text-gray-400"
+                      />
+                    </div>
+                  </div>
+
+                  {showLocationPicker && (
+                    <LocationPicker
+                      initialLat={lat}
+                      initialLng={lng}
+                      value={locationText}
+                      onValueChange={setLocationText}
+                      onCancel={() => setShowLocationPicker(false)}
+                      onConfirm={(location) => {
+                        setLat(location.lat);
+                        setLng(location.lng);
+                        if (location.name) {
+                          setLocationText(location.name);
+                        }
+                        setShowLocationPicker(false);
+                      }}
+                    />
+                  )}
+
+                  {(lat != null && lng != null) && (
+                    <p className="text-xs text-gray-500">
+                      Đã ghim vị trí: {lat.toFixed(5)}, {lng.toFixed(5)}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -170,58 +263,6 @@ export function ItineraryComposerSheet({
                     className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/30 text-gray-900 text-sm placeholder:text-gray-400 resize-none"
                   />
                 </div>
-
-                {/* Detailed toggle */}
-                <button
-                  type="button"
-                  onClick={() => setShowDetailed(!showDetailed)}
-                  className="flex items-center gap-1.5 text-xs font-bold text-brand-blue hover:text-brand-blue/80 transition-colors"
-                >
-                  <ChevronDown size={14} className={`transition-transform ${showDetailed ? 'rotate-180' : ''}`} />
-                  {showDetailed ? 'Ẩn chi tiết' : 'Thêm chi tiết (địa chỉ, toạ độ...)'}
-                </button>
-
-                <AnimatePresence>
-                  {showDetailed && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="space-y-3 overflow-hidden"
-                    >
-                      <input
-                        value={locationAddress}
-                        onChange={(e) => setLocationAddress(e.target.value)}
-                        placeholder="Địa chỉ đầy đủ"
-                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/30 text-gray-900 text-sm placeholder:text-gray-400"
-                      />
-                      <input
-                        value={placeId}
-                        onChange={(e) => setPlaceId(e.target.value)}
-                        placeholder="Google Place ID"
-                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-blue/30 text-gray-900 text-sm placeholder:text-gray-400"
-                      />
-                      <div className="grid grid-cols-2 gap-3">
-                        <input
-                          type="number"
-                          step="any"
-                          value={lat}
-                          onChange={(e) => setLat(e.target.value)}
-                          placeholder="Lat"
-                          className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm placeholder:text-gray-400"
-                        />
-                        <input
-                          type="number"
-                          step="any"
-                          value={lng}
-                          onChange={(e) => setLng(e.target.value)}
-                          placeholder="Lng"
-                          className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm placeholder:text-gray-400"
-                        />
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
 
                 <button
                   type="submit"

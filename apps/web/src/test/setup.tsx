@@ -1,4 +1,6 @@
+import React, { type ElementType, type ReactNode } from 'react';
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 
 // Mock next/navigation
 vi.mock('next/navigation', () => ({
@@ -15,7 +17,7 @@ vi.mock('next/navigation', () => ({
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => {
+  default: ({ children, href, ...props }: { children: ReactNode; href: string; [key: string]: unknown }) => {
     return <a href={href} {...props}>{children}</a>;
   },
 }));
@@ -25,12 +27,12 @@ vi.mock('framer-motion', () => ({
   motion: new Proxy({}, {
     get: (_target, prop) => {
       if (typeof prop === 'string') {
-        return ({ children, ...rest }: { children?: React.ReactNode; [key: string]: unknown }) => {
-          const Tag = prop as keyof JSX.IntrinsicElements;
-          return <Tag {...rest}>{children}</Tag>;
+        return ({ children, ...rest }: { children?: ReactNode; [key: string]: unknown }) => {
+          const Tag = prop as ElementType;
+          return React.createElement(Tag, rest, children);
         };
       }
     },
   }),
-  AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
+  AnimatePresence: ({ children }: { children: ReactNode }) => children,
 }));

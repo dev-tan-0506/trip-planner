@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTripDto } from './dto/create-trip.dto';
@@ -49,6 +49,38 @@ export class TripsService {
 
     if (!trip) {
       throw new NotFoundException('Trip not found');
+    }
+
+    return {
+      ...trip,
+      members: trip.members.map((member) => ({
+        ...member,
+        user: {
+          id: member.user.id,
+          name: null,
+          avatarUrl: null,
+        },
+      })),
+    };
+  }
+
+  async findPrivateByJoinCode(joinCode: string, userId: string) {
+    const trip = await this.prisma.trip.findUnique({
+      where: { joinCode },
+      include: {
+        members: {
+          include: { user: { select: { id: true, name: true, avatarUrl: true } } },
+        },
+      },
+    });
+
+    if (!trip) {
+      throw new NotFoundException('Trip not found');
+    }
+
+    const isMember = trip.members.some((member) => member.userId === userId);
+    if (!isMember) {
+      throw new ForbiddenException('You must join this trip to view private member details');
     }
 
     return trip;

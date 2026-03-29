@@ -10,6 +10,8 @@ import { ProposalsModule } from './proposals/proposals.module';
 import { VotesModule } from './votes/votes.module';
 import { TemplatesModule } from './templates/templates.module';
 import { LogisticsModule } from './logistics/logistics.module';
+import { ChecklistsModule } from './checklists/checklists.module';
+import { AttendanceModule } from './attendance/attendance.module';
 
 @Module({
   imports: [
@@ -25,9 +27,10 @@ import { LogisticsModule } from './logistics/logistics.module';
     VotesModule,
     TemplatesModule,
     LogisticsModule,
+    ChecklistsModule,
+    AttendanceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
-

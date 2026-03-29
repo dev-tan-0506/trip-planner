@@ -177,16 +177,15 @@ describe('LogisticsBoardTab', () => {
       expect(await screen.findByText('Phân phòng/xe')).toBeInTheDocument();
     });
 
-    it('should show leader actions including Chia nhanh and Tạo chỗ mới', async () => {
+    it('should show leader actions including Chia nhanh, Tạo phòng, and Tạo xe', async () => {
       vi.mocked(logisticsApi.getAllocations).mockResolvedValue(populatedSnapshot);
 
       render(<LogisticsBoardTab tripId="trip-1" />);
 
       await screen.findByText('Phòng 101');
 
-      const createButtons = screen.getAllByText('Tạo chỗ mới');
-      expect(createButtons.length).toBe(2); // One for room, one for ride
-
+      expect(screen.getByText('Tạo phòng')).toBeInTheDocument();
+      expect(screen.getByText('Tạo xe')).toBeInTheDocument();
       expect(screen.getByText('Chia nhanh phòng')).toBeInTheDocument();
       expect(screen.getByText('Chia nhanh xe')).toBeInTheDocument();
     });

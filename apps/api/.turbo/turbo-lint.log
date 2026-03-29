@@ -1,0 +1,27 @@
+
+> @minh-di-dau-the/api@0.0.1 lint
+> eslint "{src,apps,libs,test}/**/*.ts"
+
+
+Oops! Something went wrong! :(
+
+ESLint: 9.39.4
+
+ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
+
+From ESLint v9.0.0, the default configuration file is now eslint.config.js.
+If you are using a .eslintrc.* file, please follow the migration guide
+to update your configuration file to the new format:
+
+https://eslint.org/docs/latest/use/configure/migration-guide
+
+If you still have problems after following the migration guide, please stop by
+https://eslint.org/chat/help to chat with the team.
+
+npm error Lifecycle script `lint` failed with error:
+npm error code 2
+npm error path C:\Users\quoct\OneDrive\Desktop\code\inan\apps\api
+npm error workspace @minh-di-dau-the/api@0.0.1
+npm error location C:\Users\quoct\OneDrive\Desktop\code\inan\apps\api
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c eslint "{src,apps,libs,test}/**/*.ts"

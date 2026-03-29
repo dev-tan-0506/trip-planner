@@ -186,7 +186,7 @@ describe('VoteCardDeck', () => {
     // Click the desktop vote button (the <button> contains the text)
     const voteButtons = screen.getAllByText('Chon phuong an nay');
     // The desktop button is the last one (the other is the swipe hint)
-    fireEvent.click(voteButtons[voteButtons.length - 1]);
+    fireEvent.click(voteButtons[voteButtons.length - 1]!);
     expect(mockOnVote).toHaveBeenCalledWith('opt-a');
   });
 
