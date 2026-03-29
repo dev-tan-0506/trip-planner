@@ -63,6 +63,8 @@ model Trip {
   voteSessions         VoteSession[]
   voteSessionOutcomes  VoteSessionOutcome[]
   communityTemplates   CommunityTemplate[]
+  logisticsUnits       LogisticsUnit[]
+  allocationAssignments AllocationAssignment[]
 }
 
 enum TripRole {
@@ -79,6 +81,9 @@ model TripMember {
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  logisticsAssignments        AllocationAssignment[] @relation("AssignedMember")
+  createdLogisticsAssignments AllocationAssignment[] @relation("AssignmentCreator")
 
   @@unique([userId, tripId])
 }
@@ -276,4 +281,55 @@ model CommunityTemplate {
 
   sourceTrip    Trip @relation(fields: [sourceTripId], references: [id])
   publishedBy   User @relation("TemplatePublisher", fields: [publishedById], references: [id])
+}
+
+// ─── Logistics: Room & Ride Allocation ─────────────
+
+enum LogisticsUnitType {
+  ROOM
+  RIDE
+}
+
+enum LogisticsAssignmentSource {
+  LEADER
+  SELF_JOIN
+  AUTO_FILL
+}
+
+model LogisticsUnit {
+  id        String             @id @default(cuid())
+  tripId    String
+  type      LogisticsUnitType
+  label     String
+  capacity  Int
+  sortOrder Int
+  note      String?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  trip        Trip                   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  assignments AllocationAssignment[]
+
+  @@unique([tripId, type, sortOrder])
+  @@index([tripId, type])
+}
+
+model AllocationAssignment {
+  id                    String                     @id @default(cuid())
+  tripId                String
+  unitId                String
+  tripMemberId          String
+  createdByTripMemberId String?
+  source                LogisticsAssignmentSource  @default(LEADER)
+  createdAt             DateTime                   @default(now())
+  updatedAt             DateTime                   @updatedAt
+
+  trip      Trip           @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  unit      LogisticsUnit  @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  member    TripMember     @relation("AssignedMember", fields: [tripMemberId], references: [id], onDelete: Cascade)
+  createdBy TripMember?    @relation("AssignmentCreator", fields: [createdByTripMemberId], references: [id])
+
+  @@unique([unitId, tripMemberId])
+  @@index([tripId])
+  @@index([tripMemberId])
 }
