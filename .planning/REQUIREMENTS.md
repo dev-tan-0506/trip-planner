@@ -20,8 +20,8 @@
 
 ### LOGI: Logistics & Attendance
 - [ ] **LOGI-01**: Leader can create packing checklists and to-do items assigned to specific members.
-- [ ] **LOGI-02**: Leader can use the "Smart Room & Ride Allocation" drag-and-drop UI to distribute members into cars and rooms.
-- [ ] **LOGI-03**: Members can view available ride/room slots and auto-register themselves.
+- [x] **LOGI-02**: Leader can use the "Smart Room & Ride Allocation" drag-and-drop UI to distribute members into cars and rooms.
+- [x] **LOGI-03**: Members can view available ride/room slots and auto-register themselves.
 - [ ] **LOGI-04**: Leader can trigger a "Photo-Proof Check-in" request for a specific gathering point and time.
 - [ ] **LOGI-05**: Members must upload a selfie (via browser camera) at the gathering point to be marked "Arrived" on the real-time dashboard.
 
