@@ -11,6 +11,28 @@ import { UpdateChecklistItemDto } from './dto/update-checklist-item.dto';
 import { SubmitChecklistProofDto } from './dto/submit-checklist-proof.dto';
 import { ChecklistProofStorageService } from './checklist-proof-storage.service';
 
+type ChecklistGroupSnapshotRecord = {
+  id: string;
+  title: string;
+  kind: string;
+  sortOrder: number;
+  items: Array<{
+    id: string;
+    title: string;
+    notes: string | null;
+    proofUrl: string | null;
+    proofSubmittedAt: Date | null;
+    status: string;
+    sortOrder: number;
+    assigneeTripMemberId: string | null;
+    completedAt: Date | null;
+    assignee: {
+      id: string;
+      user: { id: string; name: string | null; avatarUrl: string | null };
+    } | null;
+  }>;
+};
+
 @Injectable()
 export class ChecklistsService {
   constructor(
@@ -58,22 +80,22 @@ export class ChecklistsService {
     });
 
     const sharedCategories = groups
-      .filter((g) => g.kind === 'SHARED_CATEGORY')
-      .map((g) => this.mapGroup(g, member.id, isLeader));
+      .filter((g: ChecklistGroupSnapshotRecord) => g.kind === 'SHARED_CATEGORY')
+      .map((g: ChecklistGroupSnapshotRecord) => this.mapGroup(g, member.id, isLeader));
 
     const personalTasks = groups
-      .filter((g) => g.kind === 'PERSONAL_TASKS')
-      .map((g) => this.mapGroup(g, member.id, isLeader));
+      .filter((g: ChecklistGroupSnapshotRecord) => g.kind === 'PERSONAL_TASKS')
+      .map((g: ChecklistGroupSnapshotRecord) => this.mapGroup(g, member.id, isLeader));
 
     const documentGroups = groups
-      .filter((g) => g.kind === 'DOCUMENTS')
-      .map((g) => this.mapGroup(g, member.id, isLeader));
+      .filter((g: ChecklistGroupSnapshotRecord) => g.kind === 'DOCUMENTS')
+      .map((g: ChecklistGroupSnapshotRecord) => this.mapGroup(g, member.id, isLeader));
 
     // Compute "my items" across all groups
-    const myItems = groups.flatMap((g) =>
+    const myItems = groups.flatMap((g: ChecklistGroupSnapshotRecord) =>
       g.items
-        .filter((item) => item.assigneeTripMemberId === member.id)
-        .map((item) => ({
+        .filter((item: ChecklistGroupSnapshotRecord['items'][number]) => item.assigneeTripMemberId === member.id)
+        .map((item: ChecklistGroupSnapshotRecord['items'][number]) => ({
           itemId: item.id,
           groupId: g.id,
           groupTitle: g.title,
@@ -92,9 +114,11 @@ export class ChecklistsService {
       personalTasks,
       documentGroups,
       myItems,
-      totalItems: groups.reduce((sum, g) => sum + g.items.length, 0),
+      totalItems: groups.reduce((sum: number, g: ChecklistGroupSnapshotRecord) => sum + g.items.length, 0),
       completedItems: groups.reduce(
-        (sum, g) => sum + g.items.filter((i) => i.status === 'DONE').length,
+        (sum: number, g: ChecklistGroupSnapshotRecord) =>
+          sum +
+          g.items.filter((i: ChecklistGroupSnapshotRecord['items'][number]) => i.status === 'DONE').length,
         0,
       ),
     };

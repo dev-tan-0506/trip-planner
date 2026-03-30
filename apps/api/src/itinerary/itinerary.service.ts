@@ -4,6 +4,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateItineraryItemDto } from './dto/create-itinerary-item.dto';
 import { UpdateItineraryItemDto } from './dto/update-itinerary-item.dto';
@@ -27,6 +28,16 @@ export interface MapItem {
   dayIndex: number;
   sortOrder: number;
 }
+
+type SnapshotItem = {
+  id: string;
+  title: string;
+  dayIndex: number;
+  startMinute: number | null;
+  lat: number | null;
+  lng: number | null;
+  sortOrder: number;
+};
 
 export interface ItineraryItemWithProgress {
   id: string;
@@ -415,7 +426,7 @@ export class ItineraryService {
 
     // Overlap warnings
     const overlapWarnings = this.detectOverlaps(
-      items.map((i) => ({
+      items.map((i: SnapshotItem) => ({
         id: i.id,
         title: i.title,
         dayIndex: i.dayIndex,
@@ -425,8 +436,8 @@ export class ItineraryService {
 
     // Map items (only items with lat/lng)
     const mapItems: MapItem[] = items
-      .filter((i) => i.lat !== null && i.lng !== null)
-      .map((i) => ({
+      .filter((i: SnapshotItem) => i.lat !== null && i.lng !== null)
+      .map((i: SnapshotItem) => ({
         id: i.id,
         title: i.title,
         lat: i.lat!,
@@ -625,7 +636,7 @@ export class ItineraryService {
     }
 
     // Normalize sortOrder to 1..N per day and execute in a transaction
-    await this.prisma.$transaction(async (tx) => {
+    await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       for (const [dayIndex, dayItems] of dayGroups.entries()) {
         // Sort by requested sortOrder
         dayItems.sort((a, b) => a.sortOrder - b.sortOrder);

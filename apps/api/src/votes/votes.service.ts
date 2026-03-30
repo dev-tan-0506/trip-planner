@@ -9,6 +9,13 @@ import { CreateVoteSessionDto } from './dto/create-vote-session.dto';
 import { SubmitBallotDto } from './dto/submit-ballot.dto';
 import { CreateVoteOptionDto } from './dto/create-vote-option.dto';
 
+type SessionOption = {
+  id: string;
+  title: string;
+  payload: unknown;
+  status: 'PENDING_APPROVAL' | 'ACTIVE' | 'REJECTED' | 'WINNER' | 'RUNNER_UP';
+};
+
 @Injectable()
 export class VotesService {
   constructor(private prisma: PrismaService) {}
@@ -167,7 +174,7 @@ export class VotesService {
 
     // Verify option is active
     const option = session.options.find(
-      (o) => o.id === dto.voteOptionId && o.status === 'ACTIVE',
+      (o: SessionOption) => o.id === dto.voteOptionId && o.status === 'ACTIVE',
     );
     if (!option) throw new BadRequestException('Invalid or inactive vote option');
 
@@ -210,7 +217,7 @@ export class VotesService {
       voteCounts[ballot.voteOptionId] = (voteCounts[ballot.voteOptionId] || 0) + 1;
     }
 
-    const optionsWithCounts = session.options.map((opt) => ({
+    const optionsWithCounts = session.options.map((opt: SessionOption) => ({
       ...opt,
       voteCount: voteCounts[opt.id] || 0,
     }));
@@ -242,9 +249,11 @@ export class VotesService {
       voteCounts[ballot.voteOptionId] = (voteCounts[ballot.voteOptionId] || 0) + 1;
     }
 
-    const activeOptions = session.options.filter((o) => o.status === 'ACTIVE');
-    const maxVotes = Math.max(...activeOptions.map((o) => voteCounts[o.id] || 0), 0);
-    const topOptions = activeOptions.filter((o) => (voteCounts[o.id] || 0) === maxVotes);
+    const activeOptions = session.options.filter((o: SessionOption) => o.status === 'ACTIVE');
+    const maxVotes = Math.max(...activeOptions.map((o: SessionOption) => voteCounts[o.id] || 0), 0);
+    const topOptions = activeOptions.filter(
+      (o: SessionOption) => (voteCounts[o.id] || 0) === maxVotes,
+    );
 
     // Check for tie
     if (topOptions.length > 1 && maxVotes > 0) {
@@ -271,7 +280,7 @@ export class VotesService {
         where: { id: winner.id },
         data: { status: 'WINNER' },
       });
-      for (const opt of activeOptions.filter((o) => o.id !== winner.id)) {
+      for (const opt of activeOptions.filter((o: SessionOption) => o.id !== winner.id)) {
         await this.prisma.voteOption.update({
           where: { id: opt.id },
           data: { status: 'RUNNER_UP' },
@@ -434,7 +443,7 @@ export class VotesService {
       throw new BadRequestException('Session does not require leader decision');
     }
 
-    const winner = session.options.find((o) => o.id === winningOptionId);
+    const winner = session.options.find((o: SessionOption) => o.id === winningOptionId);
     if (!winner) throw new BadRequestException('Invalid option');
 
     // Mark winner

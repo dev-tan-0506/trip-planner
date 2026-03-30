@@ -2,6 +2,22 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateAttendanceSessionDto } from './dto/create-attendance-session.dto';
 import { CreateAttendanceSubmissionDto } from './dto/create-attendance-submission.dto';
 import { ProofStorageService } from './proof-storage.service';
+type AttendanceLocationStatusValue = 'GRANTED' | 'DENIED' | 'UNAVAILABLE';
+type AttendanceRow = {
+    tripMemberId: string;
+    userId: string;
+    name: string | null;
+    avatarUrl: string | null;
+    role: string;
+    hasSubmitted: boolean;
+    submittedAt: string | null;
+    status: 'ARRIVED' | 'MISSING' | 'NO_LOCATION';
+    photoUrl: string | null;
+    lat: number | null;
+    lng: number | null;
+    accuracyMeters: number | null;
+    locationStatus: AttendanceLocationStatusValue | null;
+};
 export declare class AttendanceService {
     private readonly prisma;
     private readonly proofStorageService;
@@ -36,21 +52,7 @@ export declare class AttendanceService {
             lng: number;
             status: string;
         }[];
-        members: {
-            tripMemberId: string;
-            userId: string;
-            name: string | null;
-            avatarUrl: string | null;
-            role: import(".prisma/client").$Enums.TripRole;
-            hasSubmitted: boolean;
-            submittedAt: string | null;
-            status: string;
-            photoUrl: string | null;
-            lat: number | null;
-            lng: number | null;
-            accuracyMeters: number | null;
-            locationStatus: import(".prisma/client").$Enums.AttendanceLocationStatus | null;
-        }[];
+        members: AttendanceRow[];
     }>;
     createSession(tripId: string, userId: string, dto: CreateAttendanceSessionDto): Promise<{
         sessionId: string;
@@ -82,21 +84,7 @@ export declare class AttendanceService {
                 lng: number;
                 status: string;
             }[];
-            members: {
-                tripMemberId: string;
-                userId: string;
-                name: string | null;
-                avatarUrl: string | null;
-                role: import(".prisma/client").$Enums.TripRole;
-                hasSubmitted: boolean;
-                submittedAt: string | null;
-                status: string;
-                photoUrl: string | null;
-                lat: number | null;
-                lng: number | null;
-                accuracyMeters: number | null;
-                locationStatus: import(".prisma/client").$Enums.AttendanceLocationStatus | null;
-            }[];
+            members: AttendanceRow[];
         };
     }>;
     submitProof(sessionId: string, userId: string, dto: CreateAttendanceSubmissionDto): Promise<{
@@ -130,21 +118,7 @@ export declare class AttendanceService {
                 lng: number;
                 status: string;
             }[];
-            members: {
-                tripMemberId: string;
-                userId: string;
-                name: string | null;
-                avatarUrl: string | null;
-                role: import(".prisma/client").$Enums.TripRole;
-                hasSubmitted: boolean;
-                submittedAt: string | null;
-                status: string;
-                photoUrl: string | null;
-                lat: number | null;
-                lng: number | null;
-                accuracyMeters: number | null;
-                locationStatus: import(".prisma/client").$Enums.AttendanceLocationStatus | null;
-            }[];
+            members: AttendanceRow[];
         };
     }>;
     closeSession(sessionId: string, userId: string): Promise<{
@@ -178,21 +152,8 @@ export declare class AttendanceService {
                 lng: number;
                 status: string;
             }[];
-            members: {
-                tripMemberId: string;
-                userId: string;
-                name: string | null;
-                avatarUrl: string | null;
-                role: import(".prisma/client").$Enums.TripRole;
-                hasSubmitted: boolean;
-                submittedAt: string | null;
-                status: string;
-                photoUrl: string | null;
-                lat: number | null;
-                lng: number | null;
-                accuracyMeters: number | null;
-                locationStatus: import(".prisma/client").$Enums.AttendanceLocationStatus | null;
-            }[];
+            members: AttendanceRow[];
         };
     }>;
 }
+export {};

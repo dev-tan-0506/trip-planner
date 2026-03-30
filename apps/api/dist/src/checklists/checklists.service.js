@@ -80,7 +80,8 @@ let ChecklistsService = class ChecklistsService {
             documentGroups,
             myItems,
             totalItems: groups.reduce((sum, g) => sum + g.items.length, 0),
-            completedItems: groups.reduce((sum, g) => sum + g.items.filter((i) => i.status === 'DONE').length, 0),
+            completedItems: groups.reduce((sum, g) => sum +
+                g.items.filter((i) => i.status === 'DONE').length, 0),
         };
     }
     mapGroup(group, currentTripMemberId, isLeader) {

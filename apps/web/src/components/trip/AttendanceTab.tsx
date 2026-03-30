@@ -171,7 +171,7 @@ export function AttendanceTab({ tripId, onOverlayChange }: AttendanceTabProps) {
               )}
             </>
           )}
-          {!snapshot.isLeader && snapshot.session?.status === 'OPEN' && (
+          {snapshot.session?.status === 'OPEN' && (
             <button
               type="button"
               onClick={() => setShowCaptureSheet(true)}
@@ -306,7 +306,7 @@ export function AttendanceTab({ tripId, onOverlayChange }: AttendanceTabProps) {
           <AttendanceMapPanel snapshot={snapshot} />
           <AttendanceMemberList members={snapshot.members} />
 
-          {!snapshot.isLeader && myRow && (
+          {myRow && (
             <div className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div>

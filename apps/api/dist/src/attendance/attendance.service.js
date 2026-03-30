@@ -11,9 +11,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttendanceService = void 0;
 const common_1 = require("@nestjs/common");
-const client_1 = require("@prisma/client");
 const prisma_service_1 = require("../prisma/prisma.service");
 const proof_storage_service_1 = require("./proof-storage.service");
+const AttendanceLocationStatus = {
+    GRANTED: 'GRANTED',
+    DENIED: 'DENIED',
+    UNAVAILABLE: 'UNAVAILABLE',
+};
+const AttendanceSessionStatus = {
+    OPEN: 'OPEN',
+    CLOSED: 'CLOSED',
+};
 let AttendanceService = class AttendanceService {
     constructor(prisma, proofStorageService) {
         this.prisma = prisma;
@@ -78,10 +86,11 @@ let AttendanceService = class AttendanceService {
             }),
             this.getLatestSession(tripId),
         ]);
-        const submissionsByMemberId = new Map((session?.submissions ?? []).map((submission) => [submission.tripMemberId, submission]));
+        const submissionEntries = (session?.submissions ?? []).map((submission) => [submission.tripMemberId, submission]);
+        const submissionsByMemberId = new Map(submissionEntries);
         const rows = members.map((tripMember) => {
             const submission = submissionsByMemberId.get(tripMember.id);
-            const hasLocation = submission?.locationStatus === client_1.AttendanceLocationStatus.GRANTED &&
+            const hasLocation = submission?.locationStatus === AttendanceLocationStatus.GRANTED &&
                 submission.lat != null &&
                 submission.lng != null;
             const status = !submission
@@ -157,8 +166,8 @@ let AttendanceService = class AttendanceService {
             throw new common_1.BadRequestException('Invalid check-in window');
         }
         await this.prisma.attendanceSession.updateMany({
-            where: { tripId, status: client_1.AttendanceSessionStatus.OPEN },
-            data: { status: client_1.AttendanceSessionStatus.CLOSED },
+            where: { tripId, status: AttendanceSessionStatus.OPEN },
+            data: { status: AttendanceSessionStatus.CLOSED },
         });
         const session = await this.prisma.attendanceSession.create({
             data: {
@@ -187,7 +196,7 @@ let AttendanceService = class AttendanceService {
         }
         const member = await this.getMembershipOrFail(session.tripId, userId);
         const now = new Date();
-        if (session.status !== client_1.AttendanceSessionStatus.OPEN || now > session.closesAt) {
+        if (session.status !== AttendanceSessionStatus.OPEN || now > session.closesAt) {
             throw new common_1.BadRequestException('This check-in session is already closed');
         }
         const photoUrl = dto.imageDataUrl
@@ -204,17 +213,17 @@ let AttendanceService = class AttendanceService {
                 sessionId,
                 tripMemberId: member.id,
                 photoUrl,
-                lat: dto.locationStatus === client_1.AttendanceLocationStatus.GRANTED ? dto.lat : null,
-                lng: dto.locationStatus === client_1.AttendanceLocationStatus.GRANTED ? dto.lng : null,
-                accuracyMeters: dto.locationStatus === client_1.AttendanceLocationStatus.GRANTED ? dto.accuracyMeters : null,
+                lat: dto.locationStatus === AttendanceLocationStatus.GRANTED ? dto.lat : null,
+                lng: dto.locationStatus === AttendanceLocationStatus.GRANTED ? dto.lng : null,
+                accuracyMeters: dto.locationStatus === AttendanceLocationStatus.GRANTED ? dto.accuracyMeters : null,
                 locationStatus: dto.locationStatus,
             },
             update: {
                 photoUrl,
                 submittedAt: now,
-                lat: dto.locationStatus === client_1.AttendanceLocationStatus.GRANTED ? dto.lat : null,
-                lng: dto.locationStatus === client_1.AttendanceLocationStatus.GRANTED ? dto.lng : null,
-                accuracyMeters: dto.locationStatus === client_1.AttendanceLocationStatus.GRANTED ? dto.accuracyMeters : null,
+                lat: dto.locationStatus === AttendanceLocationStatus.GRANTED ? dto.lat : null,
+                lng: dto.locationStatus === AttendanceLocationStatus.GRANTED ? dto.lng : null,
+                accuracyMeters: dto.locationStatus === AttendanceLocationStatus.GRANTED ? dto.accuracyMeters : null,
                 locationStatus: dto.locationStatus,
             },
         });
@@ -238,7 +247,7 @@ let AttendanceService = class AttendanceService {
         await this.prisma.attendanceSession.update({
             where: { id: sessionId },
             data: {
-                status: client_1.AttendanceSessionStatus.CLOSED,
+                status: AttendanceSessionStatus.CLOSED,
             },
         });
         return {

@@ -6,13 +6,13 @@ const config_1 = require("@nestjs/config");
 const app_module_1 = require("./app.module");
 const swagger_1 = require("@nestjs/swagger");
 const node_path_1 = require("node:path");
-const express_1 = require("express");
+const express = require("express");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors();
     app.setGlobalPrefix('api');
-    app.use(express_1.default.json({ limit: '10mb' }));
-    app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));
+    app.use(express.json({ limit: '10mb' }));
+    app.use(express.urlencoded({ extended: true, limit: '10mb' }));
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
         forbidNonWhitelisted: true,

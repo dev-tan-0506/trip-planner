@@ -4,11 +4,55 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateLogisticsUnitDto } from './dto/create-logistics-unit.dto';
 import { ReassignLogisticsMemberDto } from './dto/reassign-logistics-member.dto';
 import { SelfJoinLogisticsSlotDto } from './dto/self-join-logistics-slot.dto';
 import { LeaveLogisticsSlotDto } from './dto/leave-logistics-slot.dto';
+
+type LogisticsUnitRecord = {
+  id: string;
+  type: string;
+  label: string;
+  capacity: number;
+  rideKind: string | null;
+  plateNumber: string | null;
+  seatLabels: string[];
+  sortOrder: number;
+  note: string | null;
+  assignments: Array<{
+    id: string;
+    tripMemberId: string;
+    seatLabel: string | null;
+    source: string;
+    member: {
+      id: string;
+      userId: string;
+      role: string;
+      user: { id: string; name: string | null; avatarUrl: string | null };
+    };
+  }>;
+};
+
+type TripMemberWithProfile = {
+  id: string;
+  role: string;
+  user: { id: string; name: string | null; avatarUrl: string | null };
+};
+
+type AssignmentWithSeat = {
+  seatLabel: string | null;
+};
+
+type AssignmentRef = {
+  tripMemberId: string;
+};
+
+type CapacityUnit = {
+  id: string;
+  remaining: number;
+};
 
 @Injectable()
 export class LogisticsService {
@@ -58,12 +102,12 @@ export class LogisticsService {
     });
 
     const roomUnits = units
-      .filter((u) => u.type === 'ROOM')
-      .map((unit) => this.mapUnitToSnapshot(unit));
+      .filter((u: LogisticsUnitRecord) => u.type === 'ROOM')
+      .map((unit: LogisticsUnitRecord) => this.mapUnitToSnapshot(unit));
 
     const rideUnits = units
-      .filter((u) => u.type === 'RIDE')
-      .map((unit) => this.mapUnitToSnapshot(unit));
+      .filter((u: LogisticsUnitRecord) => u.type === 'RIDE')
+      .map((unit: LogisticsUnitRecord) => this.mapUnitToSnapshot(unit));
 
     return {
       tripId,
@@ -72,7 +116,7 @@ export class LogisticsService {
       roomUnits,
       rideUnits,
       totalMembers: allMembers.length,
-      members: allMembers.map((m) => ({
+      members: allMembers.map((m: TripMemberWithProfile) => ({
         tripMemberId: m.id,
         userId: m.user.id,
         name: m.user.name,
@@ -245,7 +289,7 @@ export class LogisticsService {
     }
 
     // Use transaction to prevent overbooking race conditions
-    return this.prisma.$transaction(async (tx) => {
+    return this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       const freshUnit = await tx.logisticsUnit.findUnique({
         where: { id: dto.unitId },
         include: { assignments: true },
@@ -264,7 +308,7 @@ export class LogisticsService {
         }
 
         const takenSeat = freshUnit.assignments.find(
-          (assignment) => assignment.seatLabel === dto.seatLabel,
+          (assignment: AssignmentWithSeat) => assignment.seatLabel === dto.seatLabel,
         );
         if (takenSeat) {
           throw new BadRequestException('This seat is already taken');
@@ -378,11 +422,11 @@ export class LogisticsService {
     });
 
     const assignedMemberIds = new Set(
-      existingAssignments.map((a) => a.tripMemberId),
+      existingAssignments.map((a: AssignmentRef) => a.tripMemberId),
     );
 
     // Find unassigned members
-    const unassigned = allMembers.filter((m) => !assignedMemberIds.has(m.id));
+    const unassigned = allMembers.filter((m: { id: string }) => !assignedMemberIds.has(m.id));
 
     if (unassigned.length === 0) {
       return this.getAllocationSnapshot(tripId, userId);
@@ -396,11 +440,11 @@ export class LogisticsService {
     });
 
     const unitsWithCapacity = units
-      .map((unit) => ({
+      .map((unit: { id: string; capacity: number; assignments: unknown[] }) => ({
         id: unit.id,
         remaining: unit.capacity - unit.assignments.length,
       }))
-      .filter((u) => u.remaining > 0);
+      .filter((u: CapacityUnit) => u.remaining > 0);
 
     // Distribute unassigned members across units with capacity
     let memberIndex = 0;

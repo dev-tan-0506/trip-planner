@@ -92,7 +92,7 @@ export declare class ChecklistsController {
             groupTitle: string;
             title: string;
             notes: string | null;
-            status: import(".prisma/client").$Enums.ChecklistItemStatus;
+            status: string;
             sortOrder: number;
         }[];
         totalItems: number;
@@ -183,7 +183,7 @@ export declare class ChecklistsController {
             groupTitle: string;
             title: string;
             notes: string | null;
-            status: import(".prisma/client").$Enums.ChecklistItemStatus;
+            status: string;
             sortOrder: number;
         }[];
         totalItems: number;
@@ -274,7 +274,7 @@ export declare class ChecklistsController {
             groupTitle: string;
             title: string;
             notes: string | null;
-            status: import(".prisma/client").$Enums.ChecklistItemStatus;
+            status: string;
             sortOrder: number;
         }[];
         totalItems: number;
@@ -365,7 +365,7 @@ export declare class ChecklistsController {
             groupTitle: string;
             title: string;
             notes: string | null;
-            status: import(".prisma/client").$Enums.ChecklistItemStatus;
+            status: string;
             sortOrder: number;
         }[];
         totalItems: number;
@@ -456,7 +456,7 @@ export declare class ChecklistsController {
             groupTitle: string;
             title: string;
             notes: string | null;
-            status: import(".prisma/client").$Enums.ChecklistItemStatus;
+            status: string;
             sortOrder: number;
         }[];
         totalItems: number;
@@ -547,7 +547,7 @@ export declare class ChecklistsController {
             groupTitle: string;
             title: string;
             notes: string | null;
-            status: import(".prisma/client").$Enums.ChecklistItemStatus;
+            status: string;
             sortOrder: number;
         }[];
         totalItems: number;
@@ -638,7 +638,7 @@ export declare class ChecklistsController {
             groupTitle: string;
             title: string;
             notes: string | null;
-            status: import(".prisma/client").$Enums.ChecklistItemStatus;
+            status: string;
             sortOrder: number;
         }[];
         totalItems: number;
@@ -729,7 +729,7 @@ export declare class ChecklistsController {
             groupTitle: string;
             title: string;
             notes: string | null;
-            status: import(".prisma/client").$Enums.ChecklistItemStatus;
+            status: string;
             sortOrder: number;
         }[];
         totalItems: number;

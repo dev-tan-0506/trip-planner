@@ -68,7 +68,7 @@ export declare class LogisticsService {
             userId: string;
             name: string | null;
             avatarUrl: string | null;
-            role: import(".prisma/client").$Enums.TripRole;
+            role: string;
         }[];
     }>;
     private mapUnitToSnapshot;
@@ -132,7 +132,7 @@ export declare class LogisticsService {
             userId: string;
             name: string | null;
             avatarUrl: string | null;
-            role: import(".prisma/client").$Enums.TripRole;
+            role: string;
         }[];
     }>;
     updateUnit(tripId: string, userId: string, unitId: string, dto: Partial<CreateLogisticsUnitDto>): Promise<{
@@ -195,7 +195,7 @@ export declare class LogisticsService {
             userId: string;
             name: string | null;
             avatarUrl: string | null;
-            role: import(".prisma/client").$Enums.TripRole;
+            role: string;
         }[];
     }>;
     deleteUnit(tripId: string, userId: string, unitId: string): Promise<{
@@ -258,7 +258,7 @@ export declare class LogisticsService {
             userId: string;
             name: string | null;
             avatarUrl: string | null;
-            role: import(".prisma/client").$Enums.TripRole;
+            role: string;
         }[];
     }>;
     selfJoin(tripId: string, userId: string, dto: SelfJoinLogisticsSlotDto): Promise<{
@@ -321,7 +321,7 @@ export declare class LogisticsService {
             userId: string;
             name: string | null;
             avatarUrl: string | null;
-            role: import(".prisma/client").$Enums.TripRole;
+            role: string;
         }[];
     }>;
     leave(tripId: string, userId: string, dto: LeaveLogisticsSlotDto): Promise<{
@@ -384,7 +384,7 @@ export declare class LogisticsService {
             userId: string;
             name: string | null;
             avatarUrl: string | null;
-            role: import(".prisma/client").$Enums.TripRole;
+            role: string;
         }[];
     }>;
     reassign(tripId: string, userId: string, dto: ReassignLogisticsMemberDto): Promise<{
@@ -447,7 +447,7 @@ export declare class LogisticsService {
             userId: string;
             name: string | null;
             avatarUrl: string | null;
-            role: import(".prisma/client").$Enums.TripRole;
+            role: string;
         }[];
     }>;
     autoFill(tripId: string, userId: string, type: 'ROOM' | 'RIDE'): Promise<{
@@ -510,7 +510,7 @@ export declare class LogisticsService {
             userId: string;
             name: string | null;
             avatarUrl: string | null;
-            role: import(".prisma/client").$Enums.TripRole;
+            role: string;
         }[];
     }>;
 }

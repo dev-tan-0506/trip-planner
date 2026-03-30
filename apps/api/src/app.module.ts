@@ -12,6 +12,8 @@ import { TemplatesModule } from './templates/templates.module';
 import { LogisticsModule } from './logistics/logistics.module';
 import { ChecklistsModule } from './checklists/checklists.module';
 import { AttendanceModule } from './attendance/attendance.module';
+import { FundModule } from './fund/fund.module';
+import { SafetyModule } from './safety/safety.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { AttendanceModule } from './attendance/attendance.module';
     LogisticsModule,
     ChecklistsModule,
     AttendanceModule,
+    FundModule,
+    SafetyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

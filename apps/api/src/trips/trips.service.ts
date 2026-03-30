@@ -3,6 +3,15 @@ import { randomBytes } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 
+type TripMemberWithUser = {
+  userId: string;
+  user: {
+    id: string;
+    name: string | null;
+    avatarUrl: string | null;
+  };
+};
+
 @Injectable()
 export class TripsService {
   constructor(private prisma: PrismaService) {}
@@ -53,7 +62,7 @@ export class TripsService {
 
     return {
       ...trip,
-      members: trip.members.map((member) => ({
+      members: trip.members.map((member: TripMemberWithUser) => ({
         ...member,
         user: {
           id: member.user.id,
@@ -78,7 +87,7 @@ export class TripsService {
       throw new NotFoundException('Trip not found');
     }
 
-    const isMember = trip.members.some((member) => member.userId === userId);
+    const isMember = trip.members.some((member: TripMemberWithUser) => member.userId === userId);
     if (!isMember) {
       throw new ForbiddenException('You must join this trip to view private member details');
     }

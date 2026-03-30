@@ -987,3 +987,243 @@ export const attendanceApi = {
     });
   },
 };
+
+// ─── Fund & Safety API ──────────────────────────────
+
+export interface FundContributionRow {
+  id: string;
+  tripMemberId: string;
+  declaredAmount: string;
+  method: 'MOMO' | 'BANK_TRANSFER' | 'CASH' | 'OTHER';
+  status: 'PLEDGED' | 'CONFIRMED' | 'REJECTED';
+  transferNote: string | null;
+  confirmedAt: string | null;
+  createdAt: string;
+  member: {
+    tripMemberId: string;
+    userId: string;
+    name: string | null;
+    avatarUrl: string | null;
+    role: 'LEADER' | 'MEMBER';
+  };
+  confirmedBy: {
+    tripMemberId: string;
+    userId: string;
+    name: string | null;
+  } | null;
+}
+
+export interface FundExpenseRow {
+  id: string;
+  title: string;
+  amount: string;
+  category: 'FOOD' | 'TRANSPORT' | 'ACCOMMODATION' | 'TICKETS' | 'EMERGENCY' | 'OTHER';
+  incurredAt: string;
+  linkedItineraryItemId: string | null;
+  createdBy: {
+    tripMemberId: string;
+    userId: string;
+    name: string | null;
+  };
+}
+
+export interface FundSnapshot {
+  tripId: string;
+  hasFund: boolean;
+  isLeader: boolean;
+  currentTripMemberId: string;
+  fund: {
+    id: string;
+    status: string;
+    currency: string;
+    targetAmount: string;
+    collectedAmount: string;
+    spentAmount: string;
+    remainingAmount: string;
+    burnRatePercent: string;
+    momoQrPayload: Record<string, unknown> | null;
+    bankQrPayload: Record<string, unknown> | null;
+    ownerTripMemberId: string;
+  } | null;
+  contributions: FundContributionRow[];
+  expenses: FundExpenseRow[];
+  summary: {
+    targetAmount: string;
+    collectedAmount: string;
+    spentAmount: string;
+    remainingAmount: string;
+    burnRatePercent: string;
+  };
+  roleFlags: {
+    canManageFund: boolean;
+    canSubmitContribution: boolean;
+    canConfirmContribution: boolean;
+    canCreateExpense: boolean;
+  };
+}
+
+export interface SafetyOverviewSnapshot {
+  tripId: string;
+  destinationLabel: string;
+  contextLabel: string;
+  weather: Array<{
+    date: string;
+    label: string;
+    condition: string;
+    temperatureC: number;
+    rainChancePercent: number;
+  }>;
+  crowd: Array<{
+    locationLabel: string;
+    level: 'THAP' | 'VUA' | 'CAO';
+    note: string;
+  }>;
+  directoryQuickPicks: SafetyDirectoryEntry[];
+}
+
+export interface SafetyDirectoryEntry {
+  id: string;
+  kind: string;
+  title: string;
+  phone: string | null;
+  address: string;
+  lat: number | null;
+  lng: number | null;
+  source: string;
+  verifiedAt: string | null;
+}
+
+export interface SafetyWarningsSnapshot {
+  tripId: string;
+  warnings: Array<{
+    id: string;
+    title: string;
+    message: string;
+    linkedItineraryItemId: string | null;
+  }>;
+  alerts: Array<{
+    id: string;
+    type: string;
+    status: string;
+    message: string;
+    createdAt: string;
+    linkedItineraryItemId: string | null;
+    createdBy: {
+      tripMemberId: string;
+      userId: string;
+      name: string | null;
+    } | null;
+  }>;
+  quickDial: Array<{
+    label: string;
+    phone: string;
+  }>;
+}
+
+export function connectSafetySocket(): Socket {
+  return io(`${WS_BASE_URL}/safety`, {
+    transports: ['websocket', 'polling'],
+    reconnection: true,
+    reconnectionDelay: 1000,
+    reconnectionAttempts: 10,
+  });
+}
+
+export const fundApi = {
+  async getFund(tripId: string): Promise<FundSnapshot> {
+    return request<FundSnapshot>(`/trips/${tripId}/fund`);
+  },
+
+  async createFund(
+    tripId: string,
+    body: {
+      targetAmount: string;
+      currency?: string;
+      momoQrPayload?: Record<string, unknown>;
+      bankQrPayload?: Record<string, unknown>;
+    },
+  ): Promise<FundSnapshot> {
+    return request<FundSnapshot>(`/trips/${tripId}/fund`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async updateFund(
+    tripId: string,
+    body: {
+      targetAmount: string;
+      currency?: string;
+      momoQrPayload?: Record<string, unknown>;
+      bankQrPayload?: Record<string, unknown>;
+    },
+  ): Promise<FundSnapshot> {
+    return request<FundSnapshot>(`/trips/${tripId}/fund`, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async submitContribution(
+    tripId: string,
+    body: { declaredAmount: string; method: 'MOMO' | 'BANK_TRANSFER' | 'CASH' | 'OTHER'; transferNote?: string },
+  ): Promise<FundSnapshot> {
+    return request<FundSnapshot>(`/trips/${tripId}/fund/contributions`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async confirmContribution(tripId: string, contributionId: string): Promise<FundSnapshot> {
+    return request<FundSnapshot>(`/trips/${tripId}/fund/contributions/${contributionId}/confirm`, {
+      method: 'POST',
+    });
+  },
+
+  async createExpense(
+    tripId: string,
+    body: {
+      title: string;
+      amount: string;
+      category: 'FOOD' | 'TRANSPORT' | 'ACCOMMODATION' | 'TICKETS' | 'EMERGENCY' | 'OTHER';
+      incurredAt: string;
+      linkedItineraryItemId?: string;
+    },
+  ): Promise<FundSnapshot> {
+    return request<FundSnapshot>(`/trips/${tripId}/fund/expenses`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+};
+
+export const safetyApi = {
+  async getSafetyOverview(tripId: string): Promise<SafetyOverviewSnapshot> {
+    return request<SafetyOverviewSnapshot>(`/trips/${tripId}/safety/overview`);
+  },
+
+  async getSafetyDirectory(tripId: string): Promise<SafetyDirectoryEntry[]> {
+    return request<SafetyDirectoryEntry[]>(`/trips/${tripId}/safety/directory`);
+  },
+
+  async getSafetyWarnings(tripId: string): Promise<SafetyWarningsSnapshot> {
+    return request<SafetyWarningsSnapshot>(`/trips/${tripId}/safety/warnings`);
+  },
+
+  async createSosAlert(
+    tripId: string,
+    body: { message?: string; linkedItineraryItemId?: string },
+  ): Promise<SafetyWarningsSnapshot> {
+    return request<SafetyWarningsSnapshot>(`/trips/${tripId}/safety/sos`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async acknowledgeSafetyAlert(tripId: string, alertId: string): Promise<SafetyWarningsSnapshot> {
+    return request<SafetyWarningsSnapshot>(`/trips/${tripId}/safety/alerts/${alertId}/acknowledge`, {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+  },
+};

@@ -57,7 +57,7 @@ export declare class VotesService {
         approvedById: string | null;
         tieBreakRound: number;
     }>;
-    getSession(sessionId: string, userId: string): Promise<{
+    getSession(sessionId: string, userId: string): Promise<({
         createdBy: {
             name: string | null;
             id: string;
@@ -92,6 +92,87 @@ export declare class VotesService {
             replacementProposalId: string | null;
         } | null;
     } & {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        tripId: string;
+        status: import(".prisma/client").$Enums.VoteSessionStatus;
+        targetItemId: string | null;
+        mode: import(".prisma/client").$Enums.VoteSessionMode;
+        deadline: Date;
+        targetDayIndex: number | null;
+        targetInsertAfterItemId: string | null;
+        createdById: string;
+        parentSessionId: string | null;
+        approvedById: string | null;
+        tieBreakRound: number;
+    }) | {
+        options: {
+            voteCount: number;
+            id: string;
+            title: string;
+            payload: unknown;
+            status: "PENDING_APPROVAL" | "ACTIVE" | "REJECTED" | "WINNER" | "RUNNER_UP";
+        }[];
+        totalVotes: number;
+        currentItem: {
+            title: string;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            tripId: string;
+            dayIndex: number;
+            locationName: string | null;
+            shortNote: string | null;
+            locationAddress: string | null;
+            placeId: string | null;
+            lat: number | null;
+            lng: number | null;
+            sortOrder: number;
+            startMinute: number | null;
+            version: number;
+        } | null;
+        targetItem: {
+            title: string;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            tripId: string;
+            dayIndex: number;
+            locationName: string | null;
+            shortNote: string | null;
+            locationAddress: string | null;
+            placeId: string | null;
+            lat: number | null;
+            lng: number | null;
+            sortOrder: number;
+            startMinute: number | null;
+            version: number;
+        } | null;
+        createdBy: {
+            name: string | null;
+            id: string;
+            avatarUrl: string | null;
+        };
+        ballots: {
+            id: string;
+            userId: string;
+            voteOptionId: string;
+        }[];
+        outcome: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            tripId: string;
+            targetItemId: string | null;
+            payload: import("@prisma/client/runtime/library").JsonValue;
+            targetDayIndex: number | null;
+            targetInsertAfterItemId: string | null;
+            voteSessionId: string;
+            winningOptionId: string;
+            createdItemId: string | null;
+            replacementProposalId: string | null;
+        } | null;
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -186,13 +267,10 @@ export declare class VotesService {
     getSessionSnapshot(sessionId: string): Promise<{
         options: {
             voteCount: number;
-            title: string;
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            status: import(".prisma/client").$Enums.VoteOptionStatus;
-            payload: import("@prisma/client/runtime/library").JsonValue;
-            voteSessionId: string;
+            title: string;
+            payload: unknown;
+            status: "PENDING_APPROVAL" | "ACTIVE" | "REJECTED" | "WINNER" | "RUNNER_UP";
         }[];
         totalVotes: number;
         currentItem: {
@@ -271,13 +349,10 @@ export declare class VotesService {
     closeSession(sessionId: string, userId: string): Promise<{
         options: {
             voteCount: number;
-            title: string;
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            status: import(".prisma/client").$Enums.VoteOptionStatus;
-            payload: import("@prisma/client/runtime/library").JsonValue;
-            voteSessionId: string;
+            title: string;
+            payload: unknown;
+            status: "PENDING_APPROVAL" | "ACTIVE" | "REJECTED" | "WINNER" | "RUNNER_UP";
         }[];
         totalVotes: number;
         currentItem: {

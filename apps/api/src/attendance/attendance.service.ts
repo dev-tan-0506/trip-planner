@@ -4,11 +4,60 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { AttendanceLocationStatus, AttendanceSessionStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAttendanceSessionDto } from './dto/create-attendance-session.dto';
 import { CreateAttendanceSubmissionDto } from './dto/create-attendance-submission.dto';
 import { ProofStorageService } from './proof-storage.service';
+
+type AttendanceLocationStatusValue = 'GRANTED' | 'DENIED' | 'UNAVAILABLE';
+type AttendanceSessionStatusValue = 'OPEN' | 'CLOSED';
+
+const AttendanceLocationStatus = {
+  GRANTED: 'GRANTED' as AttendanceLocationStatusValue,
+  DENIED: 'DENIED' as AttendanceLocationStatusValue,
+  UNAVAILABLE: 'UNAVAILABLE' as AttendanceLocationStatusValue,
+};
+
+const AttendanceSessionStatus = {
+  OPEN: 'OPEN' as AttendanceSessionStatusValue,
+  CLOSED: 'CLOSED' as AttendanceSessionStatusValue,
+};
+
+type AttendanceSubmissionRecord = {
+  tripMemberId: string;
+  submittedAt: Date;
+  photoUrl: string | null;
+  lat: number | null;
+  lng: number | null;
+  accuracyMeters: number | null;
+  locationStatus: AttendanceLocationStatusValue;
+};
+
+type AttendanceMemberRecord = {
+  id: string;
+  role: string;
+  user: {
+    id: string;
+    name: string | null;
+    avatarUrl: string | null;
+  };
+};
+
+type AttendanceRow = {
+  tripMemberId: string;
+  userId: string;
+  name: string | null;
+  avatarUrl: string | null;
+  role: string;
+  hasSubmitted: boolean;
+  submittedAt: string | null;
+  status: 'ARRIVED' | 'MISSING' | 'NO_LOCATION';
+  photoUrl: string | null;
+  lat: number | null;
+  lng: number | null;
+  accuracyMeters: number | null;
+  locationStatus: AttendanceLocationStatusValue | null;
+};
 
 @Injectable()
 export class AttendanceService {
@@ -82,11 +131,12 @@ export class AttendanceService {
       this.getLatestSession(tripId),
     ]);
 
-    const submissionsByMemberId = new Map(
-      (session?.submissions ?? []).map((submission) => [submission.tripMemberId, submission]),
-    );
+    const submissionEntries: Array<[string, AttendanceSubmissionRecord]> = (
+      session?.submissions ?? []
+    ).map((submission: AttendanceSubmissionRecord) => [submission.tripMemberId, submission]);
+    const submissionsByMemberId = new Map<string, AttendanceSubmissionRecord>(submissionEntries);
 
-    const rows = members.map((tripMember) => {
+    const rows: AttendanceRow[] = members.map((tripMember: AttendanceMemberRecord) => {
       const submission = submissionsByMemberId.get(tripMember.id);
       const hasLocation =
         submission?.locationStatus === AttendanceLocationStatus.GRANTED &&
@@ -144,13 +194,13 @@ export class AttendanceService {
           }
         : null,
       counts: {
-        arrived: rows.filter((row) => row.status === 'ARRIVED').length,
-        missing: rows.filter((row) => row.status === 'MISSING').length,
-        noLocation: rows.filter((row) => row.status === 'NO_LOCATION').length,
+        arrived: rows.filter((row: AttendanceRow) => row.status === 'ARRIVED').length,
+        missing: rows.filter((row: AttendanceRow) => row.status === 'MISSING').length,
+        noLocation: rows.filter((row: AttendanceRow) => row.status === 'NO_LOCATION').length,
       },
       mapPoints: rows
-        .filter((row) => row.lat != null && row.lng != null)
-        .map((row) => ({
+        .filter((row: AttendanceRow) => row.lat != null && row.lng != null)
+        .map((row: AttendanceRow) => ({
           tripMemberId: row.tripMemberId,
           name: row.name,
           lat: row.lat as number,

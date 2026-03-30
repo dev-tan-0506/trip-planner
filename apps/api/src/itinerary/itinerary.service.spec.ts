@@ -142,13 +142,15 @@ describe('ItineraryService', () => {
 
       const snapshot = await service.getTripItinerarySnapshot(tripId, leaderUserId);
 
-      expect(snapshot.days).toHaveLength(2);
+      expect(snapshot.days).toHaveLength(5);
       expect(snapshot.days[0].dayIndex).toBe(0);
       expect(snapshot.days[0].items).toHaveLength(2);
       expect(snapshot.days[0].items[0].sortOrder).toBe(1);
       expect(snapshot.days[0].items[1].sortOrder).toBe(2);
       expect(snapshot.days[1].dayIndex).toBe(1);
       expect(snapshot.days[1].items).toHaveLength(1);
+      expect(snapshot.days[2].items).toHaveLength(0);
+      expect(snapshot.days[4].items).toHaveLength(0);
       expect(snapshot.totalItems).toBe(3);
       expect(snapshot.isLeader).toBe(true);
       expect(snapshot.canEdit).toBe(true);

@@ -9,6 +9,10 @@ import { PrismaService } from '../prisma/prisma.service';
 import { PublishTemplateDto } from './dto/publish-template.dto';
 import { CloneTemplateDto } from './dto/clone-template.dto';
 
+type PublishedItineraryItem = {
+  dayIndex: number;
+};
+
 @Injectable()
 export class TemplatesService {
   constructor(private prisma: PrismaService) {}
@@ -76,7 +80,7 @@ export class TemplatesService {
     };
 
     const daysCount = trip.itineraryItems.length > 0
-      ? Math.max(...trip.itineraryItems.map((i) => i.dayIndex)) + 1
+      ? Math.max(...trip.itineraryItems.map((i: PublishedItineraryItem) => i.dayIndex)) + 1
       : 0;
 
     return this.prisma.communityTemplate.create({

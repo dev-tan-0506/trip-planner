@@ -36,8 +36,16 @@ import Link from 'next/link';
 import { LogisticsBoardTab } from './LogisticsBoardTab';
 import { ChecklistTab } from './ChecklistTab';
 import { AttendanceTab } from './AttendanceTab';
+import { FinanceSafetyTab } from './FinanceSafetyTab';
 
-type Tab = 'Lich trinh' | 'Ban do' | 'De xuat' | 'Phan phong' | 'Checklist' | 'Check-in';
+type Tab =
+  | 'Lich trinh'
+  | 'Ban do'
+  | 'De xuat'
+  | 'Phan phong'
+  | 'Checklist'
+  | 'Check-in'
+  | 'Quy an toan';
 
 interface TripWorkspaceShellProps {
   trip: Trip;
@@ -239,6 +247,11 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
       key: 'Check-in',
       label: 'Check-in',
       icon: <MapIcon size={18} />,
+    },
+    {
+      key: 'Quy an toan',
+      label: 'Quỹ & an toàn',
+      icon: <Bell size={18} />,
     },
   ];
 
@@ -518,6 +531,17 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
               tripId={tripId}
               onOverlayChange={setAttendanceOverlayOpen}
             />
+          </motion.div>
+        )}
+
+        {activeTab === 'Quy an toan' && (
+          <motion.div
+            key="finance-safety"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <FinanceSafetyTab tripId={tripId} />
           </motion.div>
         )}
       </AnimatePresence>

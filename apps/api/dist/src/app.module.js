@@ -21,6 +21,8 @@ const templates_module_1 = require("./templates/templates.module");
 const logistics_module_1 = require("./logistics/logistics.module");
 const checklists_module_1 = require("./checklists/checklists.module");
 const attendance_module_1 = require("./attendance/attendance.module");
+const fund_module_1 = require("./fund/fund.module");
+const safety_module_1 = require("./safety/safety.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -41,6 +43,8 @@ exports.AppModule = AppModule = __decorate([
             logistics_module_1.LogisticsModule,
             checklists_module_1.ChecklistsModule,
             attendance_module_1.AttendanceModule,
+            fund_module_1.FundModule,
+            safety_module_1.SafetyModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

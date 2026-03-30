@@ -75,6 +75,17 @@ describe('Phase 03 Attendance API', () => {
         })
             .expect(201);
         sessionId = openSession.body.session.id;
+        const leaderSubmit = await request(app.getHttpServer())
+            .post(`/attendance/sessions/${sessionId}/submissions`)
+            .set('Authorization', `Bearer ${leaderToken}`)
+            .send({
+            locationStatus: 'UNAVAILABLE',
+        })
+            .expect(201);
+        expect(leaderSubmit.body.session.id).toBe(sessionId);
+        expect(leaderSubmit.body.session.status).toBe('OPEN');
+        expect(leaderSubmit.body.members.find((member) => member.role === 'LEADER')
+            ?.hasSubmitted).toBe(true);
         const submit = await request(app.getHttpServer())
             .post(`/attendance/sessions/${sessionId}/submissions`)
             .set('Authorization', `Bearer ${memberToken}`)
@@ -84,7 +95,10 @@ describe('Phase 03 Attendance API', () => {
         })
             .expect(201);
         expect(submit.body.session.id).toBe(sessionId);
+        expect(submit.body.session.status).toBe('OPEN');
         expect(Array.isArray(submit.body.members)).toBe(true);
+        expect(submit.body.members.find((member) => member.role === 'MEMBER')
+            ?.hasSubmitted).toBe(true);
     });
 });
 //# sourceMappingURL=phase-03-attendance.e2e-spec.js.map

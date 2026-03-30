@@ -30,11 +30,7 @@ export declare class TripsController {
                 name: null;
                 avatarUrl: null;
             };
-            id: string;
-            role: import(".prisma/client").$Enums.TripRole;
-            joinedAt: Date;
             userId: string;
-            tripId: string;
         }[];
         name: string;
         destination: string;

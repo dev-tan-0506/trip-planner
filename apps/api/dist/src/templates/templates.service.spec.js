@@ -14,6 +14,7 @@ describe('TemplatesService', () => {
         },
         communityTemplate: {
             create: jest.fn(),
+            findFirst: jest.fn(),
             findUnique: jest.fn(),
             findMany: jest.fn(),
             update: jest.fn(),
@@ -40,6 +41,7 @@ describe('TemplatesService', () => {
         });
         it('should create sanitizedSnapshot without member data, joinCode, votes, or proposals', async () => {
             prisma.tripMember.findUnique.mockResolvedValue({ role: 'LEADER' });
+            prisma.communityTemplate.findFirst.mockResolvedValue(null);
             prisma.trip.findUnique.mockResolvedValue({
                 id: 'trip-1',
                 destination: 'Da Lat',

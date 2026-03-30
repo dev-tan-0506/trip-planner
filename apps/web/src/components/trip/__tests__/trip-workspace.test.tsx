@@ -143,6 +143,9 @@ vi.mock('../../../lib/api-client', async () => {
       acceptProposal: vi.fn(),
       rejectProposal: vi.fn(),
     },
+    votesApi: {
+      listSessions: vi.fn().mockResolvedValue([]),
+    },
     templatesApi: {
       getPublishedForTrip: vi.fn().mockResolvedValue(null),
     },
@@ -150,7 +153,7 @@ vi.mock('../../../lib/api-client', async () => {
 });
 
 // Import mocked modules
-import { itineraryApi, proposalsApi, templatesApi } from '../../../lib/api-client';
+import { itineraryApi, proposalsApi, templatesApi, votesApi } from '../../../lib/api-client';
 
 describe('TripWorkspaceShell', () => {
   beforeEach(() => {
@@ -161,6 +164,7 @@ describe('TripWorkspaceShell', () => {
     beforeEach(() => {
       vi.mocked(itineraryApi.getSnapshot).mockResolvedValue(mockSnapshot);
       vi.mocked(proposalsApi.listProposals).mockResolvedValue(mockProposals);
+      vi.mocked(votesApi.listSessions).mockResolvedValue([]);
       vi.mocked(templatesApi.getPublishedForTrip).mockResolvedValue(null);
     });
 
@@ -196,6 +200,7 @@ describe('TripWorkspaceShell', () => {
     beforeEach(() => {
       vi.mocked(itineraryApi.getSnapshot).mockResolvedValue(mockLeaderSnapshot);
       vi.mocked(proposalsApi.listProposals).mockResolvedValue(mockProposals);
+      vi.mocked(votesApi.listSessions).mockResolvedValue([]);
       vi.mocked(templatesApi.getPublishedForTrip).mockResolvedValue(null);
     });
 
@@ -216,6 +221,7 @@ describe('TripWorkspaceShell', () => {
     beforeEach(() => {
       vi.mocked(itineraryApi.getSnapshot).mockResolvedValue(mockSnapshot);
       vi.mocked(proposalsApi.listProposals).mockResolvedValue([]);
+      vi.mocked(votesApi.listSessions).mockResolvedValue([]);
       vi.mocked(templatesApi.getPublishedForTrip).mockResolvedValue(null);
     });
 
