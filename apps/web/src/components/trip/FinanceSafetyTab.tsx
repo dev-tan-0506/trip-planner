@@ -173,6 +173,12 @@ export function FinanceSafetyTab({ tripId }: FinanceSafetyTabProps) {
             setWarningSnapshot(next);
           })
         }
+        onResolve={(alertId) =>
+          runBusy(async () => {
+            const next = await safetyApi.resolveSafetyAlert(tripId, alertId);
+            setWarningSnapshot(next);
+          })
+        }
       />
     </div>
   );

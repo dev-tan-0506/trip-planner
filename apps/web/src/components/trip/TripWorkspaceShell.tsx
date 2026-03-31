@@ -1,5 +1,13 @@
 'use client';
 
+import {
+  DndContext,
+  PointerSensor,
+  closestCorners,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -52,6 +60,47 @@ interface TripWorkspaceShellProps {
   joinCode: string;
 }
 
+export function buildReorderPayload(
+  snapshot: ItinerarySnapshot,
+  itemId: string,
+  targetDayIndex: number,
+  targetIndex: number,
+) {
+  const nextDays = snapshot.days.map((day) => ({
+    ...day,
+    items: [...day.items],
+  }));
+
+  let movedItem = null as (typeof nextDays)[number]['items'][number] | null;
+
+  for (const day of nextDays) {
+    const sourceIndex = day.items.findIndex((item) => item.id === itemId);
+    if (sourceIndex !== -1) {
+      movedItem = day.items[sourceIndex] ?? null;
+      day.items.splice(sourceIndex, 1);
+      break;
+    }
+  }
+
+  if (!movedItem) return null;
+
+  const targetDay = nextDays.find((day) => day.dayIndex === targetDayIndex);
+  if (!targetDay) return null;
+
+  targetDay.items.splice(Math.max(0, Math.min(targetIndex, targetDay.items.length)), 0, {
+    ...movedItem,
+    dayIndex: targetDayIndex,
+  });
+
+  return nextDays.flatMap((day) =>
+    day.items.map((item, index) => ({
+      itemId: item.id,
+      dayIndex: day.dayIndex,
+      sortOrder: index + 1,
+    })),
+  );
+}
+
 export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) {
   const [activeTab, setActiveTab] = useState<Tab>('Lich trinh');
   const [snapshot, setSnapshot] = useState<ItinerarySnapshot | null>(null);
@@ -82,6 +131,13 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
 
   const timelineRef = useRef<HTMLDivElement>(null);
   const currentItemRef = useRef<HTMLDivElement>(null);
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+  );
 
   const tripId = trip.id;
 
@@ -161,38 +217,8 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
   const handleReorderItem = useCallback(
     async (itemId: string, dayIndex: number, targetIndex: number) => {
       if (!snapshot) return;
-
-      const nextDays = snapshot.days.map((day) => ({
-        ...day,
-        items: [...day.items],
-      }));
-
-      let movedItem = null as (typeof nextDays)[number]['items'][number] | null;
-
-      for (const day of nextDays) {
-        const sourceIndex = day.items.findIndex((item) => item.id === itemId);
-        if (sourceIndex !== -1) {
-          movedItem = day.items[sourceIndex] ?? null;
-          day.items.splice(sourceIndex, 1);
-          break;
-        }
-      }
-
-      if (!movedItem) return;
-
-      const targetDay = nextDays.find((day) => day.dayIndex === dayIndex);
-      if (!targetDay) return;
-
-      const safeTargetIndex = Math.max(0, Math.min(targetIndex, targetDay.items.length));
-      targetDay.items.splice(safeTargetIndex, 0, movedItem);
-
-      const payload = nextDays.flatMap((day) =>
-        day.items.map((item, index) => ({
-          itemId: item.id,
-          dayIndex: day.dayIndex,
-          sortOrder: index + 1,
-        })),
-      );
+      const payload = buildReorderPayload(snapshot, itemId, dayIndex, targetIndex);
+      if (!payload) return;
 
       try {
         const reordered = await itineraryApi.reorder(tripId, { items: payload });
@@ -203,6 +229,24 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
       }
     },
     [snapshot, tripId],
+  );
+
+  const handleDragEnd = useCallback(
+    async ({ active, over }: DragEndEvent) => {
+      if (!snapshot?.canEdit || !over || active.id === over.id) {
+        return;
+      }
+
+      const activeItemId = active.data.current?.itemId;
+      const nextDayIndex = over.data.current?.dayIndex;
+      const nextIndex = over.data.current?.index;
+      if (typeof activeItemId !== 'string' || typeof nextDayIndex !== 'number' || typeof nextIndex !== 'number') {
+        return;
+      }
+
+      await handleReorderItem(activeItemId, nextDayIndex, nextIndex);
+    },
+    [handleReorderItem, snapshot?.canEdit],
   );
 
   const pendingProposalCount = proposals.filter((p) => p.status === 'PENDING').length;
@@ -418,33 +462,39 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
                 </p>
               </div>
             ) : (
-              <div className="relative space-y-6">
-                <div className="absolute left-4 top-6 bottom-6 w-px bg-gradient-to-b from-brand-blue/30 via-brand-blue/20 to-brand-coral/10" />
-                {snapshot.days.map((day) => (
-                  <TimelineDaySection
-                    key={day.dayIndex}
-                    day={day}
-                    tripStartDate={trip.startDate}
-                    canEdit={snapshot.canEdit}
-                    overlapWarnings={snapshot.overlapWarnings}
-                    currentItemRef={currentItemRef}
-                    joinCode={joinCode}
-                    onAddItem={(dayIndex, insertAfterId) => {
-                      setComposerDayIndex(dayIndex);
-                      setComposerInsertAfterId(insertAfterId);
-                      setShowComposer(true);
-                    }}
-                    onEditItem={(itemId) => setEditingItemId(itemId)}
-                    onDeleteItem={(itemId) => setDeletingItemId(itemId)}
-                    onReorderItem={handleReorderItem}
-                    onProposeChange={(itemId, version) => {
-                      setProposalTargetItemId(itemId);
-                      setProposalTargetVersion(version);
-                      setShowProposalComposer(true);
-                    }}
-                  />
-                ))}
-              </div>
+              <DndContext
+                collisionDetection={closestCorners}
+                onDragEnd={handleDragEnd}
+                sensors={snapshot.canEdit ? sensors : undefined}
+              >
+                <div className="relative space-y-6">
+                  <div className="absolute left-4 top-6 bottom-6 w-px bg-gradient-to-b from-brand-blue/30 via-brand-blue/20 to-brand-coral/10" />
+                  {snapshot.days.map((day) => (
+                    <TimelineDaySection
+                      key={day.dayIndex}
+                      day={day}
+                      tripStartDate={trip.startDate}
+                      canEdit={snapshot.canEdit}
+                      overlapWarnings={snapshot.overlapWarnings}
+                      currentItemRef={currentItemRef}
+                      joinCode={joinCode}
+                      onAddItem={(dayIndex, insertAfterId) => {
+                        setComposerDayIndex(dayIndex);
+                        setComposerInsertAfterId(insertAfterId);
+                        setShowComposer(true);
+                      }}
+                      onEditItem={(itemId) => setEditingItemId(itemId)}
+                      onDeleteItem={(itemId) => setDeletingItemId(itemId)}
+                      onReorderItem={handleReorderItem}
+                      onProposeChange={(itemId, version) => {
+                        setProposalTargetItemId(itemId);
+                        setProposalTargetVersion(version);
+                        setShowProposalComposer(true);
+                      }}
+                    />
+                  ))}
+                </div>
+              </DndContext>
             )}
 
             {/* Proposal inbox badge for leaders */}

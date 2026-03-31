@@ -133,6 +133,7 @@ vi.mock('../../../lib/api-client', async () => {
       getSafetyWarnings: vi.fn(),
       createSosAlert: vi.fn(),
       acknowledgeSafetyAlert: vi.fn(),
+      resolveSafetyAlert: vi.fn(),
     },
     connectSafetySocket: vi.fn(() => ({
       on: vi.fn(),
@@ -197,6 +198,7 @@ describe('FinanceSafetyTab', () => {
   it('sends SOS and shows urgent follow-up state with quick dials', async () => {
     const onSend = vi.fn().mockResolvedValue(undefined);
     const onAcknowledge = vi.fn().mockResolvedValue(undefined);
+    const onResolve = vi.fn().mockResolvedValue(undefined);
 
     render(
       <SOSPanel
@@ -216,6 +218,7 @@ describe('FinanceSafetyTab', () => {
         }}
         onSend={onSend}
         onAcknowledge={onAcknowledge}
+        onResolve={onResolve}
       />,
     );
 
@@ -234,5 +237,77 @@ describe('FinanceSafetyTab', () => {
     expect(screen.getByText('114')).toBeInTheDocument();
     expect(screen.getByText('115')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Notification' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Đã an toàn, tắt khẩn cấp' })).toBeInTheDocument();
+  });
+
+  it('dedupes browser notifications and lets user resolve SOS state', async () => {
+    const onSend = vi.fn().mockResolvedValue(undefined);
+    const onAcknowledge = vi.fn().mockResolvedValue(undefined);
+    const onResolve = vi.fn().mockResolvedValue(undefined);
+    const notificationMock = vi.fn();
+    vi.stubGlobal('Notification', Object.assign(notificationMock, {
+      permission: 'granted',
+      requestPermission: vi.fn().mockResolvedValue('granted'),
+    }));
+
+    const alertSnapshot = {
+      ...mockWarnings,
+      alerts: [
+        {
+          id: 'alert-1',
+          type: 'SOS',
+          status: 'OPEN',
+          message: 'Mình bị lạc nhóm',
+          createdAt: new Date().toISOString(),
+          linkedItineraryItemId: null,
+          createdBy: null,
+        },
+      ],
+    } satisfies SafetyWarningsSnapshot;
+    const resolvedAlert = {
+      ...alertSnapshot.alerts[0]!,
+      status: 'RESOLVED',
+    };
+
+    const { rerender } = render(
+      <SOSPanel
+        snapshot={alertSnapshot}
+        onSend={onSend}
+        onAcknowledge={onAcknowledge}
+        onResolve={onResolve}
+      />,
+    );
+
+    expect(notificationMock).toHaveBeenCalledTimes(1);
+
+    rerender(
+      <SOSPanel
+        snapshot={{ ...alertSnapshot }}
+        onSend={onSend}
+        onAcknowledge={onAcknowledge}
+        onResolve={onResolve}
+      />,
+    );
+
+    expect(notificationMock).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Đã an toàn, tắt khẩn cấp' }));
+    expect(onResolve).toHaveBeenCalledWith('alert-1');
+
+    rerender(
+      <SOSPanel
+        snapshot={{
+          ...alertSnapshot,
+          alerts: [resolvedAlert],
+        }}
+        onSend={onSend}
+        onAcknowledge={onAcknowledge}
+        onResolve={onResolve}
+      />,
+    );
+
+    expect(screen.getByText('Tình huống đã khép lại')).toBeInTheDocument();
+    expect(screen.getByText('Đã an toàn')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Đã an toàn, tắt khẩn cấp' })).not.toBeInTheDocument();
   });
 });

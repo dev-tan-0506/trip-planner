@@ -1,22 +1,25 @@
 'use client';
 
-import { RefObject, useState } from 'react';
+import { useDroppable } from '@dnd-kit/core';
+import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { motion } from 'framer-motion';
 import {
-  Clock,
-  MapPin,
-  Pencil,
-  Trash2,
-  Plus,
-  MessageSquarePlus,
   AlertTriangle,
-  Map as MapIcon,
-  GripVertical,
-  ArrowUp,
   ArrowDown,
+  ArrowUp,
+  Clock,
+  GripVertical,
+  Map as MapIcon,
+  MapPin,
+  MessageSquarePlus,
+  Pencil,
+  Plus,
+  Trash2,
 } from 'lucide-react';
-import type { DayGroup, OverlapWarning, ItineraryItem } from '../../lib/api-client';
 import Link from 'next/link';
+import type { RefObject } from 'react';
+import type { DayGroup, ItineraryItem, OverlapWarning } from '../../lib/api-client';
 
 const progressConfig = {
   'sap toi': {
@@ -43,7 +46,7 @@ const progressConfig = {
     cardClass: 'border-l-brand-yellow/50',
     emoji: '⏳',
   },
-};
+} as const;
 
 interface TimelineDaySectionProps {
   day: DayGroup;
@@ -69,7 +72,81 @@ function getDayLabel(dayIndex: number, tripStartDate: string): string {
   });
 }
 
-function ItemCard({
+function DropZone({
+  dayIndex,
+  index,
+  label,
+}: {
+  dayIndex: number;
+  index: number;
+  label?: string;
+}) {
+  const { isOver, setNodeRef } = useDroppable({
+    id: `drop-${dayIndex}-${index}`,
+    data: {
+      type: 'dropzone',
+      dayIndex,
+      index,
+    },
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      data-dropzone={`day-${dayIndex}-index-${index}`}
+      className={`rounded-xl border-2 border-dashed px-4 text-center text-xs font-bold transition-all ${
+        isOver
+          ? 'border-brand-blue bg-brand-blue/10 py-3 text-brand-blue'
+          : label
+            ? 'border-transparent py-3 text-gray-400'
+            : 'border-transparent py-2 text-transparent'
+      }`}
+    >
+      {label ?? 'Drop zone'}
+    </div>
+  );
+}
+
+function EmptyDayDropZone({
+  dayIndex,
+  canEdit,
+  onAddItem,
+}: {
+  dayIndex: number;
+  canEdit: boolean;
+  onAddItem: (dayIndex: number) => void;
+}) {
+  const { isOver, setNodeRef } = useDroppable({
+    id: `drop-${dayIndex}-0`,
+    data: {
+      type: 'dropzone',
+      dayIndex,
+      index: 0,
+    },
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      data-dropzone={`empty-day-${dayIndex}`}
+      className={`rounded-2xl border-2 border-dashed p-8 text-center transition-all ${
+        isOver ? 'border-brand-blue bg-brand-blue/10' : 'border-gray-200 bg-white'
+      }`}
+    >
+      <p className="mb-2 text-sm text-gray-400">Chưa có hoạt động nào</p>
+      {canEdit && (
+        <button
+          onClick={() => onAddItem(dayIndex)}
+          className="text-sm font-bold text-brand-blue hover:underline"
+        >
+          + Thêm hoạt động đầu tiên
+        </button>
+      )}
+    </div>
+  );
+}
+
+function SortableItemCard({
   item,
   canEdit,
   hasOverlap,
@@ -81,8 +158,6 @@ function ItemCard({
   onDelete,
   onPropose,
   onAddAfter,
-  onDragStart,
-  onDragEnd,
   onMoveUp,
   onMoveDown,
 }: {
@@ -97,43 +172,56 @@ function ItemCard({
   onDelete: () => void;
   onPropose: () => void;
   onAddAfter: () => void;
-  onDragStart: () => void;
-  onDragEnd: () => void;
   onMoveUp: () => void;
   onMoveDown: () => void;
 }) {
   const config = progressConfig[item.progress];
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: item.id,
+    disabled: !canEdit,
+    data: {
+      type: 'item',
+      itemId: item.id,
+      dayIndex: item.dayIndex,
+      index: item.sortOrder - 1,
+    },
+  });
 
   return (
     <motion.div
-      ref={isCurrent ? currentItemRef : undefined}
+      ref={(node) => {
+        setNodeRef(node);
+        if (isCurrent) {
+          currentItemRef.current = node;
+        }
+      }}
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
-      draggable={canEdit}
-      onDragStart={canEdit ? onDragStart : undefined}
-      onDragEnd={canEdit ? onDragEnd : undefined}
-      className={`relative bg-white rounded-2xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-all group border-l-4 ${config.cardClass} ${
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+      }}
+      data-sortable-id={item.id}
+      className={`group relative rounded-2xl border border-gray-100 border-l-4 bg-white p-4 shadow-sm transition-all hover:shadow-md ${config.cardClass} ${
         isCurrent ? 'ring-2 ring-brand-green/30 shadow-md' : ''
-      } ${canEdit ? 'cursor-grab active:cursor-grabbing' : ''}`}
+      } ${isDragging ? 'z-20 shadow-xl ring-2 ring-brand-blue/25' : ''}`}
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="flex-1 min-w-0 space-y-2">
-          {/* Title + Progress Chip */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <h4 className="font-bold text-gray-900 text-sm">{item.title}</h4>
+        <div className="min-w-0 flex-1 space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <h4 className="text-sm font-bold text-gray-900">{item.title}</h4>
             <span
-              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${config.chipClass}`}
+              className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold ${config.chipClass}`}
             >
               {config.emoji} {config.label}
             </span>
             {item.proposalCount > 0 && (
-              <span className="px-1.5 py-0.5 bg-brand-coral/10 text-brand-coral text-[10px] font-bold rounded-full border border-brand-coral/20">
+              <span className="rounded-full border border-brand-coral/20 bg-brand-coral/10 px-1.5 py-0.5 text-[10px] font-bold text-brand-coral">
                 {item.proposalCount} đề xuất
               </span>
             )}
           </div>
 
-          {/* Time + Location */}
           <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
             {item.startTime && (
               <span className="flex items-center gap-1">
@@ -147,34 +235,33 @@ function ItemCard({
             )}
           </div>
 
-          {/* Note */}
-          {item.shortNote && (
-            <p className="text-xs text-gray-400 italic">{item.shortNote}</p>
-          )}
+          {item.shortNote && <p className="text-xs italic text-gray-400">{item.shortNote}</p>}
 
-          {/* Overlap warning */}
           {hasOverlap && (
-            <div className="flex items-center gap-1.5 text-[10px] text-brand-yellow font-medium">
+            <div className="flex items-center gap-1.5 text-[10px] font-medium text-brand-yellow">
               <AlertTriangle size={12} />
               {overlapMessage}
             </div>
           )}
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-1 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
           {canEdit && (
-            <span
-              className="p-1.5 text-gray-300"
+            <button
+              type="button"
+              {...attributes}
+              {...listeners}
+              data-drag-handle={item.id}
+              className="cursor-grab p-1.5 text-gray-300 active:cursor-grabbing"
               title="Giữ và kéo để đổi thứ tự"
             >
               <GripVertical size={14} />
-            </span>
+            </button>
           )}
           {item.lat != null && item.lng != null && (
             <Link
               href={`/trip/${joinCode}/map?focusItemId=${item.id}`}
-              className="p-1.5 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-lg transition-all"
+              className="rounded-lg p-1.5 text-gray-400 transition-all hover:bg-brand-blue/10 hover:text-brand-blue"
               title="Xem trên bản đồ"
             >
               <MapIcon size={14} />
@@ -184,35 +271,35 @@ function ItemCard({
             <>
               <button
                 onClick={onEdit}
-                className="p-1.5 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-lg transition-all"
+                className="rounded-lg p-1.5 text-gray-400 transition-all hover:bg-brand-blue/10 hover:text-brand-blue"
                 title="Chỉnh sửa"
               >
                 <Pencil size={14} />
               </button>
               <button
                 onClick={onDelete}
-                className="p-1.5 text-gray-400 hover:text-brand-coral hover:bg-brand-coral/10 rounded-lg transition-all"
+                className="rounded-lg p-1.5 text-gray-400 transition-all hover:bg-brand-coral/10 hover:text-brand-coral"
                 title="Xoá"
               >
                 <Trash2 size={14} />
               </button>
               <button
                 onClick={onAddAfter}
-                className="p-1.5 text-gray-400 hover:text-brand-green hover:bg-brand-green/10 rounded-lg transition-all"
+                className="rounded-lg p-1.5 text-gray-400 transition-all hover:bg-brand-green/10 hover:text-brand-green"
                 title="Thêm bên dưới"
               >
                 <Plus size={14} />
               </button>
               <button
                 onClick={onMoveUp}
-                className="p-1.5 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-lg transition-all"
+                className="rounded-lg p-1.5 text-gray-400 transition-all hover:bg-brand-blue/10 hover:text-brand-blue"
                 title="Đưa lên trên"
               >
                 <ArrowUp size={14} />
               </button>
               <button
                 onClick={onMoveDown}
-                className="p-1.5 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-lg transition-all"
+                className="rounded-lg p-1.5 text-gray-400 transition-all hover:bg-brand-blue/10 hover:text-brand-blue"
                 title="Đưa xuống dưới"
               >
                 <ArrowDown size={14} />
@@ -221,7 +308,7 @@ function ItemCard({
           ) : (
             <button
               onClick={onPropose}
-              className="p-1.5 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-lg transition-all"
+              className="rounded-lg p-1.5 text-gray-400 transition-all hover:bg-brand-blue/10 hover:text-brand-blue"
               title="Đề xuất thay đổi"
             >
               <MessageSquarePlus size={14} />
@@ -246,25 +333,22 @@ export function TimelineDaySection({
   onReorderItem,
   onProposeChange,
 }: TimelineDaySectionProps) {
-  const [draggedItemId, setDraggedItemId] = useState<string | null>(null);
-  const [dropIndex, setDropIndex] = useState<number | null>(null);
   const dayLabel = getDayLabel(day.dayIndex, tripStartDate);
 
   return (
     <div className="relative space-y-3 pl-10">
-      {/* Day Header */}
       <div className="relative flex items-center gap-3">
         <div className="absolute -left-10 top-1 flex h-8 w-8 items-center justify-center rounded-full border-4 border-white bg-brand-dark text-sm font-black text-white shadow-md">
           {day.dayIndex + 1}
         </div>
         <div>
-          <h3 className="font-black text-gray-900 text-sm">Ngày {day.dayIndex + 1}</h3>
+          <h3 className="text-sm font-black text-gray-900">Ngày {day.dayIndex + 1}</h3>
           <p className="text-xs text-gray-500">{dayLabel}</p>
         </div>
         {canEdit && (
           <button
             onClick={() => onAddItem(day.dayIndex)}
-            className="ml-auto p-2 text-brand-coral hover:bg-brand-coral/10 rounded-xl transition-all"
+            className="ml-auto rounded-xl p-2 text-brand-coral transition-all hover:bg-brand-coral/10"
             title="Thêm hoạt động"
           >
             <Plus size={18} />
@@ -272,55 +356,23 @@ export function TimelineDaySection({
         )}
       </div>
 
-      {/* Items */}
       {day.items.length === 0 ? (
-        <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-8 text-center">
-          <p className="text-gray-400 text-sm mb-2">Chưa có hoạt động nào</p>
-          {canEdit && (
-            <button
-              onClick={() => onAddItem(day.dayIndex)}
-              className="text-brand-blue text-sm font-bold hover:underline"
-            >
-              + Thêm hoạt động đầu tiên
-            </button>
-          )}
-        </div>
+        <EmptyDayDropZone dayIndex={day.dayIndex} canEdit={canEdit} onAddItem={onAddItem} />
       ) : (
-        <div className="relative space-y-2">
-          {day.items.map((item) => {
-            const overlap = overlapWarnings.find((w) => w.itemId === item.id);
-            const isCurrent = item.progress === 'dang di';
-            const itemIndex = day.items.findIndex((dayItem) => dayItem.id === item.id);
+        <SortableContext items={day.items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
+          <div className="relative space-y-2" data-day-container={day.dayIndex}>
+            {canEdit && <DropZone dayIndex={day.dayIndex} index={0} />}
+            {day.items.map((item, itemIndex) => {
+              const overlap = overlapWarnings.find((warning) => warning.itemId === item.id);
+              const isCurrent = item.progress === 'dang di';
 
-            return (
-              <div key={item.id} className="relative space-y-2 pb-3 last:pb-0">
-                <div className="absolute -left-[34px] top-6 flex h-5 w-5 items-center justify-center rounded-full border-2 border-brand-blue/20 bg-white shadow-sm">
-                  <div className="h-2.5 w-2.5 rounded-full bg-brand-blue" />
-                </div>
-                {canEdit && (
-                  <div
-                    onDragOver={(event) => {
-                      event.preventDefault();
-                      event.dataTransfer.dropEffect = 'move';
-                      setDropIndex(itemIndex);
-                    }}
-                    onDragLeave={() => setDropIndex((current) => (current === itemIndex ? null : current))}
-                    onDrop={(event) => {
-                      event.preventDefault();
-                      if (draggedItemId) {
-                        onReorderItem(draggedItemId, day.dayIndex, itemIndex);
-                      }
-                      setDraggedItemId(null);
-                      setDropIndex(null);
-                    }}
-                    className={`h-4 rounded-full transition-all ${
-                      dropIndex === itemIndex ? 'bg-brand-blue/30' : 'bg-transparent'
-                    }`}
-                  />
-                )}
+              return (
+                <div key={item.id} className="relative space-y-2 pb-3 last:pb-0">
+                  <div className="absolute -left-[34px] top-6 flex h-5 w-5 items-center justify-center rounded-full border-2 border-brand-blue/20 bg-white shadow-sm">
+                    <div className="h-2.5 w-2.5 rounded-full bg-brand-blue" />
+                  </div>
 
-                <div className="relative">
-                  <ItemCard
+                  <SortableItemCard
                     item={item}
                     canEdit={canEdit}
                     hasOverlap={!!overlap}
@@ -332,45 +384,24 @@ export function TimelineDaySection({
                     onDelete={() => onDeleteItem(item.id)}
                     onPropose={() => onProposeChange(item.id, item.version)}
                     onAddAfter={() => onAddItem(day.dayIndex, item.id)}
-                    onDragStart={() => setDraggedItemId(item.id)}
-                    onDragEnd={() => {
-                      setDraggedItemId(null);
-                      setDropIndex(null);
-                    }}
                     onMoveUp={() => onReorderItem(item.id, day.dayIndex, Math.max(itemIndex - 1, 0))}
                     onMoveDown={() => onReorderItem(item.id, day.dayIndex, Math.min(itemIndex + 1, day.items.length - 1))}
                   />
-                </div>
-              </div>
-            );
-          })}
 
-          {canEdit && (
-            <div
-              onDragOver={(event) => {
-                event.preventDefault();
-                event.dataTransfer.dropEffect = 'move';
-                setDropIndex(day.items.length);
-              }}
-              onDragLeave={() => setDropIndex((current) => (current === day.items.length ? null : current))}
-              onDrop={(event) => {
-                event.preventDefault();
-                if (draggedItemId) {
-                  onReorderItem(draggedItemId, day.dayIndex, day.items.length);
-                }
-                setDraggedItemId(null);
-                setDropIndex(null);
-              }}
-              className={`rounded-xl border-2 border-dashed px-4 py-2 text-center text-xs font-bold transition-all ${
-                dropIndex === day.items.length
-                  ? 'border-brand-blue bg-brand-blue/10 text-brand-blue'
-                  : 'border-transparent text-gray-400'
-              }`}
-            >
-              Kéo thả hoạt động vào đây để đổi thứ tự
-            </div>
-          )}
-        </div>
+                  {canEdit && <DropZone dayIndex={day.dayIndex} index={itemIndex + 1} />}
+                </div>
+              );
+            })}
+
+            {canEdit && (
+              <DropZone
+                dayIndex={day.dayIndex}
+                index={day.items.length}
+                label="Kéo thả hoạt động vào đây để đổi thứ tự"
+              />
+            )}
+          </div>
+        </SortableContext>
       )}
     </div>
   );

@@ -1226,4 +1226,11 @@ export const safetyApi = {
       body: JSON.stringify({}),
     });
   },
+
+  async resolveSafetyAlert(tripId: string, alertId: string): Promise<SafetyWarningsSnapshot> {
+    return request<SafetyWarningsSnapshot>(`/trips/${tripId}/safety/alerts/${alertId}/resolve`, {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+  },
 };

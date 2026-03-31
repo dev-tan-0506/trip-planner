@@ -37,6 +37,8 @@ Build the operational trust layer for a trip: centralized group-fund management,
 - **D-13:** SOS should be a deliberate high-priority web action that alerts the group immediately and clearly, rather than a hidden secondary menu item.
 - **D-14:** The SOS experience should prioritize speed and clarity: one obvious trigger, visible state after sending, and immediate access to the relevant support directory or trip contacts.
 - **D-15:** As with earlier phases, the product should enable members to act quickly in urgent flows while still keeping the trip context understandable to the leader and the rest of the group.
+- **D-16:** SOS should include a clear de-escalation path such as `Đã an toàn, tắt khẩn cấp` so the interface can leave high-alert mode once the situation is under control.
+- **D-17:** Browser notifications for SOS are optional support, not the source of truth; the client must dedupe notifications per alert/event so refresh or socket rebroadcast does not spam the same warning repeatedly.
 
 ### the agent's Discretion
 - Exact visual treatment for finance summary cards, as long as contribution progress and burn-rate health remain instantly scannable.
@@ -98,6 +100,7 @@ Build the operational trust layer for a trip: centralized group-fund management,
 - Finance should feel like “cả nhóm đang góp đủ để chuyến đi chạy mượt” rather than a mini accounting app.
 - Safety surfaces should prioritize what the group needs to act on next, not overwhelm them with generic travel content.
 - SOS must feel serious and immediate, with tone more practical than playful.
+- Once an SOS is stabilized, the UX should communicate closure clearly instead of leaving the trip in a permanently alarming state.
 
 </specifics>
 

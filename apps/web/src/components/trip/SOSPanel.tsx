@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { SafetyWarningsSnapshot } from '../../lib/api-client';
 
 interface SOSPanelProps {
@@ -8,23 +8,38 @@ interface SOSPanelProps {
   busy?: boolean;
   onSend: (body: { message?: string }) => Promise<void>;
   onAcknowledge: (alertId: string) => Promise<void>;
+  onResolve: (alertId: string) => Promise<void>;
 }
 
-export function SOSPanel({ snapshot, busy, onSend, onAcknowledge }: SOSPanelProps) {
+export function SOSPanel({ snapshot, busy, onSend, onAcknowledge, onResolve }: SOSPanelProps) {
   const [message, setMessage] = useState('');
   const [notificationState, setNotificationState] = useState<'idle' | 'requested' | 'granted' | 'denied'>('idle');
+  const lastNotifiedAlertIdRef = useRef<string | null>(null);
+  const latestAlert = snapshot?.alerts[0] ?? null;
 
   useEffect(() => {
     if (typeof window === 'undefined' || typeof Notification === 'undefined') {
       return;
     }
 
-    if (snapshot?.alerts[0]?.type === 'SOS' && Notification.permission === 'granted') {
+    if (
+      latestAlert?.type === 'SOS' &&
+      latestAlert.status === 'OPEN' &&
+      Notification.permission === 'granted' &&
+      lastNotifiedAlertIdRef.current !== latestAlert.id
+    ) {
+      lastNotifiedAlertIdRef.current = latestAlert.id;
       new Notification('SOS mới trong chuyến đi', {
-        body: snapshot.alerts[0].message,
+        body: latestAlert.message,
       });
     }
-  }, [snapshot?.alerts]);
+  }, [latestAlert]);
+
+  useEffect(() => {
+    if (latestAlert?.status === 'RESOLVED') {
+      lastNotifiedAlertIdRef.current = latestAlert.id;
+    }
+  }, [latestAlert?.id, latestAlert?.status]);
 
   const requestNotifications = async () => {
     if (typeof Notification === 'undefined') {
@@ -78,19 +93,41 @@ export function SOSPanel({ snapshot, busy, onSend, onAcknowledge }: SOSPanelProp
         </div>
       )}
 
-      {snapshot?.alerts.length ? (
+      {latestAlert ? (
         <div className="rounded-2xl bg-white/10 px-4 py-4">
-          <p className="text-sm font-black">Đã gửi cảnh báo</p>
-          <p className="mt-2 text-sm text-white/75">{snapshot.alerts[0].message}</p>
-          {snapshot.alerts[0].status !== 'ACKNOWLEDGED' && (
-            <button
-              type="button"
-              onClick={() => onAcknowledge(snapshot.alerts[0].id)}
-              className="mt-3 rounded-xl bg-white px-3 py-2 text-xs font-black text-brand-dark"
-            >
-              Đánh dấu đã thấy
-            </button>
-          )}
+          <p className="text-sm font-black">
+            {latestAlert.status === 'RESOLVED' ? 'Tình huống đã khép lại' : 'Đã gửi cảnh báo'}
+          </p>
+          <p className="mt-2 text-sm text-white/75">{latestAlert.message}</p>
+          <p className="mt-2 text-xs font-bold uppercase tracking-[0.2em] text-white/60">
+            {latestAlert.status === 'OPEN'
+              ? 'Đang khẩn cấp'
+              : latestAlert.status === 'ACKNOWLEDGED'
+                ? 'Đã có người thấy'
+                : 'Đã an toàn'}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {latestAlert.status === 'OPEN' && (
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => onAcknowledge(latestAlert.id)}
+                className="rounded-xl bg-white px-3 py-2 text-xs font-black text-brand-dark"
+              >
+                Đánh dấu đã thấy
+              </button>
+            )}
+            {latestAlert.status !== 'RESOLVED' && (
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => onResolve(latestAlert.id)}
+                className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-xs font-black text-white"
+              >
+                Đã an toàn, tắt khẩn cấp
+              </button>
+            )}
+          </div>
         </div>
       ) : null}
 

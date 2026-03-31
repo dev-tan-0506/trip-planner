@@ -33,12 +33,12 @@ completed: 2026-03-31
 
 # Phase 04 Plan 03: SOS & Cultural Warning Summary
 
-Đã hoàn thiện phần alerting của phase 4 với SOS trip-scoped, banner `Lưu ý văn hóa`, quick-dial fallback và socket `/safety` cho refresh realtime.
+Đã hoàn thiện phần alerting của phase 4 với SOS trip-scoped, banner `Lưu ý văn hóa`, quick-dial fallback, socket `/safety` cho refresh realtime, và follow-up fix cho luồng `tắt khẩn cấp`.
 
 ## Accomplishments
 
-- Thêm `SafetyAlert` vào schema và route tạo/acknowledge SOS.
-- Dựng `SOSPanel` với CTA `Gửi SOS`, sent state, Notification path và quick-dial.
+- Thêm `SafetyAlert` vào schema và route tạo/acknowledge/resolve SOS.
+- Dựng `SOSPanel` với CTA `Gửi SOS`, sent state, Notification path, action `Đã an toàn, tắt khẩn cấp`, và dedupe browser notification theo `alertId`.
 - Dựng `CulturalWarningBanner` để render warning contextual thay vì geofencing/native behavior.
 
 ## Verification

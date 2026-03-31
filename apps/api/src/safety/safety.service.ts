@@ -206,4 +206,24 @@ export class SafetyService {
 
     return this.getWarnings(tripId, userId);
   }
+
+  async resolveAlert(tripId: string, alertId: string, userId: string) {
+    await this.getMembershipOrFail(tripId, userId);
+    const alert = await this.prisma.safetyAlert.findFirst({
+      where: { id: alertId, tripId },
+    });
+
+    if (!alert) {
+      throw new NotFoundException('Safety alert not found');
+    }
+
+    await this.prisma.safetyAlert.update({
+      where: { id: alertId },
+      data: {
+        status: 'RESOLVED',
+      },
+    });
+
+    return this.getWarnings(tripId, userId);
+  }
 }
