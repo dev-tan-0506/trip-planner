@@ -15,6 +15,7 @@ import { AttendanceModule } from './attendance/attendance.module';
 import { FundModule } from './fund/fund.module';
 import { SafetyModule } from './safety/safety.module';
 import { BookingImportModule } from './booking-import/booking-import.module';
+import { LocalExpertModule } from './local-expert/local-expert.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { BookingImportModule } from './booking-import/booking-import.module';
     FundModule,
     SafetyModule,
     BookingImportModule,
+    LocalExpertModule,
   ],
   controllers: [AppController],
   providers: [AppService],

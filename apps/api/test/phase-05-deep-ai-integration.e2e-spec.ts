@@ -310,4 +310,61 @@ describe('Phase 05 Deep AI Integration API', () => {
     expect(confirmed.body.draft.status).toBe('CONFIRMED');
     expect(confirmed.body.snapshot.totalItems).toBeGreaterThan(foodItemIds.length);
   });
+
+  it('local expert menu: returns structured menu cards with uncertainty labels when ingredients are unclear', async () => {
+    const res = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/local-expert/menu-translate`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        menuText: 'Muc nuong sa',
+      })
+      .expect(201);
+
+    expect(res.body.cards).toEqual([
+      expect.objectContaining({
+        originalText: 'Muc nuong sa',
+        translatedText: expect.any(String),
+        cautionNote: expect.stringContaining('Can xem lai'),
+        confidenceLabel: 'Can xem lai',
+        nextAction: expect.any(String),
+      }),
+    ]);
+  });
+
+  it('hidden spot local expert: returns up to three short suggestion cards', async () => {
+    const res = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/local-expert/hidden-spots`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        areaLabel: 'Hai Chau',
+        vibe: 'yen tinh',
+        budgetHint: 're',
+      })
+      .expect(201);
+
+    expect(res.body.cards).toHaveLength(3);
+    expect(res.body.cards[0]).toEqual(
+      expect.objectContaining({
+        title: expect.any(String),
+        whyItFits: expect.any(String),
+        nextAction: expect.any(String),
+      }),
+    );
+  });
+
+  it('local expert outfit: keeps the planner capped at three cards', async () => {
+    const res = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/local-expert/outfit-plan`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        dayIndex: 1,
+        aestheticHint: 'noi bat',
+        weatherLabel: 'mua nhe',
+        activityLabels: ['di bo', 'an toi'],
+      })
+      .expect(201);
+
+    expect(res.body.cards).toHaveLength(3);
+    expect(res.body.cards[2].confidenceLabel).toBe('Can xem lai');
+  });
 });
