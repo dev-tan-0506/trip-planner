@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-04-01T14:33:25.082Z"
+stopped_at: Completed 05-02-PLAN.md
+last_updated: "2026-04-01T15:15:37.744Z"
 last_activity: 2026-04-01
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 20
-  completed_plans: 16
+  completed_plans: 17
   percent: 80
 ---
 
@@ -56,6 +56,7 @@ Progress: [████████░░] 80%
 
 | Phase 05 P00 | 15 min | 2 tasks | 4 files |
 | Phase 05 P01 | 85 | 2 tasks | 13 files |
+| Phase 05 P02 | 42 | 2 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,9 @@ Recent decisions affecting current work:
 - [Phase 05]: Low-confidence and warning states are centralized in one shared fixture module before feature plans add deeper assertions. — Using one fixture source keeps confidence labels and trust-sensitive wording aligned between API and UI tests.
 - [Phase 05]: AI route suggestions stay inside the existing trip workspace and only rewrite itinerary order after an explicit leader apply call.
 - [Phase 05]: Health-profile conflicts are advisory snapshot rows rendered inline on itinerary cards with visible severity and confidence labels.
+- [Phase 05]: Trust-sensitive AI review flows stay inside the trip workspace AI tab instead of a separate AI area.
+- [Phase 05]: Leader confirmation remains the only path that can materialize booking drafts into itinerary items.
+- [Phase 05]: Booking imports are stored as drafts with raw excerpts and confidence labels before any itinerary mutation.
 
 ### Pending Todos
 
@@ -88,6 +92,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-01T14:33:25.078Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-04-01T15:15:26.798Z
+Stopped at: Completed 05-02-PLAN.md
 Resume file: None

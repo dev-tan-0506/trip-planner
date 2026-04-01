@@ -39,7 +39,7 @@
 - [ ] **SAFE-05**: System flashes browser warnings when the group approaches culturally sensitive locations (e.g., dress codes for temples).
 
 ### AIX: Smart AI Features
-- [ ] **AIX-01**: User can forward booking emails to an app-specific email address; AI auto-parses and slots them into the timeline.
+- [x] **AIX-01**: User can forward booking emails to an app-specific email address; AI auto-parses and slots them into the timeline.
 - [ ] **AIX-02**: User can ask the "Local Expert AI" to translate menus or suggest hidden local spots.
 - [ ] **AIX-03**: Leader can request an "AI Outfit Planner" suggestion based on weather and destination aesthetics.
 - [ ] **AIX-04**: System generates a humorous 2-minute "AI Daily Podcast" audio summary at the end of each trip day.
