@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { VotesService } from './votes.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateVoteSessionMode } from './dto/create-vote-session.dto';
+import { SubmitBallotDto } from './dto/submit-ballot.dto';
 
 /**
  * VotesService Unit Tests
@@ -14,7 +16,7 @@ import { PrismaService } from '../prisma/prisma.service';
  */
 describe('VotesService', () => {
   let service: VotesService;
-  let prisma: Record<string, any>;
+  let prisma: typeof mockPrisma;
 
   // Mock Prisma service
   const mockPrisma = {
@@ -72,7 +74,7 @@ describe('VotesService', () => {
       });
 
       const result = await service.createSession('trip-1', 'user-2', {
-        mode: 'NEW_OPTION' as any,
+        mode: CreateVoteSessionMode.NEW_OPTION,
         deadline: '2026-12-31T23:59:59Z',
         targetDayIndex: 0,
       });
@@ -98,7 +100,7 @@ describe('VotesService', () => {
       });
 
       const result = await service.createSession('trip-1', 'leader-1', {
-        mode: 'NEW_OPTION' as any,
+        mode: CreateVoteSessionMode.NEW_OPTION,
         deadline: '2026-12-31T23:59:59Z',
         targetDayIndex: 0,
       });
@@ -111,7 +113,7 @@ describe('VotesService', () => {
 
       await expect(
         service.createSession('trip-1', 'leader-1', {
-          mode: 'NEW_OPTION' as any,
+          mode: CreateVoteSessionMode.NEW_OPTION,
           deadline: '2026-12-31T23:59:59Z',
         }),
       ).rejects.toThrow('targetDayIndex is required');
@@ -122,7 +124,7 @@ describe('VotesService', () => {
 
       await expect(
         service.createSession('trip-1', 'leader-1', {
-          mode: 'REPLACE_ITEM' as any,
+          mode: CreateVoteSessionMode.REPLACE_ITEM,
           deadline: '2026-12-31T23:59:59Z',
         }),
       ).rejects.toThrow('targetItemId is required');
@@ -151,14 +153,12 @@ describe('VotesService', () => {
       });
 
       // First vote
-      await service.submitBallot('session-1', 'user-1', {
-        voteOptionId: 'opt-a',
-      } as any);
+      const firstVote: SubmitBallotDto = { voteOptionId: 'opt-a' };
+      await service.submitBallot('session-1', 'user-1', firstVote);
 
       // Change vote — latest active vote counts
-      const result = await service.submitBallot('session-1', 'user-1', {
-        voteOptionId: 'opt-b',
-      } as any);
+      const changedVote: SubmitBallotDto = { voteOptionId: 'opt-b' };
+      const result = await service.submitBallot('session-1', 'user-1', changedVote);
 
       // Verify upsert was called (not create) — unique on [sessionId, userId]
       expect(prisma.voteBallot.upsert).toHaveBeenCalledWith(
@@ -193,7 +193,7 @@ describe('VotesService', () => {
       await expect(
         service.submitBallot('session-1', 'user-1', {
           voteOptionId: 'opt-a',
-        } as any),
+        }),
       ).rejects.toThrow('deadline has passed');
     });
   });

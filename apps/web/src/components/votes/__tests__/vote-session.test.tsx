@@ -1,19 +1,36 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { HTMLAttributes, PropsWithChildren, ReactNode } from 'react';
+
+type MockMotionProps = PropsWithChildren<HTMLAttributes<HTMLElement> & Record<string, unknown>>;
+type MockIconProps = Record<string, unknown>;
+type MockMotionConfig = {
+  initial?: unknown;
+  animate?: unknown;
+  exit?: unknown;
+  transition?: unknown;
+  drag?: unknown;
+  dragConstraints?: unknown;
+  dragElastic?: unknown;
+  onDragEnd?: unknown;
+  whileHover?: unknown;
+  whileTap?: unknown;
+  layout?: unknown;
+};
 
 // Mock framer-motion for vote components
 vi.mock('framer-motion', () => {
-  const React = require('react');
+  const React = require('react') as typeof import('react');
   return {
     motion: new Proxy({}, {
       get: (_target: unknown, prop: string) => {
-        return React.forwardRef(({ children, ...rest }: any, ref: any) => {
+        return React.forwardRef<HTMLElement, MockMotionProps>(({ children, ...rest }, ref) => {
           const {
             initial, animate, exit, transition, drag, dragConstraints,
             dragElastic, onDragEnd, whileHover, whileTap, layout,
             ...domProps
-          } = rest;
-          return React.createElement(prop, { ...domProps, ref }, children);
+          } = rest as MockMotionProps & MockMotionConfig;
+          return React.createElement(prop, { ...domProps, ref }, children as ReactNode);
         });
       },
     }),
@@ -32,7 +49,7 @@ vi.mock('framer-motion', () => {
 // Mock lucide-react icons
 vi.mock('lucide-react', () => {
   const React = require('react');
-  const icon = (name: string) => (props: any) =>
+  const icon = (name: string) => (props: MockIconProps) =>
     React.createElement('span', { 'data-testid': `icon-${name}`, ...props });
   return {
     ThumbsUp: icon('ThumbsUp'),
@@ -263,7 +280,7 @@ describe('VoteResultsPanel', () => {
           updatedAt: new Date().toISOString(),
         },
       ],
-    } as any);
+    });
 
     render(
       <VoteResultsPanel
@@ -307,7 +324,7 @@ describe('VoteResultsPanel', () => {
           updatedAt: new Date().toISOString(),
         },
       ],
-    } as any);
+    });
 
     render(
       <VoteResultsPanel

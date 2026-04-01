@@ -6,7 +6,6 @@ import { ChecklistsService } from './checklists.service';
 
 describe('ChecklistsService', () => {
   let service: ChecklistsService;
-  let prisma: Record<string, any>;
 
   const mockPrisma = {
     tripMember: {
@@ -29,6 +28,8 @@ describe('ChecklistsService', () => {
   const mockProofStorage = {
     saveProofImage: jest.fn(),
   };
+
+  let prisma: typeof mockPrisma;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

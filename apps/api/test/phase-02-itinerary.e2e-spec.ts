@@ -15,6 +15,8 @@ import { PrismaService } from '../src/prisma/prisma.service';
  * 5. Reorder persists in later GET responses
  */
 describe('Phase 02 Itinerary API', () => {
+  type TemplateListItem = { id: string };
+
   let app: INestApplication;
   let prisma: PrismaService;
 
@@ -355,7 +357,7 @@ describe('Phase 02 Itinerary API', () => {
         .expect(200);
 
       expect(res.body.length).toBeGreaterThanOrEqual(1);
-      expect(res.body.some((t: any) => t.id === templateId)).toBe(true);
+      expect((res.body as TemplateListItem[]).some((template) => template.id === templateId)).toBe(true);
     });
 
     it('GET /templates/:templateId — retrieves template with snapshot', async () => {

@@ -12,11 +12,15 @@ import { authApi } from '../../../src/lib/api-client';
 import Link from 'next/link';
 
 const loginSchema = z.object({
-  email: z.string().email({ message: "Email không hợp lệ" }),
-  password: z.string().min(6, { message: "Mật khẩu ít nhất 6 ký tự" }),
+  email: z.string().email({ message: "Email khÃ´ng há»£p lá»‡" }),
+  password: z.string().min(6, { message: "Máº­t kháº©u Ã­t nháº¥t 6 kÃ½ tá»±" }),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
+
+function getErrorMessage(error: unknown, fallback: string): string {
+  return error instanceof Error ? error.message : fallback;
+}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -36,8 +40,8 @@ export default function LoginPage() {
       // Wait for auth string/tokens to be set, then populate zustand
       await checkAuth();
       router.push('/');
-    } catch (err: any) {
-      setGlobalError(err.message || 'Đăng nhập thất bại. Vui lòng thử lại.');
+    } catch (error: unknown) {
+      setGlobalError(getErrorMessage(error, 'ÄÄƒng nháº­p tháº¥t báº¡i. Vui lÃ²ng thá»­ láº¡i.'));
     }
   };
 
@@ -57,10 +61,10 @@ export default function LoginPage() {
           <Lock size={32} />
         </motion.div>
         <h1 className="text-3xl font-extrabold text-white tracking-tight">
-          Chào mừng trở lại!
+          ChÃ o má»«ng trá»Ÿ láº¡i!
         </h1>
         <p className="text-gray-400 mt-2 text-sm">
-          Đăng nhập để tiếp tục lên những kèo đi chơi tuyệt vời.
+          ÄÄƒng nháº­p Ä‘á»ƒ tiáº¿p tá»¥c lÃªn nhá»¯ng kÃ¨o Ä‘i chÆ¡i tuyá»‡t vá»i.
         </p>
       </div>
 
@@ -93,14 +97,14 @@ export default function LoginPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">Mật khẩu</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">Máº­t kháº©u</label>
           <div className="relative group">
             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-brand-coral transition-colors" />
             <input
               {...register('password')}
               type="password"
               className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-coral/50 transition-all"
-              placeholder="••••••••"
+              placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
             />
           </div>
           {errors.password && <p className="text-red-400 text-xs mt-1.5 ml-1">{errors.password.message}</p>}
@@ -117,16 +121,16 @@ export default function LoginPage() {
             <Loader2 className="w-6 h-6 animate-spin" />
           ) : (
             <>
-              Đăng Nhập <ArrowRight className="w-5 h-5 ml-2" />
+              ÄÄƒng Nháº­p <ArrowRight className="w-5 h-5 ml-2" />
             </>
           )}
         </motion.button>
       </form>
 
       <div className="mt-8 text-center text-sm text-gray-400">
-        Chưa có tài khoản?{' '}
+        ChÆ°a cÃ³ tÃ i khoáº£n?{' '}
         <Link href="/auth/register" className="text-brand-yellow hover:text-brand-yellow/80 font-semibold transition-colors">
-          Tạo tài khoản ngay
+          Táº¡o tÃ i khoáº£n ngay
         </Link>
       </div>
     </motion.div>

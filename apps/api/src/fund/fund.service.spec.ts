@@ -6,7 +6,6 @@ import { FundService } from './fund.service';
 
 describe('FundService', () => {
   let service: FundService;
-  let prisma: Record<string, any>;
 
   const mockPrisma = {
     tripMember: {
@@ -26,6 +25,8 @@ describe('FundService', () => {
       create: jest.fn(),
     },
   };
+
+  let prisma: typeof mockPrisma;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

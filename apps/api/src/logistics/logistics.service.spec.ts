@@ -5,11 +5,11 @@ import { ForbiddenException, BadRequestException, NotFoundException } from '@nes
 
 describe('LogisticsService', () => {
   let service: LogisticsService;
-  let prisma: Record<string, any>;
 
   const mockPrisma = {
     tripMember: {
       findUnique: jest.fn(),
+      findFirst: jest.fn(),
       findMany: jest.fn(),
     },
     logisticsUnit: {
@@ -30,6 +30,8 @@ describe('LogisticsService', () => {
     },
     $transaction: jest.fn(),
   };
+
+  let prisma: typeof mockPrisma;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -56,7 +58,10 @@ describe('LogisticsService', () => {
       });
       prisma.allocationAssignment.findFirst.mockResolvedValue(null);
 
-      prisma.$transaction.mockImplementation(async (fn: (tx: typeof prisma) => Promise<unknown>) => {
+      prisma.$transaction.mockImplementation(async (fn: (tx: {
+        logisticsUnit: { findUnique: jest.Mock };
+        allocationAssignment: { create: jest.Mock };
+      }) => Promise<unknown>) => {
         const txPrisma = {
           logisticsUnit: {
             findUnique: jest.fn().mockResolvedValue({
@@ -66,7 +71,7 @@ describe('LogisticsService', () => {
           },
           allocationAssignment: { create: jest.fn() },
         };
-        return fn(txPrisma as any);
+        return fn(txPrisma);
       });
 
       await expect(
@@ -101,7 +106,10 @@ describe('LogisticsService', () => {
       });
       prisma.allocationAssignment.findFirst.mockResolvedValue(null);
 
-      prisma.$transaction.mockImplementation(async (fn: (tx: typeof prisma) => Promise<unknown>) => {
+      prisma.$transaction.mockImplementation(async (fn: (tx: {
+        logisticsUnit: { findUnique: jest.Mock };
+        allocationAssignment: { create: jest.Mock };
+      }) => Promise<unknown>) => {
         const txPrisma = {
           logisticsUnit: {
             findUnique: jest.fn().mockResolvedValue({
@@ -111,7 +119,7 @@ describe('LogisticsService', () => {
           },
           allocationAssignment: { create: jest.fn().mockResolvedValue({}) },
         };
-        return fn(txPrisma as any);
+        return fn(txPrisma);
       });
 
       // Mock the snapshot call after transaction

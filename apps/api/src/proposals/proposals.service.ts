@@ -4,6 +4,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProposalDto } from './dto/create-proposal.dto';
 
@@ -100,7 +101,7 @@ export class ProposalsService {
         proposerId: userId,
         targetItemId: dto.targetItemId,
         type: dto.type,
-        payload: dto.payload as any,
+        payload: dto.payload as Prisma.InputJsonValue,
         baseVersion: dto.baseVersion,
       },
       include: {

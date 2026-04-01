@@ -12,12 +12,16 @@ import { authApi } from '../../../src/lib/api-client';
 import Link from 'next/link';
 
 const registerSchema = z.object({
-  name: z.string().min(2, { message: "Tên ít nhất 2 ký tự" }),
-  email: z.string().email({ message: "Email không hợp lệ" }),
-  password: z.string().min(6, { message: "Mật khẩu ít nhất 6 ký tự" }),
+  name: z.string().min(2, { message: "TÃªn Ã­t nháº¥t 2 kÃ½ tá»±" }),
+  email: z.string().email({ message: "Email khÃ´ng há»£p lá»‡" }),
+  password: z.string().min(6, { message: "Máº­t kháº©u Ã­t nháº¥t 6 kÃ½ tá»±" }),
 });
 
 type RegisterForm = z.infer<typeof registerSchema>;
+
+function getErrorMessage(error: unknown, fallback: string): string {
+  return error instanceof Error ? error.message : fallback;
+}
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -35,8 +39,8 @@ export default function RegisterPage() {
       await authApi.register(data.email, data.password, data.name);
       await checkAuth();
       router.push('/');
-    } catch (err: any) {
-      setGlobalError(err.message || 'Đăng ký thất bại. Vui lòng thử lại.');
+    } catch (error: unknown) {
+      setGlobalError(getErrorMessage(error, 'ÄÄƒng kÃ½ tháº¥t báº¡i. Vui lÃ²ng thá»­ láº¡i.'));
     }
   };
 
@@ -59,7 +63,7 @@ export default function RegisterPage() {
           Tham gia ngay!
         </h1>
         <p className="text-gray-400 mt-2 text-sm">
-          Tạo tài khoản Mình Đi Đâu Thế cực nhanh.
+          Táº¡o tÃ i khoáº£n MÃ¬nh Äi ÄÃ¢u Tháº¿ cá»±c nhanh.
         </p>
       </div>
 
@@ -79,13 +83,13 @@ export default function RegisterPage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">Họ Tên</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">Há» TÃªn</label>
           <div className="relative group">
             <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-brand-yellow transition-colors" />
             <input
               {...register('name')}
               className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-yellow/50 transition-all"
-              placeholder="Nguyễn Văn A"
+              placeholder="Nguyá»…n VÄƒn A"
             />
           </div>
           {errors.name && <p className="text-red-400 text-xs mt-1.5 ml-1">{errors.name.message}</p>}
@@ -105,14 +109,14 @@ export default function RegisterPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">Mật khẩu</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1.5 ml-1">Máº­t kháº©u</label>
           <div className="relative group">
             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-brand-yellow transition-colors" />
             <input
               {...register('password')}
               type="password"
               className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-yellow/50 transition-all"
-              placeholder="••••••••"
+              placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
             />
           </div>
           {errors.password && <p className="text-red-400 text-xs mt-1.5 ml-1">{errors.password.message}</p>}
@@ -129,16 +133,16 @@ export default function RegisterPage() {
             <Loader2 className="w-6 h-6 animate-spin" />
           ) : (
             <>
-              Tạo Tài Khoản <ArrowRight className="w-5 h-5 ml-2" />
+              Táº¡o TÃ i Khoáº£n <ArrowRight className="w-5 h-5 ml-2" />
             </>
           )}
         </motion.button>
       </form>
 
       <div className="mt-8 text-center text-sm text-gray-400">
-        Đã có tài khoản?{' '}
+        ÄÃ£ cÃ³ tÃ i khoáº£n?{' '}
         <Link href="/auth/login" className="text-brand-coral hover:text-brand-coral/80 font-semibold transition-colors">
-          Đăng nhập
+          ÄÄƒng nháº­p
         </Link>
       </div>
     </motion.div>

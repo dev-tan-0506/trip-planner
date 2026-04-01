@@ -352,7 +352,9 @@ describe('ItineraryService', () => {
           update: jest.fn().mockResolvedValue({}),
         },
       };
-      mockPrismaService.$transaction.mockImplementation(async (fn: any) => fn(txMock));
+      mockPrismaService.$transaction.mockImplementation(
+        async (fn: (tx: typeof txMock) => Promise<unknown>) => fn(txMock),
+      );
 
       await service.reorderItems(tripId, leaderUserId, {
         items: [

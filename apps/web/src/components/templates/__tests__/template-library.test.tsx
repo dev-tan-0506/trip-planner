@@ -1,18 +1,34 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { AnchorHTMLAttributes, HTMLAttributes, PropsWithChildren, ReactNode } from 'react';
+
+type MockMotionProps = PropsWithChildren<HTMLAttributes<HTMLElement> & Record<string, unknown>>;
+type MockIconProps = Record<string, unknown>;
+type MockLinkProps = PropsWithChildren<
+  { href: string } & AnchorHTMLAttributes<HTMLAnchorElement> & Record<string, unknown>
+>;
+type MockMotionConfig = {
+  initial?: unknown;
+  animate?: unknown;
+  exit?: unknown;
+  transition?: unknown;
+  whileHover?: unknown;
+  whileTap?: unknown;
+  layout?: unknown;
+};
 
 // Mock framer-motion
 vi.mock('framer-motion', () => {
-  const React = require('react');
+  const React = require('react') as typeof import('react');
   return {
     motion: new Proxy({}, {
       get: (_target: unknown, prop: string) => {
-        return React.forwardRef(({ children, ...rest }: any, ref: any) => {
+        return React.forwardRef<HTMLElement, MockMotionProps>(({ children, ...rest }, ref) => {
           const {
             initial, animate, exit, transition, whileHover, whileTap, layout,
             ...domProps
-          } = rest;
-          return React.createElement(prop, { ...domProps, ref }, children);
+          } = rest as MockMotionProps & MockMotionConfig;
+          return React.createElement(prop, { ...domProps, ref }, children as ReactNode);
         });
       },
     }),
@@ -23,7 +39,7 @@ vi.mock('framer-motion', () => {
 // Mock lucide-react
 vi.mock('lucide-react', () => {
   const React = require('react');
-  const icon = (name: string) => (props: any) =>
+  const icon = (name: string) => (props: MockIconProps) =>
     React.createElement('span', { 'data-testid': `icon-${name}`, ...props });
   return {
     MapPin: icon('MapPin'),
@@ -46,8 +62,8 @@ vi.mock('lucide-react', () => {
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: any) => {
-    const React = require('react');
+  default: ({ children, href, ...props }: MockLinkProps) => {
+    const React = require('react') as typeof import('react');
     return React.createElement('a', { href, ...props }, children);
   },
 }));

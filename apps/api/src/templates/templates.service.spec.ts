@@ -2,9 +2,31 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TemplatesService } from './templates.service';
 import { PrismaService } from '../prisma/prisma.service';
 
+type TemplateSnapshot = {
+  destination: string;
+  days: Array<{
+    dayIndex: number;
+    items: Array<{
+      title: string;
+      startMinute: number | null;
+      locationName: string | null;
+      lat: number | null;
+      lng: number | null;
+      shortNote: string | null;
+      sortOrder: number;
+    }>;
+  }>;
+};
+
+type ClonedItem = {
+  tripId: string;
+  dayIndex: number;
+  sourceTripId?: string;
+};
+
 describe('TemplatesService', () => {
   let service: TemplatesService;
-  let prisma: Record<string, any>;
+  let prisma: typeof mockPrisma;
 
   const mockPrisma = {
     tripMember: { findUnique: jest.fn() },
@@ -86,7 +108,7 @@ describe('TemplatesService', () => {
           },
         ],
       });
-      prisma.communityTemplate.create.mockImplementation(({ data }: any) => ({
+      prisma.communityTemplate.create.mockImplementation(({ data }: { data: { sanitizedSnapshot: TemplateSnapshot } & Record<string, unknown> }) => ({
         id: 'template-1',
         ...data,
       }));
@@ -97,7 +119,7 @@ describe('TemplatesService', () => {
       });
 
       // Verify sanitizedSnapshot structure
-      const snapshot = result.sanitizedSnapshot as any;
+      const snapshot = result.sanitizedSnapshot as TemplateSnapshot;
       expect(snapshot.destination).toBe('Da Lat');
       expect(snapshot.days).toHaveLength(2);
 
@@ -205,9 +227,9 @@ describe('TemplatesService', () => {
 
       expect(items).toHaveLength(3);
       // All items reference the new trip, not the source
-      expect(items.every((i: any) => i.tripId === 'new-trip-2')).toBe(true);
+      expect((items as ClonedItem[]).every((item) => item.tripId === 'new-trip-2')).toBe(true);
       // No sourceTripId field
-      expect(items.every((i: any) => !i.sourceTripId)).toBe(true);
+      expect((items as ClonedItem[]).every((item) => !item.sourceTripId)).toBe(true);
       // Items preserve relative day indexes
       expect(items[0].dayIndex).toBe(0);
       expect(items[1].dayIndex).toBe(1);

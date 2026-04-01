@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ProposalsService } from './proposals.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { ForbiddenException, BadRequestException, NotFoundException } from '@nestjs/common';
+import { ProposalType } from './dto/create-proposal.dto';
 
 describe('ProposalsService', () => {
   let service: ProposalsService;
@@ -85,7 +86,7 @@ describe('ProposalsService', () => {
       });
 
       const result = await service.createProposal(tripId, memberUserId, {
-        type: 'UPDATE_TIME' as any,
+        type: ProposalType.UPDATE_TIME,
         targetItemId: 'item-1',
         payload: { startMinute: 540 },
         baseVersion: 1,
@@ -100,7 +101,7 @@ describe('ProposalsService', () => {
 
       await expect(
         service.createProposal(tripId, memberUserId, {
-          type: 'UPDATE_TIME' as any,
+          type: ProposalType.UPDATE_TIME,
           payload: { startMinute: 540 },
         }),
       ).rejects.toThrow(BadRequestException);

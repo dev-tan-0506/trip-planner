@@ -6,8 +6,6 @@ import { ProofStorageService } from './proof-storage.service';
 
 describe('AttendanceService', () => {
   let service: AttendanceService;
-  let prisma: Record<string, any>;
-  let proofStorageService: Record<string, any>;
 
   const mockPrisma = {
     tripMember: {
@@ -29,6 +27,9 @@ describe('AttendanceService', () => {
   const mockProofStorageService = {
     saveProofImage: jest.fn(),
   };
+
+  let prisma: typeof mockPrisma;
+  let proofStorageService: typeof mockProofStorageService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

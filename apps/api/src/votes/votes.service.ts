@@ -4,6 +4,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateVoteSessionDto } from './dto/create-vote-session.dto';
 import { SubmitBallotDto } from './dto/submit-ballot.dto';
@@ -15,6 +16,10 @@ type SessionOption = {
   payload: unknown;
   status: 'PENDING_APPROVAL' | 'ACTIVE' | 'REJECTED' | 'WINNER' | 'RUNNER_UP';
 };
+
+function toInputJsonValue(value: unknown): Prisma.InputJsonValue {
+  return value as Prisma.InputJsonValue;
+}
 
 @Injectable()
 export class VotesService {
@@ -131,7 +136,7 @@ export class VotesService {
       data: {
         voteSessionId: sessionId,
         title: dto.title,
-        payload: dto.payload as any,
+        payload: toInputJsonValue(dto.payload),
         status: isLeader ? 'ACTIVE' : 'PENDING_APPROVAL',
       },
     });
@@ -342,7 +347,7 @@ export class VotesService {
         data: {
           voteSessionId: tieBreak.id,
           title: opt.title,
-          payload: opt.payload as any,
+          payload: toInputJsonValue(opt.payload),
           status: 'ACTIVE',
         },
       });
@@ -394,7 +399,7 @@ export class VotesService {
           tripId: session.tripId,
           targetDayIndex: session.targetDayIndex,
           targetInsertAfterItemId: session.targetInsertAfterItemId,
-          payload: winner.payload as any,
+          payload: toInputJsonValue(winner.payload),
           createdItemId: createdItem.id,
         },
       });
@@ -406,7 +411,7 @@ export class VotesService {
           proposerId: session.targetItemId ? session.targetItemId : '', // system
           targetItemId: session.targetItemId,
           type: 'UPDATE_LOCATION',
-          payload: winner.payload as any,
+          payload: toInputJsonValue(winner.payload),
           status: 'PENDING',
         },
       });
@@ -417,7 +422,7 @@ export class VotesService {
           winningOptionId: winner.id,
           tripId: session.tripId,
           targetItemId: session.targetItemId,
-          payload: winner.payload as any,
+          payload: toInputJsonValue(winner.payload),
           replacementProposalId: proposal.id,
         },
       });

@@ -5,12 +5,29 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { randomBytes } from 'crypto';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { PublishTemplateDto } from './dto/publish-template.dto';
 import { CloneTemplateDto } from './dto/clone-template.dto';
 
 type PublishedItineraryItem = {
   dayIndex: number;
+};
+
+type SanitizedSnapshot = {
+  destination: string;
+  days: Array<{
+    dayIndex: number;
+    items: Array<{
+      title: string;
+      startMinute: number | null;
+      locationName: string | null;
+      lat: number | null;
+      lng: number | null;
+      shortNote: string | null;
+      sortOrder: number;
+    }>;
+  }>;
 };
 
 @Injectable()
@@ -74,7 +91,7 @@ export class TemplatesService {
     if (!trip) throw new NotFoundException('Trip not found');
 
     // Build sanitizedSnapshot — strips personal/member data, votes, proposals, joinCode
-    const sanitizedSnapshot = {
+    const sanitizedSnapshot: SanitizedSnapshot = {
       destination: trip.destination,
       days: this.buildSanitizedDays(trip.itineraryItems),
     };
@@ -92,7 +109,7 @@ export class TemplatesService {
         summary: dto.summary,
         coverNote: dto.coverNote,
         daysCount,
-        sanitizedSnapshot: sanitizedSnapshot as any,
+        sanitizedSnapshot: sanitizedSnapshot as Prisma.InputJsonValue,
         status: 'PUBLISHED',
       },
     });
@@ -184,21 +201,7 @@ export class TemplatesService {
     if (!template) throw new NotFoundException('Template not found');
 
     const joinCode = this.generateJoinCode();
-    const snapshot = template.sanitizedSnapshot as {
-      destination: string;
-      days: Array<{
-        dayIndex: number;
-        items: Array<{
-          title: string;
-          startMinute: number | null;
-          locationName: string | null;
-          lat: number | null;
-          lng: number | null;
-          shortNote: string | null;
-          sortOrder: number;
-        }>;
-      }>;
-    };
+    const snapshot = template.sanitizedSnapshot as SanitizedSnapshot;
 
     // Create new trip with caller as LEADER
     const trip = await this.prisma.trip.create({
