@@ -3,7 +3,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TripWorkspaceShell } from '../TripWorkspaceShell';
 import { AiAssistTab } from '../AiAssistTab';
 import { TimelineDaySection } from '../TimelineDaySection';
-import type { ItineraryItem, ItinerarySnapshot, Trip } from '../../../lib/api-client';
+import type {
+  BookingImportDraft,
+  ItineraryItem,
+  ItinerarySnapshot,
+  Trip,
+} from '../../../lib/api-client';
 
 vi.mock('@dnd-kit/core', () => ({
   DndContext: ({ children }: { children: React.ReactNode }) => children,
@@ -158,6 +163,35 @@ const mockTrip: Trip = {
   members: [],
 };
 
+const bookingDraft: BookingImportDraft = {
+  id: 'draft-1',
+  tripId: 'trip-1',
+  createdByTripMemberId: 'member-1',
+  reviewedByTripMemberId: null,
+  sourceChannel: 'MANUAL_PASTE',
+  forwardingAddress: 'booking+join-code@minhdidauthe.local',
+  sourceMessageId: null,
+  sourceSender: null,
+  sourceSubject: 'Ve may bay',
+  rawContent: 'Flight VN123 du kien 08:30. Cho xac nhan.',
+  confidenceLabel: 'Can xem lai',
+  status: 'DRAFT',
+  parseSummary: 'Da tach noi dung dat cho, nhung con thieu hoac mo ho mot vai truong can xem lai truoc khi nhap vao lich trinh.',
+  parsedItems: [
+    {
+      title: 'Chuyen bay',
+      locationName: null,
+      startTime: null,
+      endTime: null,
+      bookingCode: 'VN123',
+      missingFields: ['locationName', 'startTime'],
+      rawExcerpt: 'Flight VN123 du kien 08:30. Cho xac nhan.',
+    },
+  ],
+  createdAt: '2026-04-01T10:00:00.000Z',
+  updatedAt: '2026-04-01T10:00:00.000Z',
+};
+
 vi.mock('../../../lib/api-client', async () => {
   const actual = await vi.importActual('../../../lib/api-client');
   return {
@@ -171,6 +205,12 @@ vi.mock('../../../lib/api-client', async () => {
       requestCulinaryRoute: vi.fn(),
       applyCulinaryRoute: vi.fn(),
     },
+    bookingImportApi: {
+      getBookingImportConfig: vi.fn(),
+      listBookingImportDrafts: vi.fn(),
+      createBookingImportDraft: vi.fn(),
+      confirmBookingImportDraft: vi.fn(),
+    },
     proposalsApi: {
       listProposals: vi.fn().mockResolvedValue([]),
     },
@@ -183,12 +223,19 @@ vi.mock('../../../lib/api-client', async () => {
   };
 });
 
-import { itineraryApi } from '../../../lib/api-client';
+import { bookingImportApi, itineraryApi } from '../../../lib/api-client';
 
 describe('Phase 5 AI workspace', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(itineraryApi.getSnapshot).mockResolvedValue(leaderSnapshot);
+    vi.mocked(bookingImportApi.getBookingImportConfig).mockResolvedValue({
+      tripId: 'trip-1',
+      forwardingAddress: 'booking+join-code@minhdidauthe.local',
+      joinCode: 'join-code',
+      manualPasteEnabled: true,
+    });
+    vi.mocked(bookingImportApi.listBookingImportDrafts).mockResolvedValue([bookingDraft]);
   });
 
   it('renders the Tro ly AI tab inside the trip workspace', async () => {
@@ -289,5 +336,23 @@ describe('Phase 5 AI workspace', () => {
       expect(screen.getAllByText('Nguy co cao').length).toBeGreaterThan(0);
       expect(screen.getByText(/di ung hai san/i)).toBeInTheDocument();
     });
+  });
+
+  it('renders booking import forwarding address and recent draft list', async () => {
+    render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
+
+    expect((await screen.findAllByText('Dia chi chuyen tiep')).length).toBeGreaterThan(0);
+    expect(screen.getByText('booking+join-code@minhdidauthe.local')).toBeInTheDocument();
+    expect(screen.getByText('Ve may bay')).toBeInTheDocument();
+  });
+
+  it('shows low-confidence caution UI and the Nhap vao lich trinh CTA in booking review sheet', async () => {
+    render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
+
+    fireEvent.click(await screen.findByText('Ve may bay'));
+
+    expect(await screen.findAllByText('Can xem lai')).not.toHaveLength(0);
+    expect(screen.getByText(/^Raw excerpt$/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Nhap vao lich trinh' })).toBeInTheDocument();
   });
 });

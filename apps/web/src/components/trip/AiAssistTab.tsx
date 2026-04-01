@@ -2,11 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import {
+  bookingImportApi,
+  type BookingImportConfig,
+  type BookingImportDraft,
+  type BookingImportParsedItem,
   itineraryApi,
   type CulinaryRouteSuggestion,
   type ItineraryItem,
   type ItinerarySnapshot,
 } from '../../lib/api-client';
+import { BookingImportCard } from './BookingImportCard';
+import { BookingImportReviewSheet } from './BookingImportReviewSheet';
 import { CulinaryRouteCard } from './CulinaryRouteCard';
 
 function isFoodStop(item: ItineraryItem) {
@@ -33,6 +39,13 @@ export function AiAssistTab({
   const [loading, setLoading] = useState(!initialSnapshot);
   const [requesting, setRequesting] = useState(false);
   const [applying, setApplying] = useState(false);
+  const [bookingConfig, setBookingConfig] = useState<BookingImportConfig | null>(null);
+  const [bookingDrafts, setBookingDrafts] = useState<BookingImportDraft[]>([]);
+  const [loadingBooking, setLoadingBooking] = useState(true);
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [selectedDraft, setSelectedDraft] = useState<BookingImportDraft | null>(null);
+  const [creatingDraft, setCreatingDraft] = useState(false);
+  const [confirmingDraft, setConfirmingDraft] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -72,6 +85,33 @@ export function AiAssistTab({
       .map((item) => item.id);
     setSelectedItemIds((current) => (current.length > 0 ? current : defaultSelection));
   }, [snapshot]);
+
+  useEffect(() => {
+    let active = true;
+    setLoadingBooking(true);
+    Promise.all([
+      bookingImportApi.getBookingImportConfig(tripId),
+      bookingImportApi.listBookingImportDrafts(tripId),
+    ])
+      .then(([config, drafts]) => {
+        if (!active) return;
+        setBookingConfig(config);
+        setBookingDrafts(drafts);
+      })
+      .catch((err) => {
+        if (!active) return;
+        setError(err instanceof Error ? err.message : 'Khong tai duoc booking import');
+      })
+      .finally(() => {
+        if (active) {
+          setLoadingBooking(false);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [tripId]);
 
   const foodStops = snapshot?.days.flatMap((day) => day.items).filter(isFoodStop) ?? [];
 
@@ -120,6 +160,48 @@ export function AiAssistTab({
     }
   };
 
+  const refreshBookingDrafts = async () => {
+    const drafts = await bookingImportApi.listBookingImportDrafts(tripId);
+    setBookingDrafts(drafts);
+    return drafts;
+  };
+
+  const createBookingDraft = async (rawContent: string) => {
+    try {
+      setCreatingDraft(true);
+      setError(null);
+      const draft = await bookingImportApi.createBookingImportDraft(tripId, { rawContent });
+      setSelectedDraft(draft);
+      setReviewOpen(true);
+      await refreshBookingDrafts();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Khong tao duoc ban nhap booking');
+    } finally {
+      setCreatingDraft(false);
+    }
+  };
+
+  const confirmBookingDraft = async (items: BookingImportParsedItem[]) => {
+    if (!selectedDraft) return;
+
+    try {
+      setConfirmingDraft(true);
+      setError(null);
+      const result = await bookingImportApi.confirmBookingImportDraft(tripId, selectedDraft.id, {
+        parsedItems: items,
+      });
+      setSelectedDraft(result.draft);
+      setSnapshot(result.snapshot);
+      onSnapshotUpdate?.(result.snapshot);
+      await refreshBookingDrafts();
+      setReviewOpen(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Khong nhap duoc booking vao lich trinh');
+    } finally {
+      setConfirmingDraft(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <section className="rounded-[28px] border border-gray-200 bg-gradient-to-br from-amber-50 via-white to-sky-50 p-5 shadow-sm">
@@ -129,6 +211,10 @@ export function AiAssistTab({
           Day la ban nhap de duyet. Lich trinh chi doi thu tu sau khi truong doan bam
           {' '}
           "Ap dung vao lich trinh".
+        </p>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
+          Booking duoc phan tich truoc, nhung khong duoc dua vao lich trinh cho toi khi ban review
+          xong va leader xac nhan.
         </p>
       </section>
 
@@ -217,6 +303,31 @@ export function AiAssistTab({
           onApply={applySuggestion}
         />
       )}
+
+      <BookingImportCard
+        config={bookingConfig}
+        drafts={bookingDrafts}
+        loading={loadingBooking}
+        onOpenManualPaste={() => {
+          setSelectedDraft(null);
+          setReviewOpen(true);
+        }}
+        onSelectDraft={(draft) => {
+          setSelectedDraft(draft);
+          setReviewOpen(true);
+        }}
+      />
+
+      <BookingImportReviewSheet
+        open={reviewOpen}
+        draft={selectedDraft}
+        canConfirm={snapshot?.isLeader ?? false}
+        creating={creatingDraft}
+        confirming={confirmingDraft}
+        onClose={() => setReviewOpen(false)}
+        onCreateDraft={createBookingDraft}
+        onConfirm={confirmBookingDraft}
+      />
     </div>
   );
 }

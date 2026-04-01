@@ -331,6 +331,55 @@ export interface CulinaryRouteSuggestion {
   confidenceLabel: AiConfidenceLabel;
 }
 
+export type BookingImportDraftStatus = 'DRAFT' | 'CONFIRMED' | 'REJECTED';
+
+export interface BookingImportParsedItem {
+  title: string;
+  locationName: string | null;
+  startTime: string | null;
+  endTime: string | null;
+  bookingCode: string | null;
+  missingFields: string[];
+  rawExcerpt: string;
+}
+
+export interface BookingImportConfig {
+  tripId: string;
+  forwardingAddress: string;
+  joinCode: string;
+  manualPasteEnabled: boolean;
+}
+
+export interface BookingImportDraft {
+  id: string;
+  tripId: string;
+  createdByTripMemberId: string | null;
+  reviewedByTripMemberId: string | null;
+  sourceChannel: string;
+  forwardingAddress: string;
+  sourceMessageId: string | null;
+  sourceSender: string | null;
+  sourceSubject: string | null;
+  rawContent: string;
+  confidenceLabel: AiConfidenceLabel;
+  status: BookingImportDraftStatus;
+  parseSummary: string;
+  parsedItems: BookingImportParsedItem[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateBookingImportDraftPayload {
+  rawContent: string;
+  sourceSender?: string;
+  sourceSubject?: string;
+  sourceMessageId?: string;
+}
+
+export interface ConfirmBookingImportDraftPayload {
+  parsedItems?: BookingImportParsedItem[];
+}
+
 export interface CreateItineraryItemPayload {
   title: string;
   dayIndex: number;
@@ -420,6 +469,40 @@ export const itineraryApi = {
       method: 'POST',
       body: JSON.stringify(body),
     });
+  },
+};
+
+export const bookingImportApi = {
+  async getBookingImportConfig(tripId: string): Promise<BookingImportConfig> {
+    return request<BookingImportConfig>(`/trips/${tripId}/booking-import/config`);
+  },
+
+  async listBookingImportDrafts(tripId: string): Promise<BookingImportDraft[]> {
+    return request<BookingImportDraft[]>(`/trips/${tripId}/booking-import/drafts`);
+  },
+
+  async createBookingImportDraft(
+    tripId: string,
+    body: CreateBookingImportDraftPayload,
+  ): Promise<BookingImportDraft> {
+    return request<BookingImportDraft>(`/trips/${tripId}/booking-import/drafts`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async confirmBookingImportDraft(
+    tripId: string,
+    draftId: string,
+    body: ConfirmBookingImportDraftPayload,
+  ): Promise<{ draft: BookingImportDraft; snapshot: ItinerarySnapshot }> {
+    return request<{ draft: BookingImportDraft; snapshot: ItinerarySnapshot }>(
+      `/trips/${tripId}/booking-import/drafts/${draftId}/confirm`,
+      {
+        method: 'POST',
+        body: JSON.stringify(body),
+      },
+    );
   },
 };
 
