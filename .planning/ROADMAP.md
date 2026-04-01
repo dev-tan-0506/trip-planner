@@ -27,7 +27,7 @@ Notes: Verification fully closed on 2026-03-31 after Plan `02-05` hardened leade
 
 ## Phase 5: Deep AI Integration
 **Focus**: The magic computational features that act as extreme differentiators.
-- [ ] 5.1: Culinary Routing & Health profile matching (PLAN-04, PLAN-05).
+- [x] 5.1: Culinary Routing & Health profile matching (PLAN-04, PLAN-05).
 - [ ] 5.2: Auto-parsing Hub for Booking Emails (AIX-01).
 - [ ] 5.3: Local Expert AI Menu Translator & Outfit Planner (AIX-02, AIX-03).
 - [ ] 5.4: AI Daily Podcast generator (AIX-04).

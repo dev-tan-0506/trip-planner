@@ -15,8 +15,8 @@
 - [ ] **PLAN-01**: Leader can add, edit, and reorder activities and locations on a drag-and-drop timeline.
 - [ ] **PLAN-02**: Members can view the real-time timeline but cannot edit its structural data.
 - [ ] **PLAN-03**: Members can participate in Tinder-style card swiping to vote on suggested food/activity options.
-- [ ] **PLAN-04**: System automatically alerts the group if an added activity conflicts with a member's health profile (e.g., seafood allergy).
-- [ ] **PLAN-05**: User can invoke "Culinary Routing" to have AI auto-generate the optimal geographical route between selected food spots.
+- [x] **PLAN-04**: System automatically alerts the group if an added activity conflicts with a member's health profile (e.g., seafood allergy).
+- [x] **PLAN-05**: User can invoke "Culinary Routing" to have AI auto-generate the optimal geographical route between selected food spots.
 
 ### LOGI: Logistics & Attendance
 - [ ] **LOGI-01**: Leader can create packing checklists and to-do items assigned to specific members.
