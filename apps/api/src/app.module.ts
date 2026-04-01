@@ -16,6 +16,7 @@ import { FundModule } from './fund/fund.module';
 import { SafetyModule } from './safety/safety.module';
 import { BookingImportModule } from './booking-import/booking-import.module';
 import { LocalExpertModule } from './local-expert/local-expert.module';
+import { DailyPodcastModule } from './daily-podcast/daily-podcast.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { LocalExpertModule } from './local-expert/local-expert.module';
     SafetyModule,
     BookingImportModule,
     LocalExpertModule,
+    DailyPodcastModule,
   ],
   controllers: [AppController],
   providers: [AppService],

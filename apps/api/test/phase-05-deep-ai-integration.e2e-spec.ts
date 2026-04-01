@@ -367,4 +367,68 @@ describe('Phase 05 Deep AI Integration API', () => {
     expect(res.body.cards).toHaveLength(3);
     expect(res.body.cards[2].confidenceLabel).toBe('Can xem lai');
   });
+
+  it('daily podcast recap: generates one persisted recap per day with browser fallback metadata', async () => {
+    const generated = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/daily-podcast/0/generate`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        tone: 'playful',
+      })
+      .expect(201);
+
+    const fetched = await request(app.getHttpServer())
+      .get(`/trips/${tripId}/daily-podcast/0`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .expect(200);
+
+    expect(generated.body.title).toBe('Podcast ngay 1');
+    expect(generated.body.audioMode).toBe('BROWSER_TTS');
+    expect(generated.body.audioUrl).toBeNull();
+    expect(generated.body.durationSeconds).toBeLessThanOrEqual(120);
+    expect(fetched.body.recap.id).toBe(generated.body.id);
+  });
+
+  it('daily podcast recap: keeps one recap per day unless refresh is requested', async () => {
+    const first = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/daily-podcast/1/generate`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        tone: 'playful',
+      })
+      .expect(201);
+
+    const second = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/daily-podcast/1/generate`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        tone: 'playful',
+      })
+      .expect(201);
+
+    const storedCount = await prisma.dailyPodcastRecap.count({
+      where: {
+        tripId,
+        dayIndex: 1,
+      },
+    });
+
+    expect(second.body.id).toBe(first.body.id);
+    expect(storedCount).toBe(1);
+  });
+
+  it('daily podcast recap: enforces transcript size guardrails for the generated story', async () => {
+    const generated = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/daily-podcast/2/generate`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        tone: 'calm',
+      })
+      .expect(201);
+
+    const words = generated.body.transcript.split(/\s+/).filter(Boolean);
+    expect(words.length).toBeGreaterThanOrEqual(220);
+    expect(words.length).toBeLessThanOrEqual(300);
+    expect(generated.body.recapText).toContain('BROWSER_TTS');
+  });
 });
