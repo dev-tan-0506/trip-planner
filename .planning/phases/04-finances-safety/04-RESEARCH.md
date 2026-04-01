@@ -6,7 +6,7 @@ Phase 4 should be implemented as a trip-scoped operations layer added to the exi
 
 - centralized group fund management with QR-based contribution guidance and summary-first burn-rate visibility
 - itinerary-aware safety intelligence for weather, crowd pressure, and verified emergency services
-- urgent escalation flows for SOS and cultural-sensitivity warnings, using browser-visible alerts instead of native background behavior
+- urgent escalation flows for SOS and cultural-sensitivity warnings, using browser-visible alerts instead of native background behavior, with an explicit de-escalation path once the situation is safe
 
 Current codebase signals:
 - The trip experience already clusters around one shell in [`apps/web/src/components/trip/TripWorkspaceShell.tsx`](../../../apps/web/src/components/trip/TripWorkspaceShell.tsx), which is the best anchor for finance and safety surfaces.
@@ -51,6 +51,7 @@ Confidence: high on the phase split and architecture shape, medium on third-part
   - one mutation creates a high-priority trip alert
   - group members receive visible notification state
   - the alert links immediately to support information or location context
+  - the alert should also support a clear “situation resolved” transition so urgency does not linger or re-notify indefinitely
 
 ## Data Model Implications
 
@@ -88,6 +89,7 @@ Recommended modules and routes:
   - `GET /trips/:tripId/safety/warnings`
   - `POST /trips/:tripId/safety/sos`
   - `POST /trips/:tripId/safety/alerts/:alertId/acknowledge`
+  - `POST /trips/:tripId/safety/alerts/:alertId/resolve`
 
 Implementation note: every mutating endpoint should return a refreshed snapshot for its surface area to fit the current app’s server-backed style.
 
@@ -112,6 +114,7 @@ Implementation note: every mutating endpoint should return a refreshed snapshot 
   - one obvious CTA
   - visible sent state
   - persistent alert banner or feed item after activation
+  - a clear follow-up action for “Đã an toàn / tắt khẩn cấp”
 
 ## Realtime Strategy
 
@@ -122,6 +125,7 @@ Implementation note: every mutating endpoint should return a refreshed snapshot 
 ## Browser And Platform Constraints
 
 - The web app cannot rely on native background geofencing, so cultural warnings should be based on visible itinerary/location context, not locked-screen monitoring.
+- Browser notifications should be treated as optional acceleration only; they need client-side dedupe so refresh or broadcast cycles do not spam users for the same active SOS.
 - QR presentation is easy on web, but actual payment confirmation is not guaranteed without provider integrations. Plan V1 around guided contribution plus app-side confirmation flows.
 - Safety directory usefulness depends on data source quality; provider normalization and graceful empty states are essential.
 - External forecast and crowd providers may fail or rate-limit, so cached server-side reads and fallback messaging are necessary.
@@ -141,6 +145,7 @@ Implementation note: every mutating endpoint should return a refreshed snapshot 
 - Weather/crowd views that ignore itinerary dates will feel generic rather than trip-specific.
 - Safety directories without fast actions (call/open map) will add information but not reduce stress in urgent moments.
 - SOS flows that only write a record without broadcasting visible UI state will fail the core urgency promise.
+- SOS flows without a resolved/de-escalated state will leave the UI stuck in high-alert mode and make repeated notifications feel noisy.
 
 ## Sequencing Advice
 
@@ -156,18 +161,20 @@ This sequence lowers risk because finance and safety directory data are more det
 
 - Unit test fund math, contribution-state transitions, expense aggregation, and leader-only structural controls.
 - Unit test provider adapters or normalization logic for weather, crowd, and safety directory data.
-- Unit test SOS alert authorization, broadcast triggering, and acknowledgement state transitions.
+- Unit test SOS alert authorization, broadcast triggering, acknowledgement state transitions, and resolved/de-escalated transitions.
 - Add API e2e tests for:
   - leader creates or updates the trip fund
   - member submits a contribution confirmation
   - burn-rate snapshot reflects added expenses
   - safety overview returns weather/crowd/directory payloads
   - SOS creates an alert visible in refreshed trip safety snapshots
+  - resolved SOS returns refreshed snapshots with non-open status
 - Add frontend interaction tests for:
   - finance summary cards and contribution QR reveal
   - member contribution flow and leader confirmation path
   - safety overview card rendering and empty states
   - SOS trigger state and persistent alert banner rendering
+  - deduped browser notification behavior and visible “Đã an toàn, tắt khẩn cấp” action
 
 ## Recommended Planning Decisions
 

@@ -1,57 +1,126 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
 import { TripWorkspaceShell } from '../TripWorkspaceShell';
-import type { ItinerarySnapshot, Proposal, Trip } from '../../../lib/api-client';
+import type { ItineraryItem, ItinerarySnapshot, Proposal, Trip } from '../../../lib/api-client';
 
-// ─── Mock API ────────────────────────────────────────
+let latestOnDragEnd: ((event: {
+  active: { id: string; data: { current: Record<string, unknown> } };
+  over: { id: string; data: { current: Record<string, unknown> } } | null;
+}) => void | Promise<void>) | null = null;
+
+vi.mock('@dnd-kit/core', () => ({
+  DndContext: ({
+    children,
+    onDragEnd,
+  }: {
+    children: React.ReactNode;
+    onDragEnd?: typeof latestOnDragEnd;
+  }) => {
+    latestOnDragEnd = onDragEnd ?? null;
+    return children;
+  },
+  PointerSensor: function PointerSensor() {
+    return null;
+  },
+  closestCorners: vi.fn(),
+  useSensor: vi.fn(() => ({})),
+  useSensors: vi.fn(() => []),
+  useDroppable: vi.fn(() => ({
+    isOver: false,
+    setNodeRef: vi.fn(),
+  })),
+}));
+
+vi.mock('@dnd-kit/sortable', () => ({
+  SortableContext: ({ children }: { children: React.ReactNode }) => children,
+  useSortable: vi.fn(({ id }: { id: string }) => ({
+    attributes: { 'data-sortable-id': id },
+    listeners: {},
+    setNodeRef: vi.fn(),
+    transform: null,
+    transition: undefined,
+    isDragging: false,
+  })),
+  verticalListSortingStrategy: vi.fn(),
+}));
+
+vi.mock('@dnd-kit/utilities', () => ({
+  CSS: {
+    Transform: {
+      toString: () => undefined,
+    },
+  },
+}));
+
+const itemOne: ItineraryItem = {
+  id: 'item-1',
+  tripId: 'trip-1',
+  dayIndex: 0,
+  sortOrder: 1,
+  startMinute: 540,
+  startTime: '09:00',
+  title: 'Visit Museum',
+  locationName: 'National Museum',
+  locationAddress: null,
+  placeId: null,
+  lat: 16.054,
+  lng: 108.221,
+  shortNote: null,
+  version: 1,
+  progress: 'sap toi',
+  proposalCount: 2,
+  createdAt: '2026-01-01',
+  updatedAt: '2026-01-01',
+};
+
+const itemTwo: ItineraryItem = {
+  id: 'item-2',
+  tripId: 'trip-1',
+  dayIndex: 0,
+  sortOrder: 2,
+  startMinute: null,
+  startTime: null,
+  title: 'Free Exploration',
+  locationName: null,
+  locationAddress: null,
+  placeId: null,
+  lat: null,
+  lng: null,
+  shortNote: 'Roam around',
+  version: 1,
+  progress: 'chua chot gio',
+  proposalCount: 0,
+  createdAt: '2026-01-01',
+  updatedAt: '2026-01-01',
+};
+
+const itemThree: ItineraryItem = {
+  id: 'item-3',
+  tripId: 'trip-1',
+  dayIndex: 1,
+  sortOrder: 1,
+  startMinute: 660,
+  startTime: '11:00',
+  title: 'Beach Stop',
+  locationName: 'My Khe',
+  locationAddress: null,
+  placeId: null,
+  lat: 16.0601,
+  lng: 108.2468,
+  shortNote: null,
+  version: 1,
+  progress: 'sap toi',
+  proposalCount: 0,
+  createdAt: '2026-01-01',
+  updatedAt: '2026-01-01',
+};
 
 const mockSnapshot: ItinerarySnapshot = {
   tripId: 'trip-1',
   days: [
     {
       dayIndex: 0,
-      items: [
-        {
-          id: 'item-1',
-          tripId: 'trip-1',
-          dayIndex: 0,
-          sortOrder: 1,
-          startMinute: 540,
-          startTime: '09:00',
-          title: 'Visit Museum',
-          locationName: 'National Museum',
-          locationAddress: null,
-          placeId: null,
-          lat: 16.054,
-          lng: 108.221,
-          shortNote: null,
-          version: 1,
-          progress: 'sap toi',
-          proposalCount: 2,
-          createdAt: '2026-01-01',
-          updatedAt: '2026-01-01',
-        },
-        {
-          id: 'item-2',
-          tripId: 'trip-1',
-          dayIndex: 0,
-          sortOrder: 2,
-          startMinute: null,
-          startTime: null,
-          title: 'Free Exploration',
-          locationName: null,
-          locationAddress: null,
-          placeId: null,
-          lat: null,
-          lng: null,
-          shortNote: 'Roam around',
-          version: 1,
-          progress: 'chua chot gio',
-          proposalCount: 0,
-          createdAt: '2026-01-01',
-          updatedAt: '2026-01-01',
-        },
-      ],
+      items: [itemOne, itemTwo],
     },
   ],
   overlapWarnings: [],
@@ -74,6 +143,20 @@ const mockLeaderSnapshot: ItinerarySnapshot = {
   ...mockSnapshot,
   isLeader: true,
   canEdit: true,
+};
+
+const mockLeaderSnapshotWithTwoDays: ItinerarySnapshot = {
+  ...mockLeaderSnapshot,
+  days: [
+    {
+      dayIndex: 0,
+      items: [itemOne, itemTwo],
+    },
+    {
+      dayIndex: 1,
+      items: [itemThree],
+    },
+  ],
 };
 
 const mockProposals: Proposal[] = [
@@ -125,7 +208,6 @@ const mockTrip: Trip = {
   ],
 };
 
-// Mock the API modules
 vi.mock('../../../lib/api-client', async () => {
   const actual = await vi.importActual('../../../lib/api-client');
   return {
@@ -152,12 +234,12 @@ vi.mock('../../../lib/api-client', async () => {
   };
 });
 
-// Import mocked modules
 import { itineraryApi, proposalsApi, templatesApi, votesApi } from '../../../lib/api-client';
 
 describe('TripWorkspaceShell', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    latestOnDragEnd = null;
   });
 
   describe('Member read-only rendering', () => {
@@ -171,20 +253,15 @@ describe('TripWorkspaceShell', () => {
     it('should show read-only view for members without structural controls', async () => {
       render(<TripWorkspaceShell trip={mockTrip} joinCode="test-code" />);
 
-      // Wait for data to load
       expect(await screen.findByText('Visit Museum')).toBeInTheDocument();
-
-      // Member should NOT see "Thêm hoạt động" button (leader-only)
       expect(screen.queryByText('Thêm hoạt động')).not.toBeInTheDocument();
-
-      // Member SHOULD see proposal CTA
+      expect(screen.queryByTitle('Giữ và kéo để đổi thứ tự')).not.toBeInTheDocument();
       expect(screen.getByText('Đề xuất hoạt động mới')).toBeInTheDocument();
     });
 
     it('should display status chips for items', async () => {
       render(<TripWorkspaceShell trip={mockTrip} joinCode="test-code" />);
 
-      // Wait for rendering — use regex since chips have emoji prefix
       expect(await screen.findByText(/Sắp tới/)).toBeInTheDocument();
       expect(screen.getByText(/Chưa chốt giờ/)).toBeInTheDocument();
     });
@@ -210,6 +287,89 @@ describe('TripWorkspaceShell', () => {
       expect(await screen.findByText('Thêm hoạt động')).toBeInTheDocument();
     });
 
+    it('should trigger same-day drag reorder with normalized payload', async () => {
+      vi.mocked(itineraryApi.reorder).mockResolvedValue({
+        ...mockLeaderSnapshot,
+        days: [
+          {
+            dayIndex: 0,
+            items: [
+              { ...itemTwo, sortOrder: 1 },
+              { ...itemOne, sortOrder: 2 },
+            ],
+          },
+        ],
+      });
+
+      render(<TripWorkspaceShell trip={mockTrip} joinCode="test-code" />);
+      await screen.findByText('Visit Museum');
+
+      await latestOnDragEnd?.({
+        active: {
+          id: 'item-1',
+          data: { current: { itemId: 'item-1', dayIndex: 0, index: 0 } },
+        },
+        over: {
+          id: 'drop-0-1',
+          data: { current: { type: 'dropzone', dayIndex: 0, index: 1 } },
+        },
+      });
+
+      await waitFor(() => {
+        expect(itineraryApi.reorder).toHaveBeenCalledWith('trip-1', {
+          items: [
+            { itemId: 'item-2', dayIndex: 0, sortOrder: 1 },
+            { itemId: 'item-1', dayIndex: 0, sortOrder: 2 },
+          ],
+        });
+      });
+    });
+
+    it('should trigger cross-day drag reorder with updated dayIndex values', async () => {
+      vi.mocked(itineraryApi.getSnapshot).mockResolvedValue(mockLeaderSnapshotWithTwoDays);
+      vi.mocked(proposalsApi.listProposals).mockResolvedValue(mockProposals);
+      vi.mocked(itineraryApi.reorder).mockResolvedValue({
+        ...mockLeaderSnapshotWithTwoDays,
+        days: [
+          {
+            dayIndex: 0,
+            items: [{ ...itemTwo, sortOrder: 1 }],
+          },
+          {
+            dayIndex: 1,
+            items: [
+              { ...itemOne, dayIndex: 1, sortOrder: 1 },
+              { ...itemThree, sortOrder: 2 },
+            ],
+          },
+        ],
+      });
+
+      render(<TripWorkspaceShell trip={mockTrip} joinCode="test-code" />);
+      await screen.findByText('Beach Stop');
+
+      await latestOnDragEnd?.({
+        active: {
+          id: 'item-1',
+          data: { current: { itemId: 'item-1', dayIndex: 0, index: 0 } },
+        },
+        over: {
+          id: 'drop-1-0',
+          data: { current: { type: 'dropzone', dayIndex: 1, index: 0 } },
+        },
+      });
+
+      await waitFor(() => {
+        expect(itineraryApi.reorder).toHaveBeenCalledWith('trip-1', {
+          items: [
+            { itemId: 'item-2', dayIndex: 0, sortOrder: 1 },
+            { itemId: 'item-1', dayIndex: 1, sortOrder: 1 },
+            { itemId: 'item-3', dayIndex: 1, sortOrder: 2 },
+          ],
+        });
+      });
+    });
+
     it('should show proposal inbox badge when pending proposals exist', async () => {
       render(<TripWorkspaceShell trip={mockTrip} joinCode="test-code" />);
 
@@ -228,10 +388,7 @@ describe('TripWorkspaceShell', () => {
     it('should render map launch link with focusItemId for geolocated items', async () => {
       render(<TripWorkspaceShell trip={mockTrip} joinCode="test-code" />);
 
-      // Wait for content
       await screen.findByText('Visit Museum');
-
-      // Check for map link with focusItemId
       const mapLinks = document.querySelectorAll('a[href*="focusItemId"]');
       expect(mapLinks.length).toBeGreaterThan(0);
 

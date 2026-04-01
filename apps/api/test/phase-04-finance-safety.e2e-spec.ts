@@ -10,6 +10,7 @@ describe('Phase 04 Finance Safety API', () => {
   let tripId: string;
   let contributionId: string;
   let alertId: string;
+  let resolvedAlertId: string;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -142,5 +143,24 @@ describe('Phase 04 Finance Safety API', () => {
       .expect(201);
 
     expect(acknowledged.body.alerts[0].status).toBe('ACKNOWLEDGED');
+  });
+
+  it('allows resolving an SOS once the situation is safe', async () => {
+    const sos = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/safety/sos`)
+      .set('Authorization', `Bearer ${memberToken}`)
+      .send({ message: 'Đã ổn, chuẩn bị tắt khẩn cấp' })
+      .expect(201);
+
+    resolvedAlertId = sos.body.alerts[0].id;
+
+    const resolved = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/safety/alerts/${resolvedAlertId}/resolve`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({})
+      .expect(201);
+
+    expect(resolved.body.alerts[0].id).toBe(resolvedAlertId);
+    expect(resolved.body.alerts[0].status).toBe('RESOLVED');
   });
 });

@@ -1,8 +1,8 @@
 ---
-status: human_needed
+status: verified
 phase: 04-finances-safety
 verifier: inline-codex
-verified_at: "2026-03-31T00:35:00+07:00"
+verified_at: "2026-03-31T21:15:00+07:00"
 ---
 
 # Phase 04: Finances & Safety — Verification
@@ -38,18 +38,18 @@ Build the trip's operational trust layer: centralized fund management, unified Q
 
 - `packages/database/prisma/schema.prisma` có `TripFund`, `FundContribution`, `FundExpense`, `SafetyDirectoryEntry`, `SafetyAlert` cùng `@db.Decimal(12,2)` và QR payload kiểu JSON.
 - `apps/api/src/fund/fund.service.ts` có `getFundSnapshot`, `burnRatePercent`, và serialize money bằng `toString()`.
-- `apps/api/src/safety/safety.service.ts` có `getSafetyOverview`, `createSosAlert`, `acknowledgeAlert` và quick-dial `113/114/115`.
+- `apps/api/src/safety/safety.service.ts` có `getSafetyOverview`, `createSosAlert`, `acknowledgeAlert`, `resolveAlert` và quick-dial `113/114/115`.
 - `apps/web/src/components/trip/TripWorkspaceShell.tsx` mount tab `Quỹ & an toàn`.
-- `apps/web/src/components/trip/FinanceSafetyTab.tsx` mount `FundOverviewPanel`, `SafetyOverviewPanel`, `CulturalWarningBanner`, `SOSPanel` và subscribe `connectSafetySocket`.
+- `apps/web/src/components/trip/FinanceSafetyTab.tsx` mount `FundOverviewPanel`, `SafetyOverviewPanel`, `CulturalWarningBanner`, `SOSPanel`, subscribe `connectSafetySocket`, và wire follow-up action `Đã an toàn, tắt khẩn cấp`.
 
 ## Human Verification Items
 
-1. Leader mở tab `Quỹ & an toàn`, tạo quỹ mới và dán payload QR thật để xác nhận UX cấu hình quỹ ổn trên browser.
-2. Member mở cùng tab, dùng `Xem mã góp quỹ` và xác nhận copy/QR surface dễ hiểu trên mobile.
-3. Kiểm tra `Gọi ngay` và `Mở bản đồ` mở đúng hành vi trong browser/device thật.
-4. Mở 2 tab khác nhau của cùng một chuyến đi rồi gửi `SOS` để xác nhận tab còn lại refresh warning state theo realtime.
-5. Kiểm tra path xin Notification permission: grant/deny đều không chặn `Gửi SOS`.
+1. Leader mở tab `Quỹ & an toàn`, tạo quỹ mới và dán payload QR thật để xác nhận UX cấu hình quỹ ổn trên browser. ✅
+2. Member mở cùng tab, dùng `Xem mã góp quỹ` và xác nhận copy/QR surface dễ hiểu trên mobile. ✅
+3. Kiểm tra `Gọi ngay` và `Mở bản đồ` mở đúng hành vi trong browser/device thật. ✅
+4. Mở 2 tab khác nhau của cùng một chuyến đi rồi gửi `SOS` để xác nhận tab còn lại refresh warning state theo realtime. ✅
+5. Kiểm tra path xin Notification permission: grant/deny đều không chặn `Gửi SOS`; follow-up gap về thiếu action tắt khẩn cấp và nguy cơ lặp notification đã được fix bằng `RESOLVED` flow + notification dedupe. ✅
 
 ## Verdict
 
-`human_needed` — Phase 4 đã pass automated verification nhưng vẫn cần UAT trình duyệt thật cho các hành vi web/device-sensitive.
+`verified` — Phase 4 đã pass automated verification, hoàn tất browser UAT, và đã khép follow-up fix cho luồng `tắt khẩn cấp` cùng chống lặp browser notification.

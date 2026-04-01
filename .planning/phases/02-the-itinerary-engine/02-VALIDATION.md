@@ -21,7 +21,7 @@ created: 2026-03-28
 | **Config file** | `apps/api/package.json` (embedded Jest config), `apps/web/package.json` scripts |
 | **Quick run command** | `npm run test -w apps/api -- --runInBand` for backend tasks, `npm run lint && npm run check-types` for frontend tasks |
 | **Full suite command** | `npm run test -w apps/api && npm run lint && npm run check-types && npm run test:ui -w apps/web` |
-| **Estimated runtime** | ~45 seconds |
+| **Estimated runtime** | ~25-30 seconds for frontline checks, ~45 seconds for the broader phase suite |
 
 ---
 
@@ -32,7 +32,7 @@ created: 2026-03-28
 - **After every frontend task commit once the UI harness exists:** Run `npm run lint && npm run check-types && npm run test:ui -w apps/web`
 - **After every plan wave:** Run `npm run test -w apps/api && npm run lint && npm run check-types && npm run test:ui -w apps/web`
 - **Before `$gsd-verify-work`:** Full suite must be green
-- **Max feedback latency:** 60 seconds
+- **Max feedback latency:** 30 seconds
 
 ---
 
@@ -50,6 +50,9 @@ created: 2026-03-28
 | 02-04-01 | 04 | 4 | TRIP-03 | unit + e2e | `npm run test -w apps/api -- --runInBand` | ❌ W0 | ⬜ pending |
 | 02-04-02 | 04 | 4 | TRIP-03 | interaction + typecheck + ui | `npm run lint && npm run check-types && npm run test:ui -w apps/web` | ❌ W0 | ⬜ pending |
 | 02-04-03 | 04 | 4 | TRIP-03 | clone/publish e2e + ui | `npm run test -w apps/api -- --runInBand && npm run test:ui -w apps/web` | ❌ W0 | ⬜ pending |
+| 02-05-01 | 05 | 5 | PLAN-01 | interaction + typecheck | `npm run -w apps/web check-types` | ✅ | ⬜ pending |
+| 02-05-02 | 05 | 5 | PLAN-01, PLAN-02 | interaction + ui regression | `npx vitest run src/components/trip/__tests__/trip-workspace.test.tsx` | ✅ | ⬜ pending |
+| 02-05-03 | 05 | 5 | PLAN-01, PLAN-02 | browser checkpoint + automated prerequisites | `npm run -w apps/web check-types && npx vitest run src/components/trip/__tests__/trip-workspace.test.tsx` | ✅ | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -74,6 +77,7 @@ created: 2026-03-28
 |----------|-------------|------------|-------------------|
 | Swipe-first voting experience feels usable on touch and desktop fallback | PLAN-03 | Gesture quality and UX clarity are hard to prove from API tests alone | Open a vote session on mobile-width and desktop-width layouts, cast and change votes, and confirm the same vote state and interim results appear |
 | Timeline auto-scroll and current-state highlighting feel clear across long itineraries | PLAN-01, PLAN-02 | Visual emphasis and scroll positioning are presentation-heavy | Seed a multi-day itinerary with past, current, future, and untimed items; open the timeline and confirm the current region is brought into view and states are visually distinct |
+| Leader drag-and-drop reorder works in a real browser and persists after refresh | PLAN-01, PLAN-02 | The diagnosed gap is specifically browser-behavioral and cannot be fully closed by static or synthetic assertions alone | As leader, drag one itinerary card within the same day and across days, refresh, and confirm the new position persists; as member, confirm no drag handle appears |
 | Map focus from a specific itinerary item is understandable | PLAN-01 | Focus transitions and remembered day filters are interaction-specific | Open the map from a specific item, confirm the correct day filter persists, and verify the chosen marker is highlighted immediately |
 | Published templates never leak member data, join codes, vote data, or proposal history | TRIP-03 | Sanitized output quality is easiest to confirm by inspecting the rendered template detail view | Publish a template from a populated trip, open the template preview, and confirm no member names, join codes, vote data, or proposal history are visible anywhere in the UI |
 

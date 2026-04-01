@@ -11,18 +11,19 @@
 - [x] 2.1: Itinerary Timeline CRUD (PLAN-01, PLAN-02).
 - [x] 2.2: Tinder-style Voting System using WebSockets (PLAN-03).
 - [x] 2.3: Community Template Cloning (TRIP-03).
+Notes: Verification fully closed on 2026-03-31 after Plan `02-05` hardened leader drag-and-drop reorder and preserved member read-only mode.
 
-## Phase 3: Logistics & Attendance
+## Phase 3: Logistics & Attendance ✅
 **Focus**: Managing the physical movement and coordination of the group.
-- [ ] 3.1: Smart Room & Ride Allocation web UI (LOGI-02, LOGI-03).
-- [ ] 3.2: To-Do lists and shared packing assignments (LOGI-01).
-- [ ] 3.3: Photo-Proof Check-in and Real-time Dashboard (LOGI-04, LOGI-05).
+- [x] 3.1: Smart Room & Ride Allocation web UI (LOGI-02, LOGI-03).
+- [x] 3.2: To-Do lists and shared packing assignments (LOGI-01).
+- [x] 3.3: Photo-Proof Check-in and Real-time Dashboard (LOGI-04, LOGI-05).
 
-## Phase 4: Finances & Safety
+## Phase 4: Finances & Safety ✅
 **Focus**: Money collection, weather parsing, and SOS alerts.
-- [ ] 4.1: Group Fund Management & MoMo QR Integration (FINA-01, FINA-02, FINA-03).
-- [ ] 4.2: Weather, Crowd predictions, and Safety Directory (SAFE-01, SAFE-02, SAFE-04).
-- [ ] 4.3: Web-based SOS and Cultural Warning popups (SAFE-03, SAFE-05).
+- [x] 4.1: Group Fund Management & MoMo QR Integration (FINA-01, FINA-02, FINA-03).
+- [x] 4.2: Weather, Crowd predictions, and Safety Directory (SAFE-01, SAFE-02, SAFE-04).
+- [x] 4.3: Web-based SOS and Cultural Warning popups (SAFE-03, SAFE-05).
 
 ## Phase 5: Deep AI Integration
 **Focus**: The magic computational features that act as extreme differentiators.

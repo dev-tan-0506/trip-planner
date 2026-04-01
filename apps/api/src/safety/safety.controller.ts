@@ -59,4 +59,17 @@ export class SafetyController {
     await this.safetyGateway.broadcast(tripId);
     return result;
   }
+
+  @Post('alerts/:alertId/resolve')
+  @ApiOperation({ summary: 'Resolve safety alert' })
+  async resolve(
+    @Param('tripId') tripId: string,
+    @Param('alertId') alertId: string,
+    @Body() _dto: AcknowledgeSafetyAlertDto,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    const result = await this.safetyService.resolveAlert(tripId, alertId, user.sub);
+    await this.safetyGateway.broadcast(tripId);
+    return result;
+  }
 }
