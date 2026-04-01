@@ -282,6 +282,18 @@ export interface OverlapWarning {
   message: string;
 }
 
+export type HealthWarningSeverity = 'LUU_Y' | 'CAN_XEM_LAI' | 'NGUY_CO_CAO';
+export type AiConfidenceLabel = 'Goi y' | 'Uoc luong' | 'Can xem lai';
+
+export interface HealthWarning {
+  itemId: string;
+  severity: HealthWarningSeverity;
+  title: string;
+  message: string;
+  confidenceLabel: AiConfidenceLabel;
+  affectedMemberIds: string[];
+}
+
 export interface MapItem {
   id: string;
   title: string;
@@ -295,10 +307,28 @@ export interface ItinerarySnapshot {
   tripId: string;
   days: DayGroup[];
   overlapWarnings: OverlapWarning[];
+  healthWarnings: HealthWarning[];
   mapItems: MapItem[];
   totalItems: number;
   isLeader: boolean;
   canEdit: boolean;
+}
+
+export interface CulinaryRouteSuggestionStop {
+  itemId: string;
+  title: string;
+  dayIndex: number;
+  sortOrder: number;
+  lat: number | null;
+  lng: number | null;
+  reason: string;
+}
+
+export interface CulinaryRouteSuggestion {
+  suggestionId: string;
+  orderedItems: CulinaryRouteSuggestionStop[];
+  totalEstimatedMinutes: number;
+  confidenceLabel: AiConfidenceLabel;
 }
 
 export interface CreateItineraryItemPayload {
@@ -330,6 +360,16 @@ export interface ReorderPayload {
   items: { itemId: string; dayIndex: number; sortOrder: number }[];
 }
 
+export interface RequestCulinaryRoutePayload {
+  itemIds: string[];
+  travelMode?: string;
+}
+
+export interface ApplyCulinaryRoutePayload {
+  orderedItemIds: string[];
+  sourceSuggestionId: string;
+}
+
 export const itineraryApi = {
   async getSnapshot(tripId: string): Promise<ItinerarySnapshot> {
     return request<ItinerarySnapshot>(`/trips/${tripId}/itinerary`);
@@ -357,6 +397,26 @@ export const itineraryApi = {
 
   async reorder(tripId: string, body: ReorderPayload): Promise<ItinerarySnapshot> {
     return request<ItinerarySnapshot>(`/trips/${tripId}/itinerary/reorder`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async requestCulinaryRoute(
+    tripId: string,
+    body: RequestCulinaryRoutePayload,
+  ): Promise<CulinaryRouteSuggestion> {
+    return request<CulinaryRouteSuggestion>(`/trips/${tripId}/itinerary/culinary-route/suggest`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async applyCulinaryRoute(
+    tripId: string,
+    body: ApplyCulinaryRoutePayload,
+  ): Promise<ItinerarySnapshot> {
+    return request<ItinerarySnapshot>(`/trips/${tripId}/itinerary/culinary-route/apply`, {
       method: 'POST',
       body: JSON.stringify(body),
     });

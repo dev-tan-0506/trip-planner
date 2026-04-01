@@ -45,6 +45,7 @@ import { LogisticsBoardTab } from './LogisticsBoardTab';
 import { ChecklistTab } from './ChecklistTab';
 import { AttendanceTab } from './AttendanceTab';
 import { FinanceSafetyTab } from './FinanceSafetyTab';
+import { AiAssistTab } from './AiAssistTab';
 
 type Tab =
   | 'Lich trinh'
@@ -53,7 +54,8 @@ type Tab =
   | 'Phan phong'
   | 'Checklist'
   | 'Check-in'
-  | 'Quy an toan';
+  | 'Quy an toan'
+  | 'Tro ly AI';
 
 interface TripWorkspaceShellProps {
   trip: Trip;
@@ -297,6 +299,11 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
       label: 'Quỹ & an toàn',
       icon: <Bell size={18} />,
     },
+    {
+      key: 'Tro ly AI',
+      label: 'Tro ly AI',
+      icon: <Loader2 size={18} />,
+    },
   ];
 
   if (loading && !snapshot) {
@@ -476,6 +483,7 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
                       tripStartDate={trip.startDate}
                       canEdit={snapshot.canEdit}
                       overlapWarnings={snapshot.overlapWarnings}
+                      healthWarnings={snapshot.healthWarnings}
                       currentItemRef={currentItemRef}
                       joinCode={joinCode}
                       onAddItem={(dayIndex, insertAfterId) => {
@@ -592,6 +600,21 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
             exit={{ opacity: 0, y: -10 }}
           >
             <FinanceSafetyTab tripId={tripId} />
+          </motion.div>
+        )}
+
+        {activeTab === 'Tro ly AI' && (
+          <motion.div
+            key="ai-assist"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <AiAssistTab
+              tripId={tripId}
+              initialSnapshot={snapshot}
+              onSnapshotUpdate={handleSnapshotUpdate}
+            />
           </motion.div>
         )}
       </AnimatePresence>

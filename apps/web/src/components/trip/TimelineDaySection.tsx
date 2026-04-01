@@ -19,7 +19,8 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import type { RefObject } from 'react';
-import type { DayGroup, ItineraryItem, OverlapWarning } from '../../lib/api-client';
+import type { DayGroup, HealthWarning, ItineraryItem, OverlapWarning } from '../../lib/api-client';
+import { HealthConflictBadge } from './HealthConflictBadge';
 
 const progressConfig = {
   'sap toi': {
@@ -53,6 +54,7 @@ interface TimelineDaySectionProps {
   tripStartDate: string;
   canEdit: boolean;
   overlapWarnings: OverlapWarning[];
+  healthWarnings: HealthWarning[];
   currentItemRef: RefObject<HTMLDivElement | null>;
   joinCode: string;
   onAddItem: (dayIndex: number, insertAfterId?: string) => void;
@@ -151,6 +153,7 @@ function SortableItemCard({
   canEdit,
   hasOverlap,
   overlapMessage,
+  healthWarnings,
   isCurrent,
   currentItemRef,
   joinCode,
@@ -165,6 +168,7 @@ function SortableItemCard({
   canEdit: boolean;
   hasOverlap: boolean;
   overlapMessage?: string;
+  healthWarnings: HealthWarning[];
   isCurrent: boolean;
   currentItemRef: RefObject<HTMLDivElement | null>;
   joinCode: string;
@@ -236,6 +240,14 @@ function SortableItemCard({
           </div>
 
           {item.shortNote && <p className="text-xs italic text-gray-400">{item.shortNote}</p>}
+
+          {healthWarnings.length > 0 && (
+            <div className="space-y-2">
+              {healthWarnings.map((warning) => (
+                <HealthConflictBadge key={`${warning.itemId}-${warning.severity}-${warning.title}`} warning={warning} />
+              ))}
+            </div>
+          )}
 
           {hasOverlap && (
             <div className="flex items-center gap-1.5 text-[10px] font-medium text-brand-yellow">
@@ -325,6 +337,7 @@ export function TimelineDaySection({
   tripStartDate,
   canEdit,
   overlapWarnings,
+  healthWarnings,
   currentItemRef,
   joinCode,
   onAddItem,
@@ -364,6 +377,7 @@ export function TimelineDaySection({
             {canEdit && <DropZone dayIndex={day.dayIndex} index={0} />}
             {day.items.map((item, itemIndex) => {
               const overlap = overlapWarnings.find((warning) => warning.itemId === item.id);
+              const itemHealthWarnings = healthWarnings.filter((warning) => warning.itemId === item.id);
               const isCurrent = item.progress === 'dang di';
 
               return (
@@ -377,6 +391,7 @@ export function TimelineDaySection({
                     canEdit={canEdit}
                     hasOverlap={!!overlap}
                     overlapMessage={overlap?.message}
+                    healthWarnings={itemHealthWarnings}
                     isCurrent={isCurrent}
                     currentItemRef={currentItemRef}
                     joinCode={joinCode}
