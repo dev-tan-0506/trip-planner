@@ -42,7 +42,7 @@
 - [x] **AIX-01**: User can forward booking emails to an app-specific email address; AI auto-parses and slots them into the timeline.
 - [x] **AIX-02**: User can ask the "Local Expert AI" to translate menus or suggest hidden local spots.
 - [x] **AIX-03**: Leader can request an "AI Outfit Planner" suggestion based on weather and destination aesthetics.
-- [ ] **AIX-04**: System generates a humorous 2-minute "AI Daily Podcast" audio summary at the end of each trip day.
+- [x] **AIX-04**: System generates a humorous 2-minute "AI Daily Podcast" audio summary at the end of each trip day.
 
 ### MEMO: Post-Trip Experience
 - [ ] **MEMO-01**: Leader can gather ID cards and tickets securely into a temporary "Digital Vault" for rapid hotel check-ins.
