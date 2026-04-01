@@ -350,6 +350,26 @@ export interface OutfitPlanCard {
   nextAction: string;
 }
 
+export interface DailyPodcastRecap {
+  id: string;
+  tripId: string;
+  dayIndex: number;
+  title: string;
+  recapText: string;
+  transcript: string;
+  audioMode: 'BROWSER_TTS' | string;
+  audioUrl: string | null;
+  durationSeconds: number;
+  generatedAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GenerateDailyPodcastPayload {
+  tone?: string;
+  refresh?: boolean;
+}
+
 export interface TranslateMenuPayload {
   menuText: string;
   localeHint?: string;
@@ -593,6 +613,23 @@ export const bookingImportApi = {
         body: JSON.stringify(body),
       },
     );
+  },
+};
+
+export const dailyPodcastApi = {
+  async getDailyPodcast(tripId: string, dayIndex: number): Promise<{ recap: DailyPodcastRecap | null }> {
+    return request<{ recap: DailyPodcastRecap | null }>(`/trips/${tripId}/daily-podcast/${dayIndex}`);
+  },
+
+  async generateDailyPodcast(
+    tripId: string,
+    dayIndex: number,
+    body: GenerateDailyPodcastPayload,
+  ): Promise<DailyPodcastRecap> {
+    return request<DailyPodcastRecap>(`/trips/${tripId}/daily-podcast/${dayIndex}/generate`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
   },
 };
 

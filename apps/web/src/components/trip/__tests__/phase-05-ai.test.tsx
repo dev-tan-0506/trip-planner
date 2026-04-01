@@ -5,6 +5,7 @@ import { AiAssistTab } from '../AiAssistTab';
 import { TimelineDaySection } from '../TimelineDaySection';
 import type {
   BookingImportDraft,
+  DailyPodcastRecap,
   ItineraryItem,
   ItinerarySnapshot,
   OutfitPlanCard,
@@ -212,6 +213,10 @@ vi.mock('../../../lib/api-client', async () => {
       createBookingImportDraft: vi.fn(),
       confirmBookingImportDraft: vi.fn(),
     },
+    dailyPodcastApi: {
+      getDailyPodcast: vi.fn(),
+      generateDailyPodcast: vi.fn(),
+    },
     localExpertApi: {
       translateMenu: vi.fn(),
       requestHiddenSpots: vi.fn(),
@@ -229,7 +234,22 @@ vi.mock('../../../lib/api-client', async () => {
   };
 });
 
-import { bookingImportApi, itineraryApi, localExpertApi } from '../../../lib/api-client';
+import { bookingImportApi, dailyPodcastApi, itineraryApi, localExpertApi } from '../../../lib/api-client';
+
+const podcastRecap: DailyPodcastRecap = {
+  id: 'recap-1',
+  tripId: 'trip-1',
+  dayIndex: 0,
+  title: 'Podcast ngay 1',
+  recapText: 'Hom nay team da ghe 2 diem va van co ban text de doc ngay.',
+  transcript: 'Doan recap podcast ngan gon cho ca nhom nghe bang browser speech synthesis.',
+  audioMode: 'BROWSER_TTS',
+  audioUrl: null,
+  durationSeconds: 72,
+  generatedAt: '2026-04-01T12:00:00.000Z',
+  createdAt: '2026-04-01T12:00:00.000Z',
+  updatedAt: '2026-04-01T12:00:00.000Z',
+};
 
 describe('Phase 5 AI workspace', () => {
   beforeEach(() => {
@@ -242,6 +262,21 @@ describe('Phase 5 AI workspace', () => {
       manualPasteEnabled: true,
     });
     vi.mocked(bookingImportApi.listBookingImportDrafts).mockResolvedValue([bookingDraft]);
+    vi.mocked(dailyPodcastApi.getDailyPodcast).mockResolvedValue({ recap: podcastRecap });
+    vi.mocked(dailyPodcastApi.generateDailyPodcast).mockResolvedValue(podcastRecap);
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: {
+        speak: vi.fn(),
+        cancel: vi.fn(),
+      },
+    });
+    Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+      configurable: true,
+      value: function SpeechSynthesisUtterance(this: { text?: string; lang?: string; rate?: number }, text: string) {
+        this.text = text;
+      },
+    });
   });
 
   it('renders the Tro ly AI tab inside the trip workspace', async () => {
@@ -459,5 +494,43 @@ describe('Phase 5 AI workspace', () => {
     expect(screen.getByText('Set 3')).toBeInTheDocument();
     expect(screen.queryByText('Set 4')).not.toBeInTheDocument();
     expect(screen.getAllByText('Can xem lai').length).toBeGreaterThan(0);
+  });
+
+  it('renders podcast recap controls and uses the browser tts playback branch', async () => {
+    render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
+
+    expect(await screen.findByText('Podcast ngay')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Phat recap' })).toBeInTheDocument();
+    expect(screen.getByText('Tom tat nhanh')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Phat recap' }));
+
+    expect(window.speechSynthesis.speak).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the text recap visible when browser speech synthesis is unavailable', async () => {
+    Object.defineProperty(window, 'speechSynthesis', {
+      configurable: true,
+      value: undefined,
+    });
+
+    vi.mocked(dailyPodcastApi.getDailyPodcast).mockResolvedValue({
+      recap: {
+        ...podcastRecap,
+        recapText: 'Ban text van hien ro rang du may khong phat audio.',
+      },
+    });
+
+    render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
+
+    expect(await screen.findByText('Tom tat nhanh')).toBeInTheDocument();
+    expect(screen.getByText('Ban text van hien ro rang du may khong phat audio.')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Phat recap' }));
+
+    expect(
+      await screen.findByText(/May nay chua ho tro speechSynthesis/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Ban text van hien ro rang du may khong phat audio.')).toBeInTheDocument();
   });
 });

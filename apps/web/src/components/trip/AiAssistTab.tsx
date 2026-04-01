@@ -14,6 +14,7 @@ import {
 import { BookingImportCard } from './BookingImportCard';
 import { BookingImportReviewSheet } from './BookingImportReviewSheet';
 import { CulinaryRouteCard } from './CulinaryRouteCard';
+import { DailyPodcastCard } from './DailyPodcastCard';
 import { LocalExpertPanel } from './LocalExpertPanel';
 import { OutfitPlannerPanel } from './OutfitPlannerPanel';
 
@@ -326,6 +327,8 @@ export function AiAssistTab({
       <LocalExpertPanel tripId={tripId} />
 
       <OutfitPlannerPanel tripId={tripId} />
+
+      <DailyPodcastCard tripId={tripId} days={snapshot?.days ?? []} />
 
       <BookingImportReviewSheet
         open={reviewOpen}
