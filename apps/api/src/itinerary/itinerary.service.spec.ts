@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ItineraryService } from './itinerary.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { ForbiddenException } from '@nestjs/common';
 
 describe('ItineraryService', () => {
   let service: ItineraryService;
@@ -43,6 +43,7 @@ describe('ItineraryService', () => {
   const mockPrismaService = {
     tripMember: {
       findUnique: jest.fn(),
+      findMany: jest.fn(),
     },
     trip: {
       findUnique: jest.fn(),
@@ -82,6 +83,7 @@ describe('ItineraryService', () => {
   describe('getTripItinerarySnapshot', () => {
     it('should return grouped days with items ordered by sortOrder', async () => {
       mockPrismaService.tripMember.findUnique.mockResolvedValue(mockLeaderMember);
+      mockPrismaService.tripMember.findMany.mockResolvedValue([]);
       mockPrismaService.trip.findUnique.mockResolvedValue(mockTrip);
       mockPrismaService.itineraryItem.findMany.mockResolvedValue([
         {
@@ -158,6 +160,7 @@ describe('ItineraryService', () => {
 
     it('should include proposal counts per item', async () => {
       mockPrismaService.tripMember.findUnique.mockResolvedValue(mockLeaderMember);
+      mockPrismaService.tripMember.findMany.mockResolvedValue([]);
       mockPrismaService.trip.findUnique.mockResolvedValue(mockTrip);
       mockPrismaService.itineraryItem.findMany.mockResolvedValue([
         {
@@ -186,6 +189,7 @@ describe('ItineraryService', () => {
 
     it('should return mapItems only for items with lat/lng', async () => {
       mockPrismaService.tripMember.findUnique.mockResolvedValue(mockLeaderMember);
+      mockPrismaService.tripMember.findMany.mockResolvedValue([]);
       mockPrismaService.trip.findUnique.mockResolvedValue(mockTrip);
       mockPrismaService.itineraryItem.findMany.mockResolvedValue([
         {
@@ -233,6 +237,7 @@ describe('ItineraryService', () => {
 
     it('should compute untimed item state as "chua chot gio"', async () => {
       mockPrismaService.tripMember.findUnique.mockResolvedValue(mockLeaderMember);
+      mockPrismaService.tripMember.findMany.mockResolvedValue([]);
       mockPrismaService.trip.findUnique.mockResolvedValue(mockTrip);
       mockPrismaService.itineraryItem.findMany.mockResolvedValue([
         {
@@ -262,6 +267,7 @@ describe('ItineraryService', () => {
 
     it('should detect overlap warnings for items within 30 minutes on the same day', async () => {
       mockPrismaService.tripMember.findUnique.mockResolvedValue(mockLeaderMember);
+      mockPrismaService.tripMember.findMany.mockResolvedValue([]);
       mockPrismaService.trip.findUnique.mockResolvedValue(mockTrip);
       mockPrismaService.itineraryItem.findMany.mockResolvedValue([
         {
@@ -306,6 +312,45 @@ describe('ItineraryService', () => {
       expect(snapshot.overlapWarnings).toHaveLength(1);
       expect(snapshot.overlapWarnings[0].itemId).toBe('item-2');
       expect(snapshot.overlapWarnings[0].conflictsWith).toBe('item-1');
+    });
+
+    it('should downgrade ambiguous health profile parsing to Can xem lai warnings', async () => {
+      mockPrismaService.tripMember.findUnique.mockResolvedValue(mockLeaderMember);
+      mockPrismaService.trip.findUnique.mockResolvedValue(mockTrip);
+      mockPrismaService.tripMember.findMany.mockResolvedValue([
+        {
+          userId: 'user-1',
+          user: {
+            healthProfile: 'co the di ung hai san, can hoi lai',
+          },
+        },
+      ]);
+      mockPrismaService.itineraryItem.findMany.mockResolvedValue([
+        {
+          id: 'item-1',
+          tripId,
+          dayIndex: 0,
+          sortOrder: 1,
+          startMinute: 480,
+          title: 'An hai san dem',
+          locationName: 'Cho dem',
+          locationAddress: null,
+          placeId: null,
+          lat: 16.054,
+          lng: 108.221,
+          shortNote: null,
+          version: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          _count: { proposals: 0 },
+        },
+      ]);
+
+      const snapshot = await service.getTripItinerarySnapshot(tripId, leaderUserId);
+      expect(snapshot.healthWarnings).toHaveLength(1);
+      expect(snapshot.healthWarnings[0].severity).toBe('CAN_XEM_LAI');
+      expect(snapshot.healthWarnings[0].confidenceLabel).toBe('Can xem lai');
+      expect(snapshot.healthWarnings[0].affectedMemberIds).toEqual(['user-1']);
     });
   });
 
@@ -393,6 +438,7 @@ describe('ItineraryService', () => {
   describe('startTime conversion', () => {
     it('should expose startTime as HH:mm and persist as startMinute', async () => {
       mockPrismaService.tripMember.findUnique.mockResolvedValue(mockLeaderMember);
+      mockPrismaService.tripMember.findMany.mockResolvedValue([]);
       mockPrismaService.trip.findUnique.mockResolvedValue(mockTrip);
       mockPrismaService.itineraryItem.findMany.mockResolvedValue([
         {
@@ -418,6 +464,64 @@ describe('ItineraryService', () => {
       const snapshot = await service.getTripItinerarySnapshot(tripId, leaderUserId);
       expect(snapshot.days[0].items[0].startTime).toBe('08:30');
       expect(snapshot.days[0].items[0].startMinute).toBe(510);
+    });
+  });
+
+  describe('culinary routing', () => {
+    it('should not mutate itinerary order when suggesting a route', async () => {
+      mockPrismaService.tripMember.findUnique.mockResolvedValue(mockLeaderMember);
+      mockPrismaService.itineraryItem.findMany.mockResolvedValue([
+        {
+          id: 'item-1',
+          tripId,
+          dayIndex: 0,
+          sortOrder: 1,
+          startMinute: 480,
+          title: 'Bun cha',
+          lat: 16.05,
+          lng: 108.22,
+        },
+        {
+          id: 'item-2',
+          tripId,
+          dayIndex: 0,
+          sortOrder: 2,
+          startMinute: 600,
+          title: 'Che',
+          lat: 16.051,
+          lng: 108.221,
+        },
+        {
+          id: 'item-3',
+          tripId,
+          dayIndex: 0,
+          sortOrder: 3,
+          startMinute: 660,
+          title: 'Hai san',
+          lat: 16.06,
+          lng: 108.23,
+        },
+      ]);
+
+      const route = await service.requestCulinaryRoute(tripId, leaderUserId, {
+        itemIds: ['item-1', 'item-2', 'item-3'],
+        travelMode: 'WALKING',
+      });
+
+      expect(route.orderedItems).toHaveLength(3);
+      expect(mockPrismaService.itineraryItem.update).not.toHaveBeenCalled();
+      expect(mockPrismaService.itineraryItem.updateMany).not.toHaveBeenCalled();
+    });
+
+    it('should reject route apply for non-leaders', async () => {
+      mockPrismaService.tripMember.findUnique.mockResolvedValue(mockRegularMember);
+
+      await expect(
+        service.applyCulinaryRoute(tripId, memberUserId, {
+          orderedItemIds: ['item-1', 'item-2'],
+          sourceSuggestionId: `culinary-${tripId}-item-1-item-2-token`,
+        }),
+      ).rejects.toThrow(ForbiddenException);
     });
   });
 });

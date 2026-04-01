@@ -13,6 +13,8 @@ import { ItineraryService } from './itinerary.service';
 import { CreateItineraryItemDto } from './dto/create-itinerary-item.dto';
 import { UpdateItineraryItemDto } from './dto/update-itinerary-item.dto';
 import { ReorderItineraryDto } from './dto/reorder-itinerary.dto';
+import { RequestCulinaryRouteDto } from './dto/request-culinary-route.dto';
+import { ApplyCulinaryRouteDto } from './dto/apply-culinary-route.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser, JwtPayload } from '../auth/decorators/current-user.decorator';
 
@@ -71,5 +73,25 @@ export class ItineraryController {
     @CurrentUser() user: JwtPayload,
   ) {
     return this.itineraryService.reorderItems(tripId, user.sub, dto);
+  }
+
+  @Post('culinary-route/suggest')
+  @ApiOperation({ summary: 'Suggest a culinary route draft for selected itinerary items' })
+  async suggestCulinaryRoute(
+    @Param('tripId') tripId: string,
+    @Body() dto: RequestCulinaryRouteDto,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.itineraryService.requestCulinaryRoute(tripId, user.sub, dto);
+  }
+
+  @Post('culinary-route/apply')
+  @ApiOperation({ summary: 'Apply a reviewed culinary route to itinerary order (Leader only)' })
+  async applyCulinaryRoute(
+    @Param('tripId') tripId: string,
+    @Body() dto: ApplyCulinaryRouteDto,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.itineraryService.applyCulinaryRoute(tripId, user.sub, dto);
   }
 }
