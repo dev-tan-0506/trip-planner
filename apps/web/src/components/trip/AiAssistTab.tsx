@@ -14,6 +14,8 @@ import {
 import { BookingImportCard } from './BookingImportCard';
 import { BookingImportReviewSheet } from './BookingImportReviewSheet';
 import { CulinaryRouteCard } from './CulinaryRouteCard';
+import { LocalExpertPanel } from './LocalExpertPanel';
+import { OutfitPlannerPanel } from './OutfitPlannerPanel';
 
 function isFoodStop(item: ItineraryItem) {
   const text = `${item.title} ${item.locationName ?? ''} ${item.shortNote ?? ''}`.toLowerCase();
@@ -216,6 +218,9 @@ export function AiAssistTab({
           Booking duoc phan tich truoc, nhung khong duoc dua vao lich trinh cho toi khi ban review
           xong va leader xac nhan.
         </p>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
+          Them hai tac vu nhe hon ben duoi: dich menu, tim diem ghe nhanh, va len do bang card ngan.
+        </p>
       </section>
 
       {loading ? (
@@ -317,6 +322,10 @@ export function AiAssistTab({
           setReviewOpen(true);
         }}
       />
+
+      <LocalExpertPanel tripId={tripId} />
+
+      <OutfitPlannerPanel tripId={tripId} />
 
       <BookingImportReviewSheet
         open={reviewOpen}

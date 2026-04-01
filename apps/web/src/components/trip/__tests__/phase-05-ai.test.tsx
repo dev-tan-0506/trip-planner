@@ -7,6 +7,7 @@ import type {
   BookingImportDraft,
   ItineraryItem,
   ItinerarySnapshot,
+  OutfitPlanCard,
   Trip,
 } from '../../../lib/api-client';
 
@@ -211,6 +212,11 @@ vi.mock('../../../lib/api-client', async () => {
       createBookingImportDraft: vi.fn(),
       confirmBookingImportDraft: vi.fn(),
     },
+    localExpertApi: {
+      translateMenu: vi.fn(),
+      requestHiddenSpots: vi.fn(),
+      requestOutfitPlan: vi.fn(),
+    },
     proposalsApi: {
       listProposals: vi.fn().mockResolvedValue([]),
     },
@@ -223,7 +229,7 @@ vi.mock('../../../lib/api-client', async () => {
   };
 });
 
-import { bookingImportApi, itineraryApi } from '../../../lib/api-client';
+import { bookingImportApi, itineraryApi, localExpertApi } from '../../../lib/api-client';
 
 describe('Phase 5 AI workspace', () => {
   beforeEach(() => {
@@ -354,5 +360,104 @@ describe('Phase 5 AI workspace', () => {
     expect(await screen.findAllByText('Can xem lai')).not.toHaveLength(0);
     expect(screen.getByText(/^Raw excerpt$/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Nhap vao lich trinh' })).toBeInTheDocument();
+  });
+
+  it('renders menu translation CTA and shows local expert result cards with Buoc tiep theo', async () => {
+    vi.mocked(localExpertApi.translateMenu).mockResolvedValue({
+      localeHint: 'en',
+      confidenceLabel: 'Can xem lai',
+      cards: [
+        {
+          originalText: 'Muc nuong sa',
+          translatedText: 'Seafood dish',
+          cautionNote: 'Ten mon co the dung hai san, Can xem lai voi quan.',
+          confidenceLabel: 'Can xem lai',
+          nextAction: 'Hoi quan ve thanh phan de chot mon an phu hop.',
+        },
+      ],
+    });
+
+    render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Dich menu' }));
+
+    expect(await screen.findByText('Seafood dish')).toBeInTheDocument();
+    expect(screen.getByText('Buoc tiep theo')).toBeInTheDocument();
+    expect(screen.getAllByText('Can xem lai').length).toBeGreaterThan(0);
+  });
+
+  it('renders hidden-spot cards from local expert without turning into chat text', async () => {
+    vi.mocked(localExpertApi.requestHiddenSpots).mockResolvedValue({
+      areaLabel: 'Hai Chau',
+      vibe: 'yen tinh',
+      budgetHint: 're',
+      cards: [
+        {
+          title: 'Ngo nho gan Hai Chau',
+          areaLabel: 'Hai Chau',
+          whyItFits: 'Hop voi khong khi yen tinh va de tranh diem dong.',
+          confidenceLabel: 'Goi y',
+          nextAction: 'Mo map va doi chieu duong di bo truoc khi re vao hem.',
+        },
+      ],
+    });
+
+    render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Goi y choi gi quanh day' }));
+
+    expect(await screen.findByText('Ngo nho gan Hai Chau')).toBeInTheDocument();
+    expect(screen.getByText(/doi chieu duong di bo/i)).toBeInTheDocument();
+  });
+
+  it('renders outfit planner cards with a maximum of three options', async () => {
+    const cards: OutfitPlanCard[] = [
+      {
+        title: 'Set 1',
+        colorDirection: 'kem, xanh bien',
+        packingNotes: 'Ao thoang va giay di bo.',
+        confidenceLabel: 'Goi y',
+        nextAction: 'Lay set nay lam option mac chinh cho buoi dau.',
+      },
+      {
+        title: 'Set 2',
+        colorDirection: 'trang nga, denim sang',
+        packingNotes: 'Mang them khoac mong.',
+        confidenceLabel: 'Uoc luong',
+        nextAction: 'Gap gon san trong vali.',
+      },
+      {
+        title: 'Set 3',
+        colorDirection: 'do gach, den, kem',
+        packingNotes: 'Can xem lai neu troi mua them.',
+        confidenceLabel: 'Can xem lai',
+        nextAction: 'Thu nhanh voi giay va tui dang mang.',
+      },
+      {
+        title: 'Set 4',
+        colorDirection: 'se khong hien',
+        packingNotes: 'Khong duoc render.',
+        confidenceLabel: 'Goi y',
+        nextAction: 'Khong hien.',
+      },
+    ];
+
+    vi.mocked(localExpertApi.requestOutfitPlan).mockResolvedValue({
+      dayIndex: 0,
+      weatherLabel: 'mua nhe',
+      aestheticHint: 'noi bat',
+      activityLabels: ['di bo', 'an toi'],
+      cards,
+    });
+
+    render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Len do cho hom nay' }));
+
+    expect(await screen.findByText('Len do cho hom nay')).toBeInTheDocument();
+    expect(screen.getByText('Set 1')).toBeInTheDocument();
+    expect(screen.getByText('Set 3')).toBeInTheDocument();
+    expect(screen.queryByText('Set 4')).not.toBeInTheDocument();
+    expect(screen.getAllByText('Can xem lai').length).toBeGreaterThan(0);
   });
 });

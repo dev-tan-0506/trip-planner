@@ -331,6 +331,64 @@ export interface CulinaryRouteSuggestion {
   confidenceLabel: AiConfidenceLabel;
 }
 
+export interface LocalExpertCard {
+  title?: string;
+  originalText?: string;
+  translatedText?: string;
+  areaLabel?: string;
+  whyItFits?: string;
+  cautionNote?: string;
+  confidenceLabel: AiConfidenceLabel;
+  nextAction: string;
+}
+
+export interface OutfitPlanCard {
+  title: string;
+  colorDirection: string;
+  packingNotes: string;
+  confidenceLabel: AiConfidenceLabel;
+  nextAction: string;
+}
+
+export interface TranslateMenuPayload {
+  menuText: string;
+  localeHint?: string;
+}
+
+export interface TranslateMenuResponse {
+  localeHint: string;
+  confidenceLabel: AiConfidenceLabel;
+  cards: LocalExpertCard[];
+}
+
+export interface RequestHiddenSpotsPayload {
+  areaLabel: string;
+  vibe?: string;
+  budgetHint?: string;
+}
+
+export interface RequestHiddenSpotsResponse {
+  areaLabel: string;
+  vibe: string;
+  budgetHint: string;
+  cards: LocalExpertCard[];
+}
+
+export interface RequestOutfitPlanPayload {
+  dayIndex: number;
+  aestheticHint?: string;
+  weatherLabel?: string;
+  activityLabels?: string[];
+}
+
+export interface RequestOutfitPlanResponse {
+  dayIndex: number;
+  weatherLabel: string;
+  aestheticHint: string;
+  activityLabels: string[];
+  cards: OutfitPlanCard[];
+}
+
 export type BookingImportDraftStatus = 'DRAFT' | 'CONFIRMED' | 'REJECTED';
 
 export interface BookingImportParsedItem {
@@ -466,6 +524,38 @@ export const itineraryApi = {
     body: ApplyCulinaryRoutePayload,
   ): Promise<ItinerarySnapshot> {
     return request<ItinerarySnapshot>(`/trips/${tripId}/itinerary/culinary-route/apply`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+};
+
+export const localExpertApi = {
+  async translateMenu(
+    tripId: string,
+    body: TranslateMenuPayload,
+  ): Promise<TranslateMenuResponse> {
+    return request<TranslateMenuResponse>(`/trips/${tripId}/local-expert/menu-translate`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async requestHiddenSpots(
+    tripId: string,
+    body: RequestHiddenSpotsPayload,
+  ): Promise<RequestHiddenSpotsResponse> {
+    return request<RequestHiddenSpotsResponse>(`/trips/${tripId}/local-expert/hidden-spots`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async requestOutfitPlan(
+    tripId: string,
+    body: RequestOutfitPlanPayload,
+  ): Promise<RequestOutfitPlanResponse> {
+    return request<RequestOutfitPlanResponse>(`/trips/${tripId}/local-expert/outfit-plan`, {
       method: 'POST',
       body: JSON.stringify(body),
     });
