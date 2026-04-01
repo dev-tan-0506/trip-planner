@@ -14,6 +14,7 @@ import { ChecklistsModule } from './checklists/checklists.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { FundModule } from './fund/fund.module';
 import { SafetyModule } from './safety/safety.module';
+import { BookingImportModule } from './booking-import/booking-import.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { SafetyModule } from './safety/safety.module';
     AttendanceModule,
     FundModule,
     SafetyModule,
+    BookingImportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

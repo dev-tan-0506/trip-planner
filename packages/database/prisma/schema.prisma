@@ -73,6 +73,7 @@ model Trip {
   fundExpenses         FundExpense[]
   safetyDirectoryEntries SafetyDirectoryEntry[]
   safetyAlerts         SafetyAlert[]
+  bookingImportDrafts  BookingImportDraft[]
 }
 
 enum TripRole {
@@ -101,8 +102,41 @@ model TripMember {
   createdFundExpenses         FundExpense[]          @relation("FundExpenseCreator")
   createdSafetyAlerts         SafetyAlert[]          @relation("SafetyAlertCreator")
   acknowledgedSafetyAlerts    SafetyAlert[]          @relation("SafetyAlertAcknowledger")
+  createdBookingImportDrafts  BookingImportDraft[]   @relation("BookingImportDraftCreator")
+  reviewedBookingImportDrafts BookingImportDraft[]   @relation("BookingImportDraftReviewer")
 
   @@unique([userId, tripId])
+}
+
+enum BookingImportDraftStatus {
+  DRAFT
+  CONFIRMED
+  REJECTED
+}
+
+model BookingImportDraft {
+  id                     String                   @id @default(cuid())
+  tripId                 String
+  createdByTripMemberId  String?
+  reviewedByTripMemberId String?
+  sourceChannel          String
+  forwardingAddress      String
+  sourceMessageId        String?
+  sourceSender           String?
+  sourceSubject          String?
+  rawContent             String
+  confidenceLabel        String
+  status                 BookingImportDraftStatus @default(DRAFT)
+  parseSummary           String
+  parsedItems            Json
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+
+  trip       Trip       @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  createdBy  TripMember? @relation("BookingImportDraftCreator", fields: [createdByTripMemberId], references: [id])
+  reviewedBy TripMember? @relation("BookingImportDraftReviewer", fields: [reviewedByTripMemberId], references: [id])
+
+  @@index([tripId, status])
 }
 
 // ─── Itinerary ─────────────────────────────────────

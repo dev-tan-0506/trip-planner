@@ -16,6 +16,7 @@ describe('Phase 05 Deep AI Integration API', () => {
   let joinCode: string;
   let memberUserId: string;
   let foodItemIds: string[] = [];
+  let memberTripMemberId: string;
 
   const now = Date.now();
   const leaderEmail = `phase05-leader-${now}@test.com`;
@@ -64,6 +65,20 @@ describe('Phase 05 Deep AI Integration API', () => {
       .post(`/trips/${joinCode}/join`)
       .set('Authorization', `Bearer ${memberToken}`)
       .expect(201);
+
+    const memberTripMember = await prisma.tripMember.findUniqueOrThrow({
+      where: {
+        userId_tripId: {
+          userId: (await prisma.user.findUniqueOrThrow({
+            where: { email: memberEmail },
+            select: { id: true },
+          })).id,
+          tripId,
+        },
+      },
+      select: { id: true },
+    });
+    memberTripMemberId = memberTripMember.id;
 
     const memberUser = await prisma.user.findUniqueOrThrow({
       where: { email: memberEmail },
@@ -201,5 +216,98 @@ describe('Phase 05 Deep AI Integration API', () => {
 
     const finalIds = applied.body.days[0].items.map((item: { id: string }) => item.id);
     expect(finalIds.slice(-orderedItemIds.length)).toEqual(orderedItemIds);
+  });
+
+  it('forwarding config: returns the trip-specific booking address', async () => {
+    const res = await request(app.getHttpServer())
+      .get(`/trips/${tripId}/booking-import/config`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .expect(200);
+
+    expect(res.body.forwardingAddress).toBe(`booking+${joinCode}@minhdidauthe.local`);
+    expect(res.body.manualPasteEnabled).toBe(true);
+  });
+
+  it('booking import draft: manual creation stores a draft without creating itinerary items', async () => {
+    const before = await request(app.getHttpServer())
+      .get(`/trips/${tripId}/itinerary`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .expect(200);
+
+    const created = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/booking-import/drafts`)
+      .set('Authorization', `Bearer ${memberToken}`)
+      .send({
+        rawContent: 'Flight VN123 du kien 08:30. Cho xac nhan.',
+        sourceSubject: 'Forward ve may bay',
+      })
+      .expect(201);
+
+    const after = await request(app.getHttpServer())
+      .get(`/trips/${tripId}/itinerary`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .expect(200);
+
+    expect(created.body.createdByTripMemberId).toBe(memberTripMemberId);
+    expect(created.body.status).toBe('DRAFT');
+    expect(created.body.confidenceLabel).toBe('Can xem lai');
+    expect(created.body.parseSummary).toContain('can xem lai');
+    expect(after.body.totalItems).toBe(before.body.totalItems);
+  });
+
+  it('booking import forwarding: inbound endpoint creates a reviewable draft', async () => {
+    const created = await request(app.getHttpServer())
+      .post('/booking-import/inbound')
+      .send({
+        recipientAddress: `booking+${joinCode}@minhdidauthe.local`,
+        rawContent: 'Khach san tai My Khe 14:00 ABC123',
+        sourceSender: 'hotel@example.com',
+        sourceSubject: 'Xac nhan dat phong',
+      })
+      .expect(201);
+
+    expect(created.body.sourceChannel).toBe('FORWARDED_EMAIL');
+    expect(created.body.forwardingAddress).toBe(`booking+${joinCode}@minhdidauthe.local`);
+    expect(created.body.parsedItems[0].rawExcerpt).toContain('Khach san');
+  });
+
+  it('booking import low-confidence parsing: keeps missing fields editable in the stored draft payload', async () => {
+    const created = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/booking-import/drafts`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        rawContent: 'Xe dua don co the roi som, pending ma dat cho',
+      })
+      .expect(201);
+
+    expect(created.body.confidenceLabel).toBe('Can xem lai');
+    expect(created.body.parsedItems[0].missingFields).toEqual(
+      expect.arrayContaining(['locationName', 'startTime', 'bookingCode']),
+    );
+  });
+
+  it('booking import confirm: only the leader can materialize a draft into itinerary items', async () => {
+    const created = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/booking-import/drafts`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        rawContent: 'Khach san tai My Khe 14:00 ABC123',
+      })
+      .expect(201);
+
+    await request(app.getHttpServer())
+      .post(`/trips/${tripId}/booking-import/drafts/${created.body.id}/confirm`)
+      .set('Authorization', `Bearer ${memberToken}`)
+      .send({})
+      .expect(403);
+
+    const confirmed = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/booking-import/drafts/${created.body.id}/confirm`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({})
+      .expect(201);
+
+    expect(confirmed.body.draft.status).toBe('CONFIRMED');
+    expect(confirmed.body.snapshot.totalItems).toBeGreaterThan(foodItemIds.length);
   });
 });
