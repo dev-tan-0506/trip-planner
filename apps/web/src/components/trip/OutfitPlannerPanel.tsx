@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { localExpertApi, type OutfitPlanCard } from '../../lib/api-client';
 
 const confidenceClass: Record<OutfitPlanCard['confidenceLabel'], string> = {
-  'Goi y': 'bg-emerald-100 text-emerald-700',
-  'Uoc luong': 'bg-amber-100 text-amber-700',
-  'Can xem lai': 'bg-sky-100 text-sky-700',
+  'Gợi ý': 'bg-emerald-100 text-emerald-700',
+  'Ước lượng': 'bg-amber-100 text-amber-700',
+  'Cần xem lại': 'bg-sky-100 text-sky-700',
 };
 
 interface OutfitPlannerPanelProps {
@@ -14,8 +14,8 @@ interface OutfitPlannerPanelProps {
 }
 
 export function OutfitPlannerPanel({ tripId }: OutfitPlannerPanelProps) {
-  const [weatherLabel, setWeatherLabel] = useState('mua nhe');
-  const [aestheticHint, setAestheticHint] = useState('noi bat');
+  const [weatherLabel, setWeatherLabel] = useState('mưa nhẹ');
+  const [aestheticHint, setAestheticHint] = useState('nổi bật');
   const [cards, setCards] = useState<OutfitPlanCard[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,11 +28,11 @@ export function OutfitPlannerPanel({ tripId }: OutfitPlannerPanelProps) {
         dayIndex: 0,
         aestheticHint,
         weatherLabel,
-        activityLabels: ['di bo', 'an toi'],
+        activityLabels: ['đi bộ', 'ăn tối'],
       });
       setCards(result.cards.slice(0, 3));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Khong tao duoc goi y len do');
+      setError(err instanceof Error ? err.message : 'Không tạo được gợi ý lên đồ');
     } finally {
       setLoading(false);
     }
@@ -43,9 +43,9 @@ export function OutfitPlannerPanel({ tripId }: OutfitPlannerPanelProps) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">Outfit planner</p>
-          <h3 className="mt-2 text-lg font-black text-gray-900">Len do cho hom nay</h3>
+          <h3 className="mt-2 text-lg font-black text-gray-900">Lên đồ cho hôm nay</h3>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
-            Toi da 3 card de chon nhanh. Neu thoi tiet hoac vibe chua chac, card se hien chip "Can xem lai".
+            Tối đa 3 card để chọn nhanh. Nếu thời tiết hoặc vibe chưa chắc, card sẽ hiện chip "Cần xem lại".
           </p>
         </div>
         <button
@@ -54,13 +54,13 @@ export function OutfitPlannerPanel({ tripId }: OutfitPlannerPanelProps) {
           disabled={loading}
           className="rounded-2xl bg-brand-dark px-4 py-3 text-sm font-black text-white transition hover:bg-brand-dark/90 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {loading ? 'Dang goi y...' : 'Len do cho hom nay'}
+          {loading ? 'Đang gợi ý...' : 'Lên đồ cho hôm nay'}
         </button>
       </div>
 
       <div className="mt-4 grid gap-3 md:grid-cols-2">
         <label className="space-y-2 rounded-2xl bg-gray-50 p-4 text-sm text-gray-700">
-          <span className="block text-xs font-bold uppercase tracking-[0.14em] text-gray-500">Thoi tiet</span>
+          <span className="block text-xs font-bold uppercase tracking-[0.14em] text-gray-500">Thời tiết</span>
           <input
             value={weatherLabel}
             onChange={(event) => setWeatherLabel(event.target.value)}
@@ -86,7 +86,7 @@ export function OutfitPlannerPanel({ tripId }: OutfitPlannerPanelProps) {
       <div className="mt-4 grid gap-3 lg:grid-cols-3">
         {cards.length === 0 ? (
           <p className="rounded-2xl bg-gray-50 px-4 py-3 text-sm text-gray-500 lg:col-span-3">
-            Chua co goi y nao. Bam "Len do cho hom nay" de nhan toi da 3 option gon nhe.
+            Chưa có gợi ý nào. Bấm "Lên đồ cho hôm nay" để nhận tối đa 3 option gọn nhẹ.
           </p>
         ) : (
           cards.slice(0, 3).map((card) => (
@@ -97,12 +97,12 @@ export function OutfitPlannerPanel({ tripId }: OutfitPlannerPanelProps) {
                   {card.confidenceLabel}
                 </span>
               </div>
-              <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.16em] text-gray-500">Huong mau</p>
+              <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.16em] text-gray-500">Hướng màu</p>
               <p className="mt-1 text-sm font-medium text-gray-800">{card.colorDirection}</p>
               <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.16em] text-gray-500">Packing notes</p>
               <p className="mt-1 text-sm leading-6 text-gray-600">{card.packingNotes}</p>
               <div className="mt-3 rounded-2xl bg-white px-3 py-3">
-                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-gray-500">Buoc tiep theo</p>
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-gray-500">Bước tiếp theo</p>
                 <p className="mt-1 text-sm font-medium text-gray-800">{card.nextAction}</p>
               </div>
             </article>

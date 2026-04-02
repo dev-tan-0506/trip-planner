@@ -3,9 +3,9 @@
 import type { HealthWarning } from '../../lib/api-client';
 
 const severityLabel: Record<HealthWarning['severity'], string> = {
-  LUU_Y: 'Luu y',
-  CAN_XEM_LAI: 'Can xem lai',
-  NGUY_CO_CAO: 'Nguy co cao',
+  LUU_Y: 'Lưu ý',
+  CAN_XEM_LAI: 'Cần xem lại',
+  NGUY_CO_CAO: 'Nguy cơ cao',
 };
 
 const severityStyle: Record<HealthWarning['severity'], string> = {

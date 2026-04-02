@@ -55,12 +55,12 @@ const mockMemberFundSnapshot: FundSnapshot = {
 
 const mockOverview: SafetyOverviewSnapshot = {
   tripId: 'trip-1',
-  destinationLabel: 'Da Nang',
-  contextLabel: 'Da Nang • 2026-06-10',
+  destinationLabel: 'Đà Nẵng',
+  contextLabel: 'Đà Nẵng • 2026-06-10',
   weather: [
     {
       date: '2026-06-10',
-      label: 'Da Nang - Hôm nay',
+      label: 'Đà Nẵng - Hôm nay',
       condition: 'Nắng nhẹ',
       temperatureC: 31,
       rainChancePercent: 10,
@@ -68,7 +68,7 @@ const mockOverview: SafetyOverviewSnapshot = {
   ],
   crowd: [
     {
-      locationLabel: 'Da Nang - trung tâm',
+      locationLabel: 'Đà Nẵng - trung tâm',
       level: 'CAO',
       note: 'Nên đi sớm hơn 30 phút để tránh chen đông.',
     },

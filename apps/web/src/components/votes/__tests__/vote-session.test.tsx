@@ -153,7 +153,7 @@ describe('VoteCardDeck', () => {
     );
 
     // Desktop buttons exist (using getAllByText since text appears in swipe hints too)
-    const skipButtons = screen.getAllByText('Khong chon');
+    const skipButtons = screen.getAllByText('Không chọn');
     expect(skipButtons.length).toBeGreaterThanOrEqual(1);
     const voteButtons = screen.getAllByText('Chon phuong an nay');
     expect(voteButtons.length).toBeGreaterThanOrEqual(1);

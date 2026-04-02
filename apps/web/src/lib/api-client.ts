@@ -283,7 +283,7 @@ export interface OverlapWarning {
 }
 
 export type HealthWarningSeverity = 'LUU_Y' | 'CAN_XEM_LAI' | 'NGUY_CO_CAO';
-export type AiConfidenceLabel = 'Goi y' | 'Uoc luong' | 'Can xem lai';
+export type AiConfidenceLabel = 'Gợi ý' | 'Ước lượng' | 'Cần xem lại';
 
 export interface HealthWarning {
   itemId: string;

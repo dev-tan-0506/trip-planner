@@ -66,7 +66,7 @@ export function DailyPodcastCard({ tripId, days = [] }: DailyPodcastCardProps) {
       })
       .catch((err) => {
         if (!active) return;
-        setError(err instanceof Error ? err.message : 'Khong tai duoc recap cuoi ngay');
+        setError(err instanceof Error ? err.message : 'Không tải được recap cuối ngày');
       })
       .finally(() => {
         if (active) {
@@ -90,12 +90,12 @@ export function DailyPodcastCard({ tripId, days = [] }: DailyPodcastCardProps) {
 
   const dayOptions = useMemo(() => {
     if (!days.length) {
-      return [{ dayIndex: 0, label: 'Ngay 1' }];
+      return [{ dayIndex: 0, label: 'Ngày 1' }];
     }
 
     return days.map((day) => ({
       dayIndex: day.dayIndex,
-      label: `Ngay ${day.dayIndex + 1}`,
+      label: `Ngày ${day.dayIndex + 1}`,
     }));
   }, [days]);
 
@@ -109,7 +109,7 @@ export function DailyPodcastCard({ tripId, days = [] }: DailyPodcastCardProps) {
       });
       setRecap(nextRecap);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Khong tao duoc recap cuoi ngay');
+      setError(err instanceof Error ? err.message : 'Không tạo được recap cuối ngày');
     } finally {
       setGenerating(false);
     }
@@ -135,7 +135,7 @@ export function DailyPodcastCard({ tripId, days = [] }: DailyPodcastCardProps) {
       utterance.onend = () => setPlaying(false);
       utterance.onerror = () => {
         setPlaying(false);
-        setPlaybackNotice('Trinh duyet dang chan doc audio, nen minh giu ban text de ca nhom doc nhanh.');
+        setPlaybackNotice('Trình duyệt đang chặn đọc audio, nên mình giữ bản text để cả nhóm đọc nhanh.');
       };
 
       setPlaying(true);
@@ -145,24 +145,24 @@ export function DailyPodcastCard({ tripId, days = [] }: DailyPodcastCardProps) {
       return;
     }
 
-    setPlaybackNotice('May nay chua ho tro speechSynthesis, nen minh hien ban recap text de doc nhanh.');
+    setPlaybackNotice('Máy này chưa hỗ trợ speechSynthesis, nên mình hiện bản recap text để đọc nhanh.');
   };
 
   return (
     <section className="rounded-[28px] border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-sky-50 p-5 shadow-sm">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Podcast ngay</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Podcast ngày</p>
           <h3 className="mt-2 text-lg font-black text-gray-900">
-            Recap vui cho cuoi ngay {selectedDayIndex + 1}
+            Recap vui cho cuối ngày {selectedDayIndex + 1}
           </h3>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
-            Mot doan recap gon de nghe tren web, va van co ban text de doc ngay khi audio khong san sang.
+            Một đoạn recap gọn để nghe trên web, và vẫn có bản text để đọc ngay khi audio không sẵn sàng.
           </p>
         </div>
 
         <label className="text-xs font-semibold text-gray-500">
-          Chon ngay
+          Chọn ngày
           <select
             value={selectedDayIndex}
             onChange={(event) => setSelectedDayIndex(Number(event.target.value))}
@@ -184,7 +184,7 @@ export function DailyPodcastCard({ tripId, days = [] }: DailyPodcastCardProps) {
           disabled={generating}
           className="rounded-2xl bg-emerald-600 px-4 py-3 text-sm font-black text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {generating ? 'Dang tao recap...' : recap ? 'Tao lai recap' : 'Tao recap ngay'}
+          {generating ? 'Đang tạo recap...' : recap ? 'Tạo lại recap' : 'Tạo recap ngày'}
         </button>
 
         <button
@@ -193,13 +193,13 @@ export function DailyPodcastCard({ tripId, days = [] }: DailyPodcastCardProps) {
           disabled={!recap || playing}
           className="rounded-2xl bg-brand-dark px-4 py-3 text-sm font-black text-white transition hover:bg-brand-dark/90 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {playing ? 'Dang phat...' : 'Phat recap'}
+          {playing ? 'Đang phát...' : 'Phát recap'}
         </button>
       </div>
 
       {loading ? (
         <div className="mt-4 rounded-2xl bg-white/80 px-4 py-3 text-sm text-gray-500">
-          Dang tim recap cuoi ngay...
+          Đang tìm recap cuối ngày...
         </div>
       ) : null}
 
@@ -226,18 +226,18 @@ export function DailyPodcastCard({ tripId, days = [] }: DailyPodcastCardProps) {
               </span>
             </div>
             <div className="mt-4">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">Tom tat nhanh</p>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">Tóm tắt nhanh</p>
               <p className="mt-2 text-sm leading-6 text-gray-700">{recap.recapText}</p>
             </div>
             <div className="mt-4 rounded-2xl bg-gray-50 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">Ban transcript</p>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">Bản transcript</p>
               <p className="mt-2 text-sm leading-6 text-gray-600">{recap.transcript}</p>
             </div>
           </div>
         </div>
       ) : !loading ? (
         <div className="mt-4 rounded-2xl border border-dashed border-emerald-200 bg-white/80 px-4 py-3 text-sm text-gray-600">
-          Chua co recap nao cho ngay nay. Bam "Tao recap ngay" de co mot ban tong ket gon cho ca nhom.
+          Chưa có recap nào cho ngày này. Bấm "Tạo recap ngày" để có một bản tổng kết gọn cho cả nhóm.
         </div>
       ) : null}
     </section>

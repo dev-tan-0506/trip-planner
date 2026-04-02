@@ -3,9 +3,9 @@
 import type { CulinaryRouteSuggestion } from '../../lib/api-client';
 
 const confidenceClass: Record<CulinaryRouteSuggestion['confidenceLabel'], string> = {
-  'Goi y': 'bg-emerald-100 text-emerald-700',
-  'Uoc luong': 'bg-amber-100 text-amber-700',
-  'Can xem lai': 'bg-sky-100 text-sky-700',
+  'Gợi ý': 'bg-emerald-100 text-emerald-700',
+  'Ước lượng': 'bg-amber-100 text-amber-700',
+  'Cần xem lại': 'bg-sky-100 text-sky-700',
 };
 
 interface CulinaryRouteCardProps {
@@ -24,12 +24,12 @@ export function CulinaryRouteCard({
   return (
     <section className="rounded-[28px] border border-gray-200 bg-white p-5 shadow-sm">
       <div className="flex flex-wrap items-center gap-3">
-        <h3 className="text-base font-black text-gray-900">Ban nhap lo trinh an uong</h3>
+        <h3 className="text-base font-black text-gray-900">Bản nháp lộ trình ăn uống</h3>
         <span className={`rounded-full px-3 py-1 text-xs font-bold ${confidenceClass[suggestion.confidenceLabel]}`}>
           {suggestion.confidenceLabel}
         </span>
         <span className="text-xs text-gray-500">
-          {suggestion.totalEstimatedMinutes} phut di chuyen du kien
+          {suggestion.totalEstimatedMinutes} phút di chuyển dự kiến
         </span>
       </div>
 
@@ -42,7 +42,7 @@ export function CulinaryRouteCard({
               </span>
               <div className="space-y-1">
                 <p className="text-sm font-bold text-gray-900">{stop.title}</p>
-                <p className="text-xs text-gray-500">Ngay {stop.dayIndex + 1} · diem {stop.sortOrder}</p>
+                <p className="text-xs text-gray-500">Ngày {stop.dayIndex + 1} · điểm {stop.sortOrder}</p>
                 <p className="text-xs leading-5 text-gray-600">{stop.reason}</p>
               </div>
             </div>
@@ -57,11 +57,11 @@ export function CulinaryRouteCard({
           disabled={applying}
           className="mt-4 rounded-2xl bg-brand-dark px-4 py-3 text-sm font-black text-white transition hover:bg-brand-dark/90 disabled:cursor-wait disabled:opacity-70"
         >
-          {applying ? 'Dang ap dung...' : 'Ap dung vao lich trinh'}
+          {applying ? 'Đang áp dụng...' : 'Áp dụng vào lịch trình'}
         </button>
       ) : (
         <p className="mt-4 rounded-2xl bg-gray-100 px-4 py-3 text-xs text-gray-600">
-          Chi truong doan moi co the ap dung goi y nay vao lich trinh chinh.
+          Chỉ trưởng đoàn mới có thể áp dụng gợi ý này vào lịch trình chính.
         </p>
       )}
     </section>

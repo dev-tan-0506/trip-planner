@@ -4,7 +4,7 @@ import { RequestHiddenSpotsDto } from './dto/request-hidden-spots.dto';
 import { RequestOutfitPlanDto } from './dto/request-outfit-plan.dto';
 import { TranslateMenuDto } from './dto/translate-menu.dto';
 
-export type LocalExpertConfidenceLabel = 'Goi y' | 'Uoc luong' | 'Can xem lai';
+export type LocalExpertConfidenceLabel = 'Gợi ý' | 'Ước lượng' | 'Cần xem lại';
 
 export interface MenuTranslationCard {
   originalText: string;
@@ -58,31 +58,31 @@ export class LocalExpertService {
     if (normalized.includes('bun cha ca')) {
       return {
         translatedText: 'Cha ca noodle soup',
-        cautionNote: 'Nuoc dung co the nau tu ca va xuong, hoi lai neu ban nhay vi voi hai san.',
-        confidenceLabel: 'Goi y' as const,
+        cautionNote: 'Nước dùng có thể nấu từ cá và xương, hỏi lại nếu bạn nhạy vị với hải sản.',
+        confidenceLabel: 'Gợi ý' as const,
       };
     }
 
     if (normalized.includes('goi') || normalized.includes('nom')) {
       return {
         translatedText: 'Mixed herb salad',
-        cautionNote: 'Mon goi hay dung nuoc mam, lac hoac topping theo mua nen nen hoi them thanh phan.',
-        confidenceLabel: 'Uoc luong' as const,
+        cautionNote: 'Món gỏi hay dùng nước mắm, lạc hoặc topping theo mùa nên cần hỏi thêm thành phần.',
+        confidenceLabel: 'Ước lượng' as const,
       };
     }
 
     if (normalized.includes('muc') || normalized.includes('tom') || normalized.includes('hai san')) {
       return {
         translatedText: 'Seafood dish',
-        cautionNote: 'Ten mon goi y co hai san nhung cach che bien khong ro, Can xem lai voi quan.',
-        confidenceLabel: 'Can xem lai' as const,
+        cautionNote: 'Tên món gợi ý có hải sản nhưng cách chế biến không rõ, cần xem lại với quán.',
+        confidenceLabel: 'Cần xem lại' as const,
       };
     }
 
     return {
       translatedText: 'Local house specialty',
-      cautionNote: 'Ten mon chua du ro thanh phan, Can xem lai cach che bien va topping.',
-      confidenceLabel: 'Can xem lai' as const,
+      cautionNote: 'Tên món chưa đủ rõ thành phần, cần xem lại cách chế biến và topping.',
+      confidenceLabel: 'Cần xem lại' as const,
     };
   }
 
@@ -106,17 +106,17 @@ export class LocalExpertService {
           localeHint === 'en' ? translation.translatedText : `${translation.translatedText} (${localeHint})`,
         cautionNote: translation.cautionNote,
         confidenceLabel: translation.confidenceLabel,
-        nextAction: 'Hoi quan ve thanh phan de chot mon an phu hop.',
+        nextAction: 'Hỏi quán về thành phần để chốt món ăn phù hợp.',
       };
     });
 
     return {
       localeHint,
-      confidenceLabel: cards.some((card) => card.confidenceLabel === 'Can xem lai')
-        ? 'Can xem lai'
-        : cards.some((card) => card.confidenceLabel === 'Uoc luong')
-          ? 'Uoc luong'
-          : 'Goi y',
+      confidenceLabel: cards.some((card) => card.confidenceLabel === 'Cần xem lại')
+        ? 'Cần xem lại'
+        : cards.some((card) => card.confidenceLabel === 'Ước lượng')
+          ? 'Ước lượng'
+          : 'Gợi ý',
       cards,
     };
   }
@@ -125,34 +125,34 @@ export class LocalExpertService {
     await this.ensureMembership(tripId, userId);
 
     const areaLabel = dto.areaLabel.trim();
-    const vibe = dto.vibe?.trim() || 'de di bo';
-    const budgetHint = dto.budgetHint?.trim() || 'vua tui';
+    const vibe = dto.vibe?.trim() || 'dễ đi bộ';
+    const budgetHint = dto.budgetHint?.trim() || 'vừa túi';
     const vibeKey = normalizeVietnamese(vibe);
     const budgetKey = normalizeVietnamese(budgetHint);
 
     const cards: HiddenSpotCard[] = [
       {
-        title: `Ngo nho gan ${areaLabel}`,
+        title: `Ngõ nhỏ gần ${areaLabel}`,
         areaLabel,
-        whyItFits: `Hop voi khong khi ${vibe} va de tranh diem dong, chi can ghe ngan roi quay lai lich trinh chinh.`,
-        confidenceLabel: 'Goi y',
-        nextAction: 'Mo map va doi chieu duong di bo truoc khi re vao hem.',
+        whyItFits: `Hợp với không khí ${vibe} và dễ tránh điểm đông, chỉ cần ghé ngắn rồi quay lại lịch trình chính.`,
+        confidenceLabel: 'Gợi ý',
+        nextAction: 'Mở map và đối chiếu đường đi bộ trước khi rẽ vào hẻm.',
       },
       {
-        title: `Quan nha dan khu ${areaLabel}`,
+        title: `Quán nhà dân khu ${areaLabel}`,
         areaLabel,
-        whyItFits: `De tim mon dia phuong gia ${budgetHint}, phu hop cho luc can mot diem dung chan nhanh.`,
-        confidenceLabel: budgetKey.includes('re') ? 'Goi y' : 'Uoc luong',
-        nextAction: 'Hoi gia va gio dong cua ngay hom nay truoc khi ghe.',
+        whyItFits: `Dễ tìm món địa phương giá ${budgetHint}, phù hợp cho lúc cần một điểm dừng chân nhanh.`,
+        confidenceLabel: budgetKey.includes('re') ? 'Gợi ý' : 'Ước lượng',
+        nextAction: 'Hỏi giá và giờ đóng cửa ngày hôm nay trước khi ghé.',
       },
       {
-        title: `Goc ngam pho ${areaLabel}`,
+        title: `Góc ngắm phố ${areaLabel}`,
         areaLabel,
         whyItFits: vibeKey.includes('yen')
-          ? 'Goc nay hop de ngoi cham, chup nhanh vai tam anh va nghi ngan truoc chang tiep theo.'
-          : 'Goc nay hop de ghe nhanh, xem nhịp sống dia phuong ma khong can doi lich trinh qua lau.',
-        confidenceLabel: vibeKey.includes('bi an') ? 'Can xem lai' : 'Uoc luong',
-        nextAction: 'Xem dong nguoi thuc te roi quyet dinh ghe hay bo qua.',
+          ? 'Góc này hợp để ngồi chậm, chụp nhanh vài tấm ảnh và nghỉ ngắn trước chặng tiếp theo.'
+          : 'Góc này hợp để ghé nhanh, xem nhịp sống địa phương mà không cần đổi lịch trình quá lâu.',
+        confidenceLabel: vibeKey.includes('bi an') ? 'Cần xem lại' : 'Ước lượng',
+        nextAction: 'Xem đông người thực tế rồi quyết định ghé hay bỏ qua.',
       },
     ];
 
@@ -167,37 +167,37 @@ export class LocalExpertService {
   async requestOutfitPlan(tripId: string, userId: string, dto: RequestOutfitPlanDto) {
     await this.ensureMembership(tripId, userId);
 
-    const weatherLabel = dto.weatherLabel?.trim() || 'troi am';
-    const aestheticHint = dto.aestheticHint?.trim() || 'de chup anh';
-    const activities = dto.activityLabels?.length ? dto.activityLabels.join(', ') : 'di bo nhe';
+    const weatherLabel = dto.weatherLabel?.trim() || 'trời âm';
+    const aestheticHint = dto.aestheticHint?.trim() || 'dễ chụp ảnh';
+    const activities = dto.activityLabels?.length ? dto.activityLabels.join(', ') : 'đi bộ nhẹ';
     const weatherKey = normalizeVietnamese(weatherLabel);
     const aestheticKey = normalizeVietnamese(aestheticHint);
 
     const cards: OutfitPlanCard[] = [
       {
-        title: 'Set 1: Mac de di va de len hinh',
-        colorDirection: aestheticKey.includes('toi gian') ? 'be, trang, xanh reu' : 'kem, xanh bien, nau cat',
+        title: 'Set 1: Mặc dễ đi và dễ lên hình',
+        colorDirection: aestheticKey.includes('toi gian') ? 'be, trắng, xanh rêu' : 'kem, xanh biển, nâu cát',
         packingNotes: weatherKey.includes('mua')
-          ? `Khoac mong chong mua nhe, giay de kho va tui mini cho ${activities}.`
-          : `Ao thoang, chat lieu mem va giay di bo de theo lich ${activities}.`,
-        confidenceLabel: 'Goi y',
-        nextAction: 'Lay set nay lam option mac chinh cho buoi dau.',
+          ? `Khoác mỏng chống mưa nhẹ, giày dễ khô và túi mini cho ${activities}.`
+          : `Áo thoáng, chất liệu mềm và giày đi bộ để theo lịch ${activities}.`,
+        confidenceLabel: 'Gợi ý',
+        nextAction: 'Lấy set này làm option mặc chính cho buổi đầu.',
       },
       {
-        title: 'Set 2: Du phong khi doi canh nhanh',
-        colorDirection: weatherKey.includes('nang') ? 'trang ngà, xanh la nhat, denim sang' : 'xam khoi, xanh navy, nau dam',
+        title: 'Set 2: Dự phòng khi đổi cảnh nhanh',
+        colorDirection: weatherKey.includes('nang') ? 'trắng ngà, xanh lá nhạt, denim sáng' : 'xám khói, xanh navy, nâu đậm',
         packingNotes: weatherKey.includes('mua')
-          ? 'Them ao khoac sieu gon va mot khan nhe de doi gio.'
-          : 'Mang theo lop khoac mong de vao quan cafe may lanh.',
-        confidenceLabel: 'Uoc luong',
-        nextAction: 'Gap gon san trong vali de doi nhanh truoc bua toi.',
+          ? 'Thêm áo khoác siêu gọn và một khăn nhẹ để đổi gió.'
+          : 'Mang theo lớp khoác mỏng để vào quán cafe máy lạnh.',
+        confidenceLabel: 'Ước lượng',
+        nextAction: 'Gấp gọn sẵn trong vali để đổi nhanh trước bữa tối.',
       },
       {
-        title: 'Set 3: Phuong an an toan de khoi lo lech mood',
-        colorDirection: aestheticKey.includes('noi bat') ? 'do gach, den, kem' : 'xanh xam, be dam, trang sua',
-        packingNotes: `Neu ${weatherLabel} thay doi hoac lich ${activities} keo dai, uu tien set nay vi de phoi lai phu kien.`,
-        confidenceLabel: weatherKey.includes('mua') || aestheticKey.includes('noi bat') ? 'Can xem lai' : 'Uoc luong',
-        nextAction: 'Thu nhanh voi giay va tui dang mang de tranh lech tong mau.',
+        title: 'Set 3: Phương án an toàn để khỏi lo lệch mood',
+        colorDirection: aestheticKey.includes('noi bat') ? 'đỏ gạch, đen, kem' : 'xanh xám, be đậm, trắng sữa',
+        packingNotes: `Nếu ${weatherLabel} thay đổi hoặc lịch ${activities} kéo dài, ưu tiên set này vì dễ phối lại phụ kiện.`,
+        confidenceLabel: weatherKey.includes('mua') || aestheticKey.includes('noi bat') ? 'Cần xem lại' : 'Ước lượng',
+        nextAction: 'Thử nhanh với giày và túi đang mang để tránh lệch tông màu.',
       },
     ];
 

@@ -135,7 +135,7 @@ function SwipeCard({
           {/* Swipe Hint */}
           <div className="flex items-center justify-between text-xs text-gray-400 pt-4">
             <span className="flex items-center gap-1">
-              <ChevronLeft size={14} /> Khong chon
+              <ChevronLeft size={14} /> Không chọn
             </span>
             <span className="text-gray-300">Vuốt trái hoặc phải</span>
             <span className="flex items-center gap-1">
@@ -260,7 +260,7 @@ export function VoteCardDeck({ session, userId, onVote, onBack }: VoteCardDeckPr
             className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-brand-coral/20 text-brand-coral rounded-2xl font-bold text-sm hover:bg-brand-coral/5 transition-all active:scale-[0.98] disabled:opacity-50"
           >
             <ThumbsDown size={18} />
-            Khong chon
+            Không chọn
           </button>
           <button
             onClick={() => handleVote(currentOption.id)}

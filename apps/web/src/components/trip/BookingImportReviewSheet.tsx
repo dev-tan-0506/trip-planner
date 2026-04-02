@@ -54,26 +54,26 @@ export function BookingImportReviewSheet({
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">Booking review</p>
-            <h3 className="mt-2 text-xl font-black text-gray-900">Kiem tra ban nhap booking truoc khi dua vao lich</h3>
+            <h3 className="mt-2 text-xl font-black text-gray-900">Kiểm tra bản nháp booking trước khi đưa vào lịch</h3>
             <p className="mt-2 text-sm leading-6 text-gray-600">
-              Noi dung nay khong duoc dua vao lich trinh cho toi khi nguoi dan dau xac nhan lai.
+              Nội dung này không được đưa vào lịch trình cho tới khi người dẫn đầu xác nhận lại.
             </p>
           </div>
           <button type="button" onClick={onClose} className="rounded-2xl bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700">
-            Dong
+            Đóng
           </button>
         </div>
 
         {!draft && (
           <div className="mt-5 space-y-3">
             <label className="block text-sm font-bold text-gray-900">
-              Dan noi dung dat cho
+              Dán nội dung đặt chỗ
               <textarea
                 value={rawContent}
                 onChange={(event) => setRawContent(event.target.value)}
                 rows={8}
                 className="mt-2 w-full rounded-3xl border border-gray-200 px-4 py-3 text-sm outline-none transition focus:border-brand-blue"
-                placeholder="Dan email, booking code, gio nhan phong, gio bay..."
+                placeholder="Dán email, booking code, giờ nhận phòng, giờ bay..."
               />
             </label>
             <button
@@ -82,18 +82,18 @@ export function BookingImportReviewSheet({
               disabled={creating || rawContent.trim().length === 0}
               className="rounded-2xl bg-brand-dark px-4 py-3 text-sm font-black text-white transition hover:bg-brand-dark/90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {creating ? 'Dang tach booking...' : 'Tao ban nhap booking'}
+              {creating ? 'Đang tách booking...' : 'Tạo bản nháp booking'}
             </button>
           </div>
         )}
 
         {draft && (
           <div className="mt-5 space-y-4">
-            {draft.confidenceLabel === 'Can xem lai' && (
+            {draft.confidenceLabel === 'Cần xem lại' && (
               <div className="rounded-3xl border border-amber-200 bg-amber-50 px-4 py-4">
-                <p className="text-sm font-black text-amber-900">Can xem lai</p>
+                <p className="text-sm font-black text-amber-900">Cần xem lại</p>
                 <p className="mt-1 text-sm leading-6 text-amber-800">
-                  He thong thay mot vai truong dang mo ho. Ban nen doi chieu voi raw excerpt truoc khi xac nhan.
+                  Hệ thống thấy một vài trường đang mơ hồ. Bạn nên đối chiếu với raw excerpt trước khi xác nhận.
                 </p>
               </div>
             )}
@@ -108,7 +108,7 @@ export function BookingImportReviewSheet({
                 <div key={`${draft.id}-${index}`} className="rounded-3xl border border-gray-200 p-4">
                   <div className="grid gap-3 md:grid-cols-2">
                     <label className="text-sm font-bold text-gray-900">
-                      Tieu de
+                      Tiêu đề
                       <input
                         value={item.title}
                         onChange={(event) => updateItem(index, 'title', event.target.value)}
@@ -116,7 +116,7 @@ export function BookingImportReviewSheet({
                       />
                     </label>
                     <label className="text-sm font-bold text-gray-900">
-                      Dia diem
+                      Địa điểm
                       <input
                         value={item.locationName ?? ''}
                         onChange={(event) => updateItem(index, 'locationName', event.target.value)}
@@ -124,7 +124,7 @@ export function BookingImportReviewSheet({
                       />
                     </label>
                     <label className="text-sm font-bold text-gray-900">
-                      Gio bat dau
+                      Giờ bắt đầu
                       <input
                         value={item.startTime ?? ''}
                         onChange={(event) => updateItem(index, 'startTime', event.target.value)}
@@ -132,7 +132,7 @@ export function BookingImportReviewSheet({
                       />
                     </label>
                     <label className="text-sm font-bold text-gray-900">
-                      Ma booking
+                      Mã booking
                       <input
                         value={item.bookingCode ?? ''}
                         onChange={(event) => updateItem(index, 'bookingCode', event.target.value)}
@@ -142,7 +142,7 @@ export function BookingImportReviewSheet({
                   </div>
                   {item.missingFields.length > 0 && (
                     <p className="mt-3 text-xs font-semibold text-rose-600">
-                      Truong can bo sung: {item.missingFields.join(', ')}
+                      Trường cần bổ sung: {item.missingFields.join(', ')}
                     </p>
                   )}
                   <details className="mt-3 rounded-2xl bg-gray-50 px-3 py-2">
@@ -160,11 +160,11 @@ export function BookingImportReviewSheet({
                 disabled={confirming || items.length === 0}
                 className="rounded-2xl bg-brand-dark px-4 py-3 text-sm font-black text-white transition hover:bg-brand-dark/90 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {confirming ? 'Dang nhap vao lich...' : 'Nhap vao lich trinh'}
+                {confirming ? 'Đang nhập vào lịch...' : 'Nhập vào lịch trình'}
               </button>
             ) : (
               <p className="rounded-2xl bg-gray-100 px-4 py-3 text-sm text-gray-600">
-                Ban van co the sua thong tin, nhung chi truong doan moi co the nhan "Nhap vao lich trinh".
+                Bạn vẫn có thể sửa thông tin, nhưng chỉ trưởng đoàn mới có thể nhấn "Nhập vào lịch trình".
               </p>
             )}
           </div>

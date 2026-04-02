@@ -5,7 +5,7 @@ type BenchmarkSeed = {
   medianAmount: string;
   highThresholdAmount: string;
   sourceLabel: string;
-  confidenceLabel: 'Goi y' | 'Uoc luong' | 'Can xem lai';
+  confidenceLabel: 'Gợi ý' | 'Ước lượng' | 'Cần xem lại';
   note: string;
 };
 
@@ -19,62 +19,62 @@ const DESTINATION_BENCHMARKS: Record<string, Partial<Record<string, BenchmarkSee
     FOOD: {
       medianAmount: '90000',
       highThresholdAmount: '180000',
-      sourceLabel: 'Mat bang quan an pho bien Da Nang',
-      confidenceLabel: 'Goi y',
-      note: 'Moc nay hop de doi chieu nhanh voi bua an thong thuong trong khu vuc.',
+      sourceLabel: 'Mặt bằng quán ăn phổ biến Đà Nẵng',
+      confidenceLabel: 'Gợi ý',
+      note: 'Mốc này hợp để đối chiếu nhanh với bữa ăn thông thường trong khu vực.',
     },
     TRANSPORT: {
       medianAmount: '120000',
       highThresholdAmount: '250000',
-      sourceLabel: 'Gia di chuyen noi thanh Da Nang',
-      confidenceLabel: 'Uoc luong',
-      note: 'Nen doi chieu them quang duong va gio cao diem neu gia tang dot bien.',
+      sourceLabel: 'Giá di chuyển nội thành Đà Nẵng',
+      confidenceLabel: 'Ước lượng',
+      note: 'Nên đối chiếu thêm quãng đường và giờ cao điểm nếu giá tăng đột biến.',
     },
     ACCOMMODATION: {
       medianAmount: '850000',
       highThresholdAmount: '1500000',
-      sourceLabel: 'Khung phong tam trung gan bien Da Nang',
-      confidenceLabel: 'Uoc luong',
-      note: 'Gia phong co the thay doi theo cuoi tuan va view gan bien.',
+      sourceLabel: 'Khung phòng tầm trung gần biển Đà Nẵng',
+      confidenceLabel: 'Ước lượng',
+      note: 'Giá phòng có thể thay đổi theo cuối tuần và view gần biển.',
     },
     TICKETS: {
       medianAmount: '150000',
       highThresholdAmount: '320000',
-      sourceLabel: 'Ve tham quan pho bien tai Da Nang',
-      confidenceLabel: 'Uoc luong',
-      note: 'Moc tham khao nay phu hop cho diem tham quan pho bien, khong phai ve su kien dac biet.',
+      sourceLabel: 'Vé tham quan phổ biến tại Đà Nẵng',
+      confidenceLabel: 'Ước lượng',
+      note: 'Mốc tham khảo này phù hợp cho điểm tham quan phổ biến, không phải vé sự kiện đặc biệt.',
     },
   },
   'da lat': {
     FOOD: {
       medianAmount: '80000',
       highThresholdAmount: '160000',
-      sourceLabel: 'Mat bang quan an pho bien Da Lat',
-      confidenceLabel: 'Goi y',
-      note: 'Gia tham khao danh cho quan an thong thuong quanh trung tam.',
+      sourceLabel: 'Mặt bằng quán ăn phổ biến Đà Lạt',
+      confidenceLabel: 'Gợi ý',
+      note: 'Giá tham khảo dành cho quán ăn thông thường quanh trung tâm.',
     },
     TRANSPORT: {
       medianAmount: '100000',
       highThresholdAmount: '220000',
-      sourceLabel: 'Gia di chuyen noi thanh Da Lat',
-      confidenceLabel: 'Uoc luong',
-      note: 'Can doi chieu them do doc va khoang cach thuc te cua lo trinh.',
+      sourceLabel: 'Giá di chuyển nội thành Đà Lạt',
+      confidenceLabel: 'Ước lượng',
+      note: 'Cần đối chiếu thêm độ dốc và khoảng cách thực tế của lộ trình.',
     },
   },
   'hoi an': {
     FOOD: {
       medianAmount: '100000',
       highThresholdAmount: '190000',
-      sourceLabel: 'Mat bang quan an pho co Hoi An',
-      confidenceLabel: 'Goi y',
-      note: 'Nen doi chieu them vi tri trong pho co va phu thu du lich cao diem.',
+      sourceLabel: 'Mặt bằng quán ăn phố cổ Hội An',
+      confidenceLabel: 'Gợi ý',
+      note: 'Nên đối chiếu thêm vị trí trong phố cổ và phụ thu du lịch cao điểm.',
     },
     TICKETS: {
       medianAmount: '120000',
       highThresholdAmount: '250000',
-      sourceLabel: 'Gia ve tham quan va trai nghiem pho co',
-      confidenceLabel: 'Uoc luong',
-      note: 'Soat lai goi ve neu da bao gom combo hay huong dan vien.',
+      sourceLabel: 'Giá vé tham quan và trải nghiệm phố cổ',
+      confidenceLabel: 'Ước lượng',
+      note: 'Soát lại gói vé nếu đã bao gồm combo hay hướng dẫn viên.',
     },
   },
 };
@@ -87,7 +87,7 @@ export class LocalCostBenchmarkProvider {
     amount: Prisma.Decimal,
     currency: string,
   ): CostBenchmarkResult {
-    const destinationLabel = destination.trim() || 'chua ro diem den';
+    const destinationLabel = destination.trim() || 'chưa rõ điểm đến';
     const normalizedDestination = destinationLabel.toLowerCase();
     const normalizedCategory = category.toUpperCase();
     const seed = DESTINATION_BENCHMARKS[normalizedDestination]?.[normalizedCategory];
@@ -98,9 +98,9 @@ export class LocalCostBenchmarkProvider {
         normalizedCategory,
         medianAmount: amount.toString(),
         highThresholdAmount: amount.toString(),
-        sourceLabel: 'Can doi chieu tai cho',
-        confidenceLabel: 'Can xem lai',
-        note: 'Chua co moc gia on dinh cho diem den hoac danh muc nay, nen xem day la canh bao mem de kiem tra lai.',
+        sourceLabel: 'Cần đối chiếu tại chỗ',
+        confidenceLabel: 'Cần xem lại',
+        note: 'Chưa có mốc giá ổn định cho điểm đến hoặc danh mục này, nên xem đây là cảnh báo mềm để kiểm tra lại.',
       };
     }
 

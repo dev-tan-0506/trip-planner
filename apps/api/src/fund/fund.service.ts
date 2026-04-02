@@ -65,9 +65,9 @@ export class FundService {
     amount: Prisma.Decimal,
     medianAmount: Prisma.Decimal,
     highThresholdAmount: Prisma.Decimal,
-    confidenceLabel: 'Goi y' | 'Uoc luong' | 'Can xem lai',
+    confidenceLabel: 'Gợi ý' | 'Ước lượng' | 'Cần xem lại',
   ) {
-    if (confidenceLabel === 'Can xem lai') {
+    if (confidenceLabel === 'Cần xem lại') {
       return 'CAN_XEM_LAI' as const;
     }
 
@@ -121,7 +121,7 @@ export class FundService {
       sourceLabel: benchmark.sourceLabel,
       confidenceLabel: benchmark.confidenceLabel,
       note: expenseInput.quantityHint
-        ? `${benchmark.note} Kiem tra them so luong "${expenseInput.quantityHint}" de doi chieu chinh xac hon.`
+        ? `${benchmark.note} Kiểm tra thêm số lượng "${expenseInput.quantityHint}" để đối chiếu chính xác hơn.`
         : benchmark.note,
       merchantLabel: expenseInput.merchantLabel?.trim() || null,
       destinationLabel: benchmark.destinationLabel,
@@ -261,9 +261,9 @@ export class FundService {
         linkedItineraryItemId: item.linkedItineraryItemId,
         severity: expenseBenchmarks[index]?.severity ?? 'CAN_XEM_LAI',
         benchmarkMedianAmount: expenseBenchmarks[index]?.benchmarkMedianAmount ?? null,
-        sourceLabel: expenseBenchmarks[index]?.sourceLabel ?? 'Can doi chieu tai cho',
-        confidenceLabel: expenseBenchmarks[index]?.confidenceLabel ?? 'Can xem lai',
-        note: expenseBenchmarks[index]?.note ?? 'Can doi chieu them gia thuc te tai diem den.',
+        sourceLabel: expenseBenchmarks[index]?.sourceLabel ?? 'Cần đối chiếu tại chỗ',
+        confidenceLabel: expenseBenchmarks[index]?.confidenceLabel ?? 'Cần xem lại',
+        note: expenseBenchmarks[index]?.note ?? 'Cần đối chiếu thêm giá thực tế tại điểm đến.',
         createdBy: {
           tripMemberId: item.createdBy.id,
           userId: item.createdBy.user.id,
@@ -277,9 +277,9 @@ export class FundService {
         category: item.category,
         severity: expenseBenchmarks[index]?.severity ?? 'CAN_XEM_LAI',
         benchmarkMedianAmount: expenseBenchmarks[index]?.benchmarkMedianAmount ?? null,
-        sourceLabel: expenseBenchmarks[index]?.sourceLabel ?? 'Can doi chieu tai cho',
-        confidenceLabel: expenseBenchmarks[index]?.confidenceLabel ?? 'Can xem lai',
-        note: expenseBenchmarks[index]?.note ?? 'Can doi chieu them gia thuc te tai diem den.',
+        sourceLabel: expenseBenchmarks[index]?.sourceLabel ?? 'Cần đối chiếu tại chỗ',
+        confidenceLabel: expenseBenchmarks[index]?.confidenceLabel ?? 'Cần xem lại',
+        note: expenseBenchmarks[index]?.note ?? 'Cần đối chiếu thêm giá thực tế tại điểm đến.',
       })),
       summary: {
         targetAmount: this.formatMoney(targetAmount),

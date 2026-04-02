@@ -3,9 +3,9 @@
 import type { BookingImportConfig, BookingImportDraft } from '../../lib/api-client';
 
 const confidenceClass: Record<BookingImportDraft['confidenceLabel'], string> = {
-  'Goi y': 'bg-emerald-100 text-emerald-700',
-  'Uoc luong': 'bg-amber-100 text-amber-700',
-  'Can xem lai': 'bg-rose-100 text-rose-700',
+  'Gợi ý': 'bg-emerald-100 text-emerald-700',
+  'Ước lượng': 'bg-amber-100 text-amber-700',
+  'Cần xem lại': 'bg-rose-100 text-rose-700',
 };
 
 interface BookingImportCardProps {
@@ -28,12 +28,12 @@ export function BookingImportCard({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
-            Dia chi chuyen tiep
+            Địa chỉ chuyển tiếp
           </p>
-          <h3 className="mt-2 text-lg font-black text-gray-900">Nhap booking vao ban nhap de xem lai</h3>
+          <h3 className="mt-2 text-lg font-black text-gray-900">Nhập booking vào bản nháp để xem lại</h3>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
-            Ban co the forward email vao dia chi rieng cua chuyen di, hoac dan tay noi dung dat cho
-            ngay tai day.
+            Bạn có thể forward email vào địa chỉ riêng của chuyến đi, hoặc dán tay nội dung đặt chỗ
+            ngay tại đây.
           </p>
         </div>
         <button
@@ -41,12 +41,12 @@ export function BookingImportCard({
           onClick={onOpenManualPaste}
           className="rounded-2xl bg-brand-dark px-4 py-3 text-sm font-black text-white transition hover:bg-brand-dark/90"
         >
-          Dan noi dung dat cho
+          Dán nội dung đặt chỗ
         </button>
       </div>
 
       <div className="mt-4 rounded-3xl border border-dashed border-gray-300 bg-gray-50 px-4 py-4">
-        <p className="text-xs font-bold uppercase tracking-[0.14em] text-gray-500">Dia chi chuyen tiep</p>
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-gray-500">Địa chỉ chuyển tiếp</p>
         <p className="mt-2 break-all font-mono text-sm font-bold text-gray-900">
           {config?.forwardingAddress ?? 'booking+...@minhdidauthe.local'}
         </p>
@@ -54,13 +54,13 @@ export function BookingImportCard({
 
       <div className="mt-5">
         <div className="flex items-center justify-between gap-3">
-          <h4 className="text-sm font-black text-gray-900">Ban nhap booking gan day</h4>
-          {loading && <span className="text-xs text-gray-500">Dang tai...</span>}
+          <h4 className="text-sm font-black text-gray-900">Bản nháp booking gần đây</h4>
+          {loading && <span className="text-xs text-gray-500">Đang tải...</span>}
         </div>
         <div className="mt-3 space-y-3">
           {drafts.length === 0 ? (
             <p className="rounded-2xl bg-gray-50 px-4 py-3 text-sm text-gray-500">
-              Chua co booking nao duoc dua vao hang cho review.
+              Chưa có booking nào được đưa vào hàng chờ review.
             </p>
           ) : (
             drafts.map((draft) => (
@@ -72,7 +72,7 @@ export function BookingImportCard({
               >
                 <div>
                   <p className="text-sm font-bold text-gray-900">
-                    {draft.sourceSubject || draft.parsedItems[0]?.title || 'Ban nhap booking'}
+                    {draft.sourceSubject || draft.parsedItems[0]?.title || 'Bản nháp booking'}
                   </p>
                   <p className="mt-1 text-xs leading-5 text-gray-500">{draft.parseSummary}</p>
                 </div>

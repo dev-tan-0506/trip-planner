@@ -85,7 +85,7 @@ export class DailyPodcastService {
       | null,
   ) {
     if (!attendanceSession) {
-      return 'Khong co buoi diem danh nao duoc ghi nhan cho ngay nay, nen ca nhom van tu do tu nhac nhau giu lich.';
+      return 'Không có buổi điểm danh nào được ghi nhận cho ngày này, nên cả nhóm vẫn tự do tự nhắc nhau giữ lịch.';
     }
 
     const arrived = attendanceSession.submissions.filter(
@@ -93,10 +93,10 @@ export class DailyPodcastService {
     ).length;
     const pending = attendanceSession.submissions.length - arrived;
 
-    return `Buoi diem danh "${attendanceSession.title}" ghi nhan ${arrived} ban da den dung diem hen, con ${Math.max(
+      return `Buổi điểm danh "${attendanceSession.title}" ghi nhận ${arrived} bạn đã đến đúng điểm hẹn, còn ${Math.max(
       pending,
       0,
-    )} ban can nhac lai hoac cap nhat vi tri.`;
+    )} bạn cần nhắc lại hoặc cập nhật vị trí.`;
   }
 
   private buildFinanceSummary(
@@ -104,7 +104,7 @@ export class DailyPodcastService {
     contributions: Array<{ declaredAmount: Prisma.Decimal; status: string }>,
   ) {
     if (!expenses.length && !contributions.length) {
-      return 'Vi nhom hom nay khong co bien dong lon, vay nen khong co khoan chi nao dang lam mood ca nhom bi nang len.';
+      return 'Vì nhóm hôm nay không có biến động lớn, vậy nên không có khoản chi nào đang làm mood cả nhóm bị nặng lên.';
     }
 
     const totalSpent = expenses.reduce(
@@ -116,41 +116,41 @@ export class DailyPodcastService {
       .reduce((sum, contribution) => sum.plus(contribution.declaredAmount), new Prisma.Decimal(0));
     const latestExpense = expenses[0];
 
-    return `Phan quy nhom dang ghi nhan chi tieu ${totalSpent.toString()} VND, dong vao da xac nhan ${confirmedContributions.toString()} VND, va muc chi gan nhat la "${latestExpense?.title ?? 'chua co'}" o nhom ${latestExpense?.category?.toLowerCase?.() ?? 'khac'}.`;
+    return `Phần quỹ nhóm đang ghi nhận chi tiêu ${totalSpent.toString()} VND, đóng vào đã xác nhận ${confirmedContributions.toString()} VND, và mức chi gần nhất là "${latestExpense?.title ?? 'chưa có'}" ở nhóm ${latestExpense?.category?.toLowerCase?.() ?? 'khác'}.`;
   }
 
   private buildSafetySummary(alerts: Array<{ message: string; status: string; type: string }>) {
     if (!alerts.length) {
-      return 'Khong co canh bao an toan moi, nen phan nhac viec toi nay chu yeu la giu pin, giu do, va ve dung gio nghi.';
+      return 'Không có cảnh báo an toàn mới, nên phần nhắc việc tối nay chủ yếu là giữ pin, giữ đồ và về đúng giờ nghỉ.';
     }
 
     const openAlerts = alerts.filter((alert) => alert.status === 'OPEN');
     const latest = alerts[0];
     if (!openAlerts.length) {
-      return `Da co ${alerts.length} luu y an toan duoc xu ly, noi dung gan nhat la "${latest.message}".`;
+      return `Đã có ${alerts.length} lưu ý an toàn được xử lý, nội dung gần nhất là "${latest.message}".`;
     }
 
-    return `Van con ${openAlerts.length} luu y an toan dang mo, noi dung moi nhat la "${latest.message}" thuoc nhom ${latest.type.toLowerCase()}.`;
+    return `Vẫn còn ${openAlerts.length} lưu ý an toàn đang mở, nội dung mới nhất là "${latest.message}" thuộc nhóm ${latest.type.toLowerCase()}.`;
   }
 
   private buildTranscript(context: TranscriptContext) {
     const itinerarySummary = context.itineraryTitles.length
-      ? `Hom nay ngay ${context.dayIndex + 1}, team ${context.tripName} o ${context.destination} da di qua ${context.itineraryTitles.length} diem nhan nho: ${context.itineraryTitles.join(', ')}.`
-      : `Hom nay ngay ${context.dayIndex + 1}, team ${context.tripName} o ${context.destination} co mot ngay nhe lich, it diem check-in nhung van du chat lieu de nhac lai.`;
+          ? `Hôm nay ngày ${context.dayIndex + 1}, team ${context.tripName} ở ${context.destination} đã đi qua ${context.itineraryTitles.length} điểm nhấn nhớ: ${context.itineraryTitles.join(', ')}.`
+          : `Hôm nay ngày ${context.dayIndex + 1}, team ${context.tripName} ở ${context.destination} có một ngày nhẹ lịch, ít điểm check-in nhưng vẫn đủ chất liệu để nhắc lại.`;
 
     const toneLine = context.tone.toLowerCase().includes('calm')
-      ? 'Ban tin nay giu nhip ke chuyen diu hon mot chut, nhu mot loi tong ket truoc khi ca nhom tat thong bao.'
-      : 'Ban tin nay giu dung chat vui nhe, giong mot radio mini de ca nhom nghe xong roi cuoi mot cai la du.';
+      ? 'Bản tin này giữ nhịp kể chuyện dịu hơn một chút, như một lời tổng kết trước khi cả nhóm tắt thông báo.'
+      : 'Bản tin này giữ đúng chất vui nhẹ, giống một radio mini để cả nhóm nghe xong rồi cười một cái là đủ.';
 
     const transcript = [
       `${itinerarySummary} ${toneLine}`,
-      'Neu nhin lai tong the, nhom da co mot ngay du de nho ten tung diem den, nho vi sao minh chon no, va nho ca nhung khoanh khac nho ma luc dang di co the chua kip noi ra.',
+      'Nếu nhìn lại tổng thể, nhóm đã có một ngày đủ để nhớ tên từng điểm đến, nhớ vì sao mình chọn nó, và nhớ cả những khoảnh khắc nhỏ mà lúc đang đi có thể chưa kịp nói ra.',
       context.attendanceSummary,
       context.financeSummary,
       context.safetySummary,
-      'Phan hay nhat cua recap toi nay la nhac nho rang hanh trinh van dang o dung nhịp: minh khong can them mot workflow media nang, chi can mot doan tom tat de ghe lai ky niem va chot nhanh nhung dieu can check lai cho ngay mai.',
-      'Neu ngay mai muon bat dau gon gang hon, chi can nhin lai lich trinh, chot mot hai uu tien, va de moi nguoi tu cap nhat nhung mon do, diem hen, hay ghi chu con dang bo ngo.',
-      'Con bay gio thi podcast mini xin ket thuc bang mot loi nhac rat ngan: giu pin, giu nuoc, giu tam trang vui, va de cho ngay mai co them mot doan recap dang nho hon nua.',
+      'Phần hay nhất của recap tối nay là nhắc nhớ rằng hành trình vẫn đang ở đúng nhịp: mình không cần thêm một workflow media nặng, chỉ cần một đoạn tóm tắt để ghé lại kỷ niệm và chốt nhanh những điều cần check lại cho ngày mai.',
+      'Nếu ngày mai muốn bắt đầu gọn gàng hơn, chỉ cần nhìn lại lịch trình, chốt một hai ưu tiên, và để mọi người tự cập nhật những món đồ, điểm hẹn hay ghi chú còn đang bỏ ngỏ.',
+      'Còn bây giờ thì podcast mini xin kết thúc bằng một lời nhắc rất ngắn: giữ pin, giữ nước, giữ tâm trạng vui, và để cho ngày mai có thêm một đoạn recap đáng nhớ hơn nữa.',
     ].join(' ');
 
     return this.ensureTranscriptLength(transcript);
@@ -158,10 +158,10 @@ export class DailyPodcastService {
 
   private buildRecapText(itineraryTitles: string[], attendanceSummary: string) {
     const itemText = itineraryTitles.length
-      ? `Hom nay team da chot ${itineraryTitles.length} diem: ${itineraryTitles.slice(0, 3).join(', ')}.`
-      : 'Hom nay team giu lich nhe, khong co qua nhieu diem can nho.';
+      ? `Hôm nay team đã chốt ${itineraryTitles.length} điểm: ${itineraryTitles.slice(0, 3).join(', ')}.`
+      : 'Hôm nay team giữ lịch nhẹ, không có quá nhiều điểm cần nhớ.';
 
-    return `${itemText} ${attendanceSummary} Audio hien dang o che do BROWSER_TTS nen van nghe duoc tren web khi can.`;
+    return `${itemText} ${attendanceSummary} Audio hiện đang ở chế độ BROWSER_TTS nên vẫn nghe được trên web khi cần.`;
   }
 
   private computeDurationSeconds(transcript: string) {
@@ -321,7 +321,7 @@ export class DailyPodcastService {
       create: {
         tripId,
         dayIndex,
-        title: `Podcast ngay ${dayIndex + 1}`,
+        title: `Podcast ngày ${dayIndex + 1}`,
         recapText,
         transcript,
         audioMode: 'BROWSER_TTS',
@@ -329,7 +329,7 @@ export class DailyPodcastService {
         durationSeconds,
       },
       update: {
-        title: `Podcast ngay ${dayIndex + 1}`,
+        title: `Podcast ngày ${dayIndex + 1}`,
         recapText,
         transcript,
         audioMode: 'BROWSER_TTS',

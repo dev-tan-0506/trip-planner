@@ -314,7 +314,7 @@ describe('ItineraryService', () => {
       expect(snapshot.overlapWarnings[0].conflictsWith).toBe('item-1');
     });
 
-    it('should downgrade ambiguous health profile parsing to Can xem lai warnings', async () => {
+    it('should downgrade ambiguous health profile parsing to Cần xem lại warnings', async () => {
       mockPrismaService.tripMember.findUnique.mockResolvedValue(mockLeaderMember);
       mockPrismaService.trip.findUnique.mockResolvedValue(mockTrip);
       mockPrismaService.tripMember.findMany.mockResolvedValue([
@@ -349,7 +349,7 @@ describe('ItineraryService', () => {
       const snapshot = await service.getTripItinerarySnapshot(tripId, leaderUserId);
       expect(snapshot.healthWarnings).toHaveLength(1);
       expect(snapshot.healthWarnings[0].severity).toBe('CAN_XEM_LAI');
-      expect(snapshot.healthWarnings[0].confidenceLabel).toBe('Can xem lai');
+      expect(snapshot.healthWarnings[0].confidenceLabel).toBe('Cần xem lại');
       expect(snapshot.healthWarnings[0].affectedMemberIds).toEqual(['user-1']);
     });
   });

@@ -95,8 +95,8 @@ describe('BookingImportService', () => {
     });
 
     expect(draft.forwardingAddress).toBe('booking+joinabc@minhdidauthe.local');
-    expect(draft.confidenceLabel).toBe('Can xem lai');
-    expect(draft.parseSummary).toContain('can xem lai');
+    expect(draft.confidenceLabel).toBe('Cần xem lại');
+    expect(draft.parseSummary).toContain('cần xem lại');
     expect((draft.parsedItems as Array<{ rawExcerpt: string }>)[0].rawExcerpt).toContain('Flight VN123');
   });
 
@@ -144,7 +144,7 @@ describe('BookingImportService', () => {
       sourceSender: null,
       sourceSubject: null,
       rawContent: 'Khach san tai My Khe 14:00 ABC123',
-      confidenceLabel: 'Goi y',
+      confidenceLabel: 'Gợi ý',
       status: BookingImportDraftStatus.DRAFT,
       parseSummary: 'summary',
       parsedItems: [
@@ -182,7 +182,7 @@ describe('BookingImportService', () => {
       sourceSender: null,
       sourceSubject: null,
       rawContent: 'Khach san tai My Khe 14:00 ABC123',
-      confidenceLabel: 'Goi y',
+      confidenceLabel: 'Gợi ý',
       status: data.status,
       parseSummary: 'summary',
       parsedItems: data.parsedItems,

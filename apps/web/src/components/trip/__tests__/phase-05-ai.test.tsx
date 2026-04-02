@@ -128,9 +128,9 @@ const leaderSnapshot: ItinerarySnapshot = {
     {
       itemId: 'item-1',
       severity: 'NGUY_CO_CAO',
-      title: 'Nguy co cao',
-      message: 'Mon nay co the khong hop voi thanh vien di ung hai san.',
-      confidenceLabel: 'Can xem lai',
+      title: 'Nguy cơ cao',
+      message: 'Món này có thể không hợp với thành viên dị ứng hải sản.',
+      confidenceLabel: 'Cần xem lại',
       affectedMemberIds: ['user-2'],
     },
   ],
@@ -157,8 +157,8 @@ const memberSnapshot: ItinerarySnapshot = {
 
 const mockTrip: Trip = {
   id: 'trip-1',
-  name: 'Da Nang',
-  destination: 'Da Nang',
+  name: 'Đà Nẵng',
+  destination: 'Đà Nẵng',
   startDate: '2026-05-01',
   endDate: '2026-05-03',
   joinCode: 'join-code',
@@ -176,11 +176,11 @@ const bookingDraft: BookingImportDraft = {
   forwardingAddress: 'booking+join-code@minhdidauthe.local',
   sourceMessageId: null,
   sourceSender: null,
-  sourceSubject: 'Ve may bay',
-  rawContent: 'Flight VN123 du kien 08:30. Cho xac nhan.',
-  confidenceLabel: 'Can xem lai',
+  sourceSubject: 'Vé máy bay',
+  rawContent: 'Flight VN123 dự kiến 08:30. Chờ xác nhận.',
+  confidenceLabel: 'Cần xem lại',
   status: 'DRAFT',
-  parseSummary: 'Da tach noi dung dat cho, nhung con thieu hoac mo ho mot vai truong can xem lai truoc khi nhap vao lich trinh.',
+  parseSummary: 'Đã tách nội dung đặt chỗ, nhưng còn thiếu hoặc mơ hồ một vài trường cần xem lại trước khi nhập vào lịch trình.',
   parsedItems: [
     {
       title: 'Chuyen bay',
@@ -189,7 +189,7 @@ const bookingDraft: BookingImportDraft = {
       endTime: null,
       bookingCode: 'VN123',
       missingFields: ['locationName', 'startTime'],
-      rawExcerpt: 'Flight VN123 du kien 08:30. Cho xac nhan.',
+      rawExcerpt: 'Flight VN123 dự kiến 08:30. Chờ xác nhận.',
     },
   ],
   createdAt: '2026-04-01T10:00:00.000Z',
@@ -242,9 +242,9 @@ const podcastRecap: DailyPodcastRecap = {
   id: 'recap-1',
   tripId: 'trip-1',
   dayIndex: 0,
-  title: 'Podcast ngay 1',
-  recapText: 'Hom nay team da ghe 2 diem va van co ban text de doc ngay.',
-  transcript: 'Doan recap podcast ngan gon cho ca nhom nghe bang browser speech synthesis.',
+  title: 'Podcast ngày 1',
+  recapText: 'Hôm nay team đã ghé 2 điểm và vẫn có bản text để đọc ngay.',
+  transcript: 'Đoạn recap podcast ngắn gọn cho cả nhóm nghe bằng browser speech synthesis.',
   audioMode: 'BROWSER_TTS',
   audioUrl: null,
   durationSeconds: 72,
@@ -261,9 +261,9 @@ const benchmarkWarnings: CostBenchmarkWarning[] = [
     category: 'FOOD',
     severity: 'NGUY_CO_CAO',
     benchmarkMedianAmount: '90000',
-    sourceLabel: 'Mat bang quan an pho bien Da Nang',
-    confidenceLabel: 'Goi y',
-    note: 'Nen kiem tra lai vi tri quan, phu thu va so luong truoc khi chot.',
+    sourceLabel: 'Mặt bằng quán ăn phổ biến Đà Nẵng',
+    confidenceLabel: 'Gợi ý',
+    note: 'Nên kiểm tra lại vị trí quán, phụ thu và số lượng trước khi chốt.',
   },
   {
     expenseId: 'expense-2',
@@ -272,9 +272,9 @@ const benchmarkWarnings: CostBenchmarkWarning[] = [
     category: 'EMERGENCY',
     severity: 'CAN_XEM_LAI',
     benchmarkMedianAmount: '500000',
-    sourceLabel: 'Can doi chieu tai cho',
-    confidenceLabel: 'Can xem lai',
-    note: 'Chua co moc gia on dinh, hay doi chieu them voi nha thuoc hoac le tan.',
+    sourceLabel: 'Cần đối chiếu tại chỗ',
+    confidenceLabel: 'Cần xem lại',
+    note: 'Chưa có mốc giá ổn định, hãy đối chiếu thêm với nhà thuốc hoặc lễ tân.',
   },
   {
     expenseId: 'expense-3',
@@ -283,9 +283,9 @@ const benchmarkWarnings: CostBenchmarkWarning[] = [
     category: 'FOOD',
     severity: 'LUU_Y',
     benchmarkMedianAmount: '90000',
-    sourceLabel: 'Mat bang quan an pho bien Da Nang',
-    confidenceLabel: 'Uoc luong',
-    note: 'Gia nay gan median, van nen doi chieu voi set an da chon.',
+    sourceLabel: 'Mặt bằng quán ăn phổ biến Đà Nẵng',
+    confidenceLabel: 'Ước lượng',
+    note: 'Giá này gần median, vẫn nên đối chiếu với set ăn đã chọn.',
   },
 ];
 
@@ -317,10 +317,10 @@ describe('Phase 5 AI workspace', () => {
     });
   });
 
-  it('renders the Tro ly AI tab inside the trip workspace', async () => {
+  it('renders the Trợ lý AI tab inside the trip workspace', async () => {
     render(<TripWorkspaceShell trip={mockTrip} joinCode="join-code" />);
 
-    expect(await screen.findByText('Tro ly AI')).toBeInTheDocument();
+    expect(await screen.findByText('Trợ lý AI')).toBeInTheDocument();
   });
 
   it('renders route suggestion confidence chips and leader apply CTA', async () => {
@@ -347,15 +347,15 @@ describe('Phase 5 AI workspace', () => {
         },
       ],
       totalEstimatedMinutes: 8,
-      confidenceLabel: 'Uoc luong',
+      confidenceLabel: 'Ước lượng',
     });
 
     render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Goi y lo trinh an uong' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Gợi ý lộ trình ăn uống' }));
 
-    expect(await screen.findByText('Uoc luong')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Ap dung vao lich trinh' })).toBeInTheDocument();
+    expect(await screen.findByText('Ước lượng')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Áp dụng vào lịch trình' })).toBeInTheDocument();
   });
 
   it('keeps route apply read-only for non-leaders', async () => {
@@ -382,14 +382,14 @@ describe('Phase 5 AI workspace', () => {
         },
       ],
       totalEstimatedMinutes: 8,
-      confidenceLabel: 'Can xem lai',
+      confidenceLabel: 'Cần xem lại',
     });
 
     render(<AiAssistTab tripId="trip-1" initialSnapshot={memberSnapshot} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Goi y lo trinh an uong' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Gợi ý lộ trình ăn uống' }));
 
-    expect(await screen.findByText('Can xem lai')).toBeInTheDocument();
+    expect((await screen.findAllByText('Cần xem lại')).length).toBeGreaterThan(0);
     expect(screen.queryByRole('button', { name: 'Ap dung vao lich trinh' })).not.toBeInTheDocument();
   });
 
@@ -412,39 +412,39 @@ describe('Phase 5 AI workspace', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getAllByText('Nguy co cao').length).toBeGreaterThan(0);
-      expect(screen.getByText(/di ung hai san/i)).toBeInTheDocument();
+      expect(screen.getAllByText('Nguy cơ cao').length).toBeGreaterThan(0);
+      expect(screen.getByText(/dị ứng hải sản/i)).toBeInTheDocument();
     });
   });
 
   it('renders booking import forwarding address and recent draft list', async () => {
     render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
 
-    expect((await screen.findAllByText('Dia chi chuyen tiep')).length).toBeGreaterThan(0);
+    expect((await screen.findAllByText('Địa chỉ chuyển tiếp')).length).toBeGreaterThan(0);
     expect(screen.getByText('booking+join-code@minhdidauthe.local')).toBeInTheDocument();
-    expect(screen.getByText('Ve may bay')).toBeInTheDocument();
+    expect(screen.getByText('Vé máy bay')).toBeInTheDocument();
   });
 
-  it('shows low-confidence caution UI and the Nhap vao lich trinh CTA in booking review sheet', async () => {
+  it('shows low-confidence caution UI and the Nhập vào lịch trình CTA in booking review sheet', async () => {
     render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
 
-    fireEvent.click(await screen.findByText('Ve may bay'));
+    fireEvent.click(await screen.findByText('Vé máy bay'));
 
-    expect(await screen.findAllByText('Can xem lai')).not.toHaveLength(0);
+    expect(await screen.findAllByText('Cần xem lại')).not.toHaveLength(0);
     expect(screen.getByText(/^Raw excerpt$/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Nhap vao lich trinh' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Nhập vào lịch trình' })).toBeInTheDocument();
   });
 
-  it('renders menu translation CTA and shows local expert result cards with Buoc tiep theo', async () => {
+  it('renders menu translation CTA and shows local expert result cards with Bước tiếp theo', async () => {
     vi.mocked(localExpertApi.translateMenu).mockResolvedValue({
       localeHint: 'en',
-      confidenceLabel: 'Can xem lai',
+      confidenceLabel: 'Cần xem lại',
       cards: [
         {
           originalText: 'Muc nuong sa',
           translatedText: 'Seafood dish',
-          cautionNote: 'Ten mon co the dung hai san, Can xem lai voi quan.',
-          confidenceLabel: 'Can xem lai',
+          cautionNote: 'Tên món có thể dùng hải sản, cần xem lại với quán.',
+          confidenceLabel: 'Cần xem lại',
           nextAction: 'Hoi quan ve thanh phan de chot mon an phu hop.',
         },
       ],
@@ -452,11 +452,11 @@ describe('Phase 5 AI workspace', () => {
 
     render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Dich menu' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Dịch menu' }));
 
     expect(await screen.findByText('Seafood dish')).toBeInTheDocument();
-    expect(screen.getByText('Buoc tiep theo')).toBeInTheDocument();
-    expect(screen.getAllByText('Can xem lai').length).toBeGreaterThan(0);
+    expect(screen.getByText('Bước tiếp theo')).toBeInTheDocument();
+    expect(screen.getAllByText('Cần xem lại').length).toBeGreaterThan(0);
   });
 
   it('renders hidden-spot cards from local expert without turning into chat text', async () => {
@@ -466,82 +466,82 @@ describe('Phase 5 AI workspace', () => {
       budgetHint: 're',
       cards: [
         {
-          title: 'Ngo nho gan Hai Chau',
+          title: 'Ngõ nhỏ gần Hai Chau',
           areaLabel: 'Hai Chau',
-          whyItFits: 'Hop voi khong khi yen tinh va de tranh diem dong.',
-          confidenceLabel: 'Goi y',
-          nextAction: 'Mo map va doi chieu duong di bo truoc khi re vao hem.',
+          whyItFits: 'Hợp với không khí yên tĩnh và dễ tránh điểm đông.',
+          confidenceLabel: 'Gợi ý',
+          nextAction: 'Mở map và đối chiếu đường đi bộ trước khi rẽ vào hẻm.',
         },
       ],
     });
 
     render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Goi y choi gi quanh day' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Gợi ý chơi gì quanh đây' }));
 
-    expect(await screen.findByText('Ngo nho gan Hai Chau')).toBeInTheDocument();
-    expect(screen.getByText(/doi chieu duong di bo/i)).toBeInTheDocument();
+    expect(await screen.findByText('Ngõ nhỏ gần Hai Chau')).toBeInTheDocument();
+    expect(screen.getByText(/đối chiếu đường đi bộ/i)).toBeInTheDocument();
   });
 
   it('renders outfit planner cards with a maximum of three options', async () => {
     const cards: OutfitPlanCard[] = [
       {
         title: 'Set 1',
-        colorDirection: 'kem, xanh bien',
-        packingNotes: 'Ao thoang va giay di bo.',
-        confidenceLabel: 'Goi y',
-        nextAction: 'Lay set nay lam option mac chinh cho buoi dau.',
+        colorDirection: 'kem, xanh biển',
+        packingNotes: 'Áo thoáng và giày đi bộ.',
+        confidenceLabel: 'Gợi ý',
+        nextAction: 'Lấy set này làm option mặc chính cho buổi đầu.',
       },
       {
         title: 'Set 2',
-        colorDirection: 'trang nga, denim sang',
-        packingNotes: 'Mang them khoac mong.',
-        confidenceLabel: 'Uoc luong',
-        nextAction: 'Gap gon san trong vali.',
+        colorDirection: 'trắng ngà, denim sáng',
+        packingNotes: 'Mang thêm khoác mỏng.',
+        confidenceLabel: 'Ước lượng',
+        nextAction: 'Gấp gọn sẵn trong vali.',
       },
       {
         title: 'Set 3',
-        colorDirection: 'do gach, den, kem',
-        packingNotes: 'Can xem lai neu troi mua them.',
-        confidenceLabel: 'Can xem lai',
-        nextAction: 'Thu nhanh voi giay va tui dang mang.',
+        colorDirection: 'đỏ gạch, đen, kem',
+        packingNotes: 'Cần xem lại nếu trời mưa thêm.',
+        confidenceLabel: 'Cần xem lại',
+        nextAction: 'Thử nhanh với giày và túi đang mang.',
       },
       {
         title: 'Set 4',
-        colorDirection: 'se khong hien',
-        packingNotes: 'Khong duoc render.',
-        confidenceLabel: 'Goi y',
-        nextAction: 'Khong hien.',
+        colorDirection: 'sẽ không hiện',
+        packingNotes: 'Không được render.',
+        confidenceLabel: 'Gợi ý',
+        nextAction: 'Không hiện.',
       },
     ];
 
     vi.mocked(localExpertApi.requestOutfitPlan).mockResolvedValue({
       dayIndex: 0,
-      weatherLabel: 'mua nhe',
-      aestheticHint: 'noi bat',
-      activityLabels: ['di bo', 'an toi'],
+      weatherLabel: 'mưa nhẹ',
+      aestheticHint: 'nổi bật',
+      activityLabels: ['đi bộ', 'ăn tối'],
       cards,
     });
 
     render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Len do cho hom nay' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Lên đồ cho hôm nay' }));
 
-    expect(await screen.findByText('Len do cho hom nay')).toBeInTheDocument();
+    expect(await screen.findByText('Lên đồ cho hôm nay')).toBeInTheDocument();
     expect(screen.getByText('Set 1')).toBeInTheDocument();
     expect(screen.getByText('Set 3')).toBeInTheDocument();
     expect(screen.queryByText('Set 4')).not.toBeInTheDocument();
-    expect(screen.getAllByText('Can xem lai').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Cần xem lại').length).toBeGreaterThan(0);
   });
 
   it('renders podcast recap controls and uses the browser tts playback branch', async () => {
     render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
 
-    expect(await screen.findByText('Podcast ngay')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Phat recap' })).toBeInTheDocument();
-    expect(screen.getByText('Tom tat nhanh')).toBeInTheDocument();
+    expect(await screen.findByText('Podcast ngày')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Phát recap' })).toBeInTheDocument();
+    expect(screen.getByText('Tóm tắt nhanh')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Phat recap' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Phát recap' }));
 
     expect(window.speechSynthesis.speak).toHaveBeenCalledTimes(1);
   });
@@ -555,37 +555,37 @@ describe('Phase 5 AI workspace', () => {
     vi.mocked(dailyPodcastApi.getDailyPodcast).mockResolvedValue({
       recap: {
         ...podcastRecap,
-        recapText: 'Ban text van hien ro rang du may khong phat audio.',
+        recapText: 'Bản text vẫn hiện rõ ràng dù máy không phát audio.',
       },
     });
 
     render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
 
-    expect(await screen.findByText('Tom tat nhanh')).toBeInTheDocument();
-    expect(screen.getByText('Ban text van hien ro rang du may khong phat audio.')).toBeInTheDocument();
+    expect(await screen.findByText('Tóm tắt nhanh')).toBeInTheDocument();
+    expect(screen.getByText('Bản text vẫn hiện rõ ràng dù máy không phát audio.')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Phat recap' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Phát recap' }));
 
     expect(
-      await screen.findByText(/May nay chua ho tro speechSynthesis/i),
+      await screen.findByText(/Máy này chưa hỗ trợ speechSynthesis/i),
     ).toBeInTheDocument();
-    expect(screen.getByText('Ban text van hien ro rang du may khong phat audio.')).toBeInTheDocument();
+    expect(screen.getByText('Bản text vẫn hiện rõ ràng dù máy không phát audio.')).toBeInTheDocument();
   });
 
-  it('renders Chi phi dia phuong warnings with all three severity labels', () => {
+  it('renders Chi phí địa phương warnings with all three severity labels', () => {
     render(
       <CostBenchmarkWarningCard
         warnings={benchmarkWarnings}
         currency="VND"
-        destinationLabel="Da Nang"
+        destinationLabel="Đà Nẵng"
       />,
     );
 
-    expect(screen.getByText('Chi phi dia phuong')).toBeInTheDocument();
-    expect(screen.getByText('Nguy co cao')).toBeInTheDocument();
-    expect(screen.getAllByText('Can xem lai').length).toBeGreaterThan(0);
-    expect(screen.getByText('Luu y')).toBeInTheDocument();
-    expect(screen.getByText(/Mat bang quan an pho bien Da Nang/i)).toBeInTheDocument();
+    expect(screen.getByText('Chi phí địa phương')).toBeInTheDocument();
+    expect(screen.getByText('Nguy cơ cao')).toBeInTheDocument();
+    expect(screen.getAllByText('Cần xem lại').length).toBeGreaterThan(0);
+    expect(screen.getByText('Lưu ý')).toBeInTheDocument();
+    expect(screen.getAllByText(/Mặt bằng quán ăn phổ biến Đà Nẵng/i).length).toBeGreaterThan(0);
   });
 
   it('renders missing-data fallback copy for cost benchmarks as non-blocking guidance', () => {
@@ -593,12 +593,12 @@ describe('Phase 5 AI workspace', () => {
       <CostBenchmarkWarningCard
         warnings={[benchmarkWarnings[1]]}
         currency="VND"
-        destinationLabel="Da Nang"
+        destinationLabel="Đà Nẵng"
       />,
     );
 
-    expect(screen.getAllByText('Can xem lai').length).toBeGreaterThan(0);
-    expect(screen.getByText(/Chua co moc gia on dinh/i)).toBeInTheDocument();
-    expect(screen.getByText(/Nguon doi chieu/i)).toBeInTheDocument();
+    expect(screen.getAllByText('Cần xem lại').length).toBeGreaterThan(0);
+    expect(screen.getByText(/Chưa có mốc giá ổn định/i)).toBeInTheDocument();
+    expect(screen.getByText(/Nguồn đối chiếu/i)).toBeInTheDocument();
   });
 });

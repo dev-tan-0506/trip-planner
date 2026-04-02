@@ -52,7 +52,7 @@ describe('Phase 05 Deep AI Integration API', () => {
       .set('Authorization', `Bearer ${leaderToken}`)
       .send({
         name: 'AI Deep Integration Trip',
-        destination: 'Da Nang',
+        destination: 'Đà Nẵng',
         startDate: '2026-06-01',
         endDate: '2026-06-03',
       })
@@ -89,7 +89,7 @@ describe('Phase 05 Deep AI Integration API', () => {
     await prisma.user.update({
       where: { id: memberUserId },
       data: {
-        healthProfile: 'co the di ung hai san, can xem lai truoc khi an',
+        healthProfile: 'có thể dị ứng hải sản, cần xem lại trước khi ăn',
       },
     });
 
@@ -146,7 +146,7 @@ describe('Phase 05 Deep AI Integration API', () => {
     }
   });
 
-  it('health warnings: downgrades ambiguous profile parsing to Can xem lai', async () => {
+  it('health warnings: downgrades ambiguous profile parsing to Cần xem lại', async () => {
     const res = await request(app.getHttpServer())
       .get(`/trips/${tripId}/itinerary`)
       .set('Authorization', `Bearer ${leaderToken}`)
@@ -157,8 +157,8 @@ describe('Phase 05 Deep AI Integration API', () => {
         expect.objectContaining({
           itemId: expect.any(String),
           severity: 'CAN_XEM_LAI',
-          title: 'Can xem lai',
-          confidenceLabel: 'Can xem lai',
+          title: 'Cần xem lại',
+          confidenceLabel: 'Cần xem lại',
           affectedMemberIds: [memberUserId],
         }),
       ]),
@@ -186,8 +186,8 @@ describe('Phase 05 Deep AI Integration API', () => {
 
     expect(suggested.body.suggestionId).toContain(`culinary-${tripId}-`);
     expect(suggested.body.orderedItems).toHaveLength(3);
-    expect(suggested.body.confidenceLabel).toBe('Goi y');
-    expect(suggested.body.orderedItems[1].reason).toContain('phut di chuyen');
+    expect(suggested.body.confidenceLabel).toBe('Gợi ý');
+    expect(suggested.body.orderedItems[1].reason).toContain('phút di chuyển');
     expect(after.body.days[0].items.map((item: { id: string }) => item.id)).toEqual(
       before.body.days[0].items.map((item: { id: string }) => item.id),
     );
@@ -248,7 +248,7 @@ describe('Phase 05 Deep AI Integration API', () => {
       .post(`/trips/${tripId}/booking-import/drafts`)
       .set('Authorization', `Bearer ${memberToken}`)
       .send({
-        rawContent: 'Flight VN123 du kien 08:30. Cho xac nhan.',
+        rawContent: 'Flight VN123 dự kiến 08:30. Chờ xác nhận.',
         sourceSubject: 'Forward ve may bay',
       })
       .expect(201);
@@ -260,8 +260,8 @@ describe('Phase 05 Deep AI Integration API', () => {
 
     expect(created.body.createdByTripMemberId).toBe(memberTripMemberId);
     expect(created.body.status).toBe('DRAFT');
-    expect(created.body.confidenceLabel).toBe('Can xem lai');
-    expect(created.body.parseSummary).toContain('can xem lai');
+    expect(created.body.confidenceLabel).toBe('Cần xem lại');
+    expect(created.body.parseSummary).toContain('cần xem lại');
     expect(after.body.totalItems).toBe(before.body.totalItems);
   });
 
@@ -290,7 +290,7 @@ describe('Phase 05 Deep AI Integration API', () => {
       })
       .expect(201);
 
-    expect(created.body.confidenceLabel).toBe('Can xem lai');
+    expect(created.body.confidenceLabel).toBe('Cần xem lại');
     expect(created.body.parsedItems[0].missingFields).toEqual(
       expect.arrayContaining(['locationName', 'startTime', 'bookingCode']),
     );
@@ -334,8 +334,8 @@ describe('Phase 05 Deep AI Integration API', () => {
       expect.objectContaining({
         originalText: 'Muc nuong sa',
         translatedText: expect.any(String),
-        cautionNote: expect.stringContaining('Can xem lai'),
-        confidenceLabel: 'Can xem lai',
+        cautionNote: expect.stringContaining('cần xem lại'),
+        confidenceLabel: 'Cần xem lại',
         nextAction: expect.any(String),
       }),
     ]);
@@ -375,7 +375,7 @@ describe('Phase 05 Deep AI Integration API', () => {
       .expect(201);
 
     expect(res.body.cards).toHaveLength(3);
-    expect(res.body.cards[2].confidenceLabel).toBe('Can xem lai');
+    expect(res.body.cards[2].confidenceLabel).toBe('Cần xem lại');
   });
 
   it('daily podcast recap: generates one persisted recap per day with browser fallback metadata', async () => {
@@ -392,7 +392,7 @@ describe('Phase 05 Deep AI Integration API', () => {
       .set('Authorization', `Bearer ${leaderToken}`)
       .expect(200);
 
-    expect(generated.body.title).toBe('Podcast ngay 1');
+    expect(generated.body.title).toBe('Podcast ngày 1');
     expect(generated.body.audioMode).toBe('BROWSER_TTS');
     expect(generated.body.audioUrl).toBeNull();
     expect(generated.body.durationSeconds).toBeLessThanOrEqual(120);
@@ -459,7 +459,7 @@ describe('Phase 05 Deep AI Integration API', () => {
     const expense = created.body.expenses.find((item: { title: string }) => item.title === 'Bua trua gan bien');
     expect(expense.severity).toBe('LUU_Y');
     expect(expense.benchmarkMedianAmount).toBe('90000');
-    expect(expense.confidenceLabel).toBe('Goi y');
+    expect(expense.confidenceLabel).toBe('Gợi ý');
   });
 
   it('cost benchmark: flags clearly overpriced expenses as NGUY_CO_CAO', async () => {
@@ -476,10 +476,10 @@ describe('Phase 05 Deep AI Integration API', () => {
 
     const expense = created.body.expenses.find((item: { title: string }) => item.title === 'Hai san view dep');
     expect(expense.severity).toBe('NGUY_CO_CAO');
-    expect(expense.sourceLabel).toContain('Da Nang');
+    expect(expense.sourceLabel).toContain('Đà Nẵng');
   });
 
-  it('cost benchmark: returns non-blocking Can xem lai fallback when local data is missing', async () => {
+  it('cost benchmark: returns non-blocking Cần xem lại fallback when local data is missing', async () => {
     await request(app.getHttpServer())
       .post(`/trips/${tripId}/fund/expenses`)
       .set('Authorization', `Bearer ${leaderToken}`)
@@ -503,8 +503,8 @@ describe('Phase 05 Deep AI Integration API', () => {
         expect.objectContaining({
           title: 'Thuoc du phong',
           severity: 'CAN_XEM_LAI',
-          confidenceLabel: 'Can xem lai',
-          note: expect.stringContaining('canh bao mem'),
+          confidenceLabel: 'Cần xem lại',
+      note: expect.stringContaining('cảnh báo mềm'),
         }),
       ]),
     );

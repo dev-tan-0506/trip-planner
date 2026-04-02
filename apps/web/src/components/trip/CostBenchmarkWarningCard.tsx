@@ -9,9 +9,9 @@ interface CostBenchmarkWarningCardProps {
 }
 
 const severityCopy: Record<HealthWarningSeverity, string> = {
-  LUU_Y: 'Luu y',
-  CAN_XEM_LAI: 'Can xem lai',
-  NGUY_CO_CAO: 'Nguy co cao',
+  LUU_Y: 'Lưu ý',
+  CAN_XEM_LAI: 'Cần xem lại',
+  NGUY_CO_CAO: 'Nguy cơ cao',
 };
 
 const severityClass: Record<HealthWarningSeverity, string> = {
@@ -42,12 +42,12 @@ export function CostBenchmarkWarningCard({
     <section className="rounded-3xl border border-amber-100 bg-gradient-to-br from-amber-50 via-white to-orange-50 p-5 shadow-sm">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-amber-700">Chi phi dia phuong</p>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-amber-700">Chi phí địa phương</p>
           <h3 className="mt-2 text-lg font-black text-gray-900">
-            Canh bao mem de doi chieu gia chi tieu voi mat bang tai {destinationLabel ?? 'diem den nay'}.
+            Cảnh báo mềm để đối chiếu giá chi tiêu với mặt bằng tại {destinationLabel ?? 'điểm đến này'}.
           </h3>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
-            Day la lop goi y trong luong nhe, khong chan thao tac nhap chi phi. Neu muc gia vuot moc, hay xem lai so luong, vi tri va phu thu truoc khi chot.
+            Đây là lớp gợi ý trọng lượng nhẹ, không chặn thao tác nhập chi phí. Nếu mức giá vượt mốc, hãy xem lại số lượng, vị trí và phụ thu trước khi chốt.
           </p>
         </div>
       </div>
@@ -67,11 +67,11 @@ export function CostBenchmarkWarningCard({
 
             <div className="mt-3 grid gap-3 md:grid-cols-2">
               <div className="rounded-2xl bg-amber-50 px-4 py-3">
-                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-amber-700">Muc da nhap</p>
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-amber-700">Mức đã nhập</p>
                 <p className="mt-1 text-lg font-black text-gray-900">{formatMoney(warning.amount, currency)}</p>
               </div>
               <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">Median dia phuong</p>
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">Median địa phương</p>
                 <p className="mt-1 text-lg font-black text-gray-900">
                   {formatMoney(warning.benchmarkMedianAmount, currency)}
                 </p>
@@ -81,7 +81,7 @@ export function CostBenchmarkWarningCard({
             <div className="mt-3 rounded-2xl bg-gray-50 px-4 py-3 text-sm leading-6 text-gray-600">
               <p className="font-semibold text-gray-800">{warning.note}</p>
               <p className="mt-2">
-                Nguon doi chieu: <span className="font-semibold text-gray-800">{warning.sourceLabel}</span>
+                Nguồn đối chiếu: <span className="font-semibold text-gray-800">{warning.sourceLabel}</span>
               </p>
             </div>
           </article>

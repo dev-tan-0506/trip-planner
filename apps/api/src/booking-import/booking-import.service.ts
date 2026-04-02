@@ -127,10 +127,10 @@ export class BookingImportService {
       /co the|du kien|tam tinh|pending|cho xac nhan/.test(normalized);
 
     return {
-      confidenceLabel: hasLowConfidence ? 'Can xem lai' : 'Goi y',
+      confidenceLabel: hasLowConfidence ? 'Cần xem lại' : 'Gợi ý',
       parseSummary: hasLowConfidence
-        ? 'Da tach noi dung dat cho, nhung con thieu hoac mo ho mot vai truong can xem lai truoc khi nhap vao lich trinh.'
-        : 'Da tach noi dung dat cho thanh ban nhap de doi chieu truoc khi nhap vao lich trinh.',
+        ? 'Đã tách nội dung đặt chỗ, nhưng còn thiếu hoặc mơ hồ một vài trường cần xem lại trước khi nhập vào lịch trình.'
+        : 'Đã tách nội dung đặt chỗ thành bản nháp để đối chiếu trước khi nhập vào lịch trình.',
       parsedItems,
     };
   }

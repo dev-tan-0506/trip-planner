@@ -55,7 +55,7 @@ type Tab =
   | 'Checklist'
   | 'Check-in'
   | 'Quy an toan'
-  | 'Tro ly AI';
+  | 'Trợ lý AI';
 
 interface TripWorkspaceShellProps {
   trip: Trip;
@@ -300,8 +300,8 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
       icon: <Bell size={18} />,
     },
     {
-      key: 'Tro ly AI',
-      label: 'Tro ly AI',
+      key: 'Trợ lý AI',
+      label: 'Trợ lý AI',
       icon: <Loader2 size={18} />,
     },
   ];
@@ -603,7 +603,7 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
           </motion.div>
         )}
 
-        {activeTab === 'Tro ly AI' && (
+        {activeTab === 'Trợ lý AI' && (
           <motion.div
             key="ai-assist"
             initial={{ opacity: 0, y: 10 }}

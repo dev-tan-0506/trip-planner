@@ -46,11 +46,11 @@ describe('LocalExpertService', () => {
       expect.objectContaining({
         originalText: 'Muc nuong sa',
         translatedText: 'Seafood dish',
-        confidenceLabel: 'Can xem lai',
+        confidenceLabel: 'Cần xem lại',
         nextAction: expect.any(String),
       }),
     );
-    expect(result.confidenceLabel).toBe('Can xem lai');
+    expect(result.confidenceLabel).toBe('Cần xem lại');
   });
 
   it('limits hidden spot responses to compact cards', async () => {
@@ -73,7 +73,7 @@ describe('LocalExpertService', () => {
     });
 
     expect(result.cards).toHaveLength(3);
-    expect(result.cards[2].confidenceLabel).toBe('Can xem lai');
+    expect(result.cards[2].confidenceLabel).toBe('Cần xem lại');
   });
 
   it('rejects access when the user is not a trip member', async () => {

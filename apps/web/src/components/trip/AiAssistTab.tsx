@@ -66,7 +66,7 @@ export function AiAssistTab({
       })
       .catch((err) => {
         if (!active) return;
-        setError(err instanceof Error ? err.message : 'Khong tai duoc du lieu AI');
+        setError(err instanceof Error ? err.message : 'Không tải được dữ liệu AI');
       })
       .finally(() => {
         if (active) {
@@ -103,7 +103,7 @@ export function AiAssistTab({
       })
       .catch((err) => {
         if (!active) return;
-        setError(err instanceof Error ? err.message : 'Khong tai duoc booking import');
+        setError(err instanceof Error ? err.message : 'Không tải được booking import');
       })
       .finally(() => {
         if (active) {
@@ -126,7 +126,7 @@ export function AiAssistTab({
 
   const requestSuggestion = async () => {
     if (selectedItemIds.length < 2) {
-      setError('Can chon it nhat 2 diem an uong de goi y lo trinh.');
+      setError('Cần chọn ít nhất 2 điểm ăn uống để gợi ý lộ trình.');
       return;
     }
 
@@ -138,7 +138,7 @@ export function AiAssistTab({
       });
       setSuggestion(nextSuggestion);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Khong tao duoc goi y AI');
+      setError(err instanceof Error ? err.message : 'Không tạo được gợi ý AI');
     } finally {
       setRequesting(false);
     }
@@ -157,7 +157,7 @@ export function AiAssistTab({
       setSnapshot(nextSnapshot);
       onSnapshotUpdate?.(nextSnapshot);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Khong ap dung duoc goi y');
+      setError(err instanceof Error ? err.message : 'Không áp dụng được gợi ý');
     } finally {
       setApplying(false);
     }
@@ -178,7 +178,7 @@ export function AiAssistTab({
       setReviewOpen(true);
       await refreshBookingDrafts();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Khong tao duoc ban nhap booking');
+      setError(err instanceof Error ? err.message : 'Không tạo được bản nháp booking');
     } finally {
       setCreatingDraft(false);
     }
@@ -199,7 +199,7 @@ export function AiAssistTab({
       await refreshBookingDrafts();
       setReviewOpen(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Khong nhap duoc booking vao lich trinh');
+      setError(err instanceof Error ? err.message : 'Không nhập được booking vào lịch trình');
     } finally {
       setConfirmingDraft(false);
     }
@@ -208,30 +208,30 @@ export function AiAssistTab({
   return (
     <div className="space-y-4">
       <section className="rounded-[28px] border border-gray-200 bg-gradient-to-br from-amber-50 via-white to-sky-50 p-5 shadow-sm">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">Tro ly AI</p>
-        <h2 className="mt-2 text-xl font-black text-gray-900">Goi y lo trinh an uong</h2>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">Trợ lý AI</p>
+        <h2 className="mt-2 text-xl font-black text-gray-900">Gợi ý lộ trình ăn uống</h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
-          Day la ban nhap de duyet. Lich trinh chi doi thu tu sau khi truong doan bam
+          Đây là bản nháp để duyệt. Lịch trình chỉ đổi thứ tự sau khi trưởng đoàn bấm
           {' '}
-          "Ap dung vao lich trinh".
+          "Áp dụng vào lịch trình".
         </p>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
-          Booking duoc phan tich truoc, nhung khong duoc dua vao lich trinh cho toi khi ban review
-          xong va leader xac nhan.
+          Booking được phân tích trước, nhưng không được đưa vào lịch trình cho tới khi bạn review
+          xong và leader xác nhận.
         </p>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
-          Them hai tac vu nhe hon ben duoi: dich menu, tim diem ghe nhanh, va len do bang card ngan.
+          Thêm hai tác vụ nhẹ hơn bên dưới: dịch menu, tìm điểm ghé nhanh và lên đồ bằng card ngắn.
         </p>
       </section>
 
       {loading ? (
-        <div className="rounded-3xl bg-white p-6 text-sm text-gray-500 shadow-sm">Dang tai ngu canh chuyen di...</div>
+        <div className="rounded-3xl bg-white p-6 text-sm text-gray-500 shadow-sm">Đang tải ngữ cảnh chuyến đi...</div>
       ) : (
         <section className="rounded-[28px] border border-gray-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h3 className="text-base font-black text-gray-900">Chon diem an dang muon ghe</h3>
-              <p className="text-xs text-gray-500">AI se sap xep thu tu di chuyen gon de ca nhom xem lai.</p>
+              <h3 className="text-base font-black text-gray-900">Chọn điểm ăn đang muốn ghé</h3>
+              <p className="text-xs text-gray-500">AI sẽ sắp xếp thứ tự di chuyển gọn để cả nhóm xem lại.</p>
             </div>
             <button
               type="button"
@@ -239,7 +239,7 @@ export function AiAssistTab({
               disabled={requesting || foodStops.length < 2}
               className="rounded-2xl bg-brand-dark px-4 py-3 text-sm font-black text-white transition hover:bg-brand-dark/90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {requesting ? 'Dang goi y...' : 'Goi y lo trinh an uong'}
+              {requesting ? 'Đang gợi ý...' : 'Gợi ý lộ trình ăn uống'}
             </button>
           </div>
 
@@ -262,7 +262,7 @@ export function AiAssistTab({
                 <span>
                   <span className="block font-bold text-gray-900">{item.title}</span>
                   <span className="block text-xs text-gray-500">
-                    Ngay {item.dayIndex + 1}
+                    Ngày {item.dayIndex + 1}
                     {item.locationName ? ` · ${item.locationName}` : ''}
                   </span>
                 </span>
@@ -272,7 +272,7 @@ export function AiAssistTab({
 
           {foodStops.length === 0 && (
             <p className="mt-4 rounded-2xl bg-gray-50 px-4 py-3 text-sm text-gray-500">
-              Chua co diem an nao trong lich trinh de AI sap tuyen.
+              Chưa có điểm ăn nào trong lịch trình để AI sắp tuyến.
             </p>
           )}
         </section>
@@ -280,7 +280,7 @@ export function AiAssistTab({
 
       {selectedItemIds.length > 0 && snapshot && (
         <section className="rounded-[28px] border border-dashed border-gray-300 bg-white/80 p-5">
-          <h3 className="text-sm font-black text-gray-900">Cac diem dang chon</h3>
+          <h3 className="text-sm font-black text-gray-900">Các điểm đang chọn</h3>
           <ul className="mt-3 flex flex-wrap gap-2">
             {selectedItemIds.map((itemId) => {
               const item = snapshot.days.flatMap((day) => day.items).find((candidate) => candidate.id === itemId);

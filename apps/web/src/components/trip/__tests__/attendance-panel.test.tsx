@@ -130,7 +130,7 @@ describe('Check-in', () => {
     expect(screen.getByText('Member B')).toBeInTheDocument();
   });
 
-  it('cho phep leader thay check-in CTA va giu nguyen nut quan ly phien', async () => {
+  it('cho phép leader thấy check-in CTA và giữ nguyên nút quản lý phiên', async () => {
     vi.mocked(attendanceApi.getCurrentSession).mockResolvedValue(buildSnapshot());
 
     render(<AttendanceTab tripId="trip-1" />);
@@ -147,7 +147,7 @@ describe('Check-in', () => {
     expect(await screen.findByTestId('capture-sheet')).toBeInTheDocument();
   });
 
-  it('hien trang thai ca nhan cua leader trong phien dang mo', async () => {
+  it('hiển thị trạng thái cá nhân của leader trong phiên đang mở', async () => {
     vi.mocked(attendanceApi.getCurrentSession).mockResolvedValue(buildSnapshot());
 
     render(<AttendanceTab tripId="trip-1" />);

@@ -142,11 +142,11 @@ describe('FundService', () => {
     });
 
     expect(result.severity).toBe('NGUY_CO_CAO');
-    expect(result.confidenceLabel).toBe('Goi y');
+    expect(result.confidenceLabel).toBe('Gợi ý');
     expect(result.benchmarkMedianAmount).toBe('90000');
   });
 
-  it('falls back to Can xem lai when destination-category data is missing', async () => {
+  it('falls back to Cần xem lại when destination-category data is missing', async () => {
     prisma.trip.findUnique.mockResolvedValue({
       destination: 'Da Nang',
     });
@@ -160,7 +160,7 @@ describe('FundService', () => {
     });
 
     expect(result.severity).toBe('CAN_XEM_LAI');
-    expect(result.confidenceLabel).toBe('Can xem lai');
-    expect(result.note).toContain('Kiem tra them so luong');
+    expect(result.confidenceLabel).toBe('Cần xem lại');
+    expect(result.note).toContain('Kiểm tra thêm số lượng');
   });
 });

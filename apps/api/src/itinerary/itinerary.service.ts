@@ -32,7 +32,7 @@ export interface MapItem {
 }
 
 export type HealthWarningSeverity = 'LUU_Y' | 'CAN_XEM_LAI' | 'NGUY_CO_CAO';
-export type AiConfidenceLabel = 'Goi y' | 'Uoc luong' | 'Can xem lai';
+export type AiConfidenceLabel = 'Gợi ý' | 'Ước lượng' | 'Cần xem lại';
 
 export interface HealthWarning {
   itemId: string;
@@ -223,11 +223,11 @@ export class ItineraryService {
   ): string {
     const distanceMeters = this.getDistanceMeters(current, next);
     if (distanceMeters === null) {
-      return `Chuyen sang ${next.title} theo thu tu gan nhat hien co, can xem lai vi thieu toa do.`;
+      return `Chuyển sang ${next.title} theo thứ tự gần nhất hiện có, cần xem lại vì thiếu tọa độ.`;
     }
 
     const minutes = this.estimateTravelMinutes(distanceMeters, travelMode);
-    return `${next.title} nam tiep tuyen ${minutes} phut di chuyen tu ${current.title}.`;
+    return `${next.title} nằm tiếp tuyến ${minutes} phút di chuyển từ ${current.title}.`;
   }
 
   private collectHealthKeywords(value: unknown, allowHighRisk: boolean): HealthSignal[] {
@@ -242,8 +242,8 @@ export class ItineraryService {
       signals.push({
         keyword: 'hai san',
         severity: allowHighRisk ? 'NGUY_CO_CAO' : 'CAN_XEM_LAI',
-        confidenceLabel: allowHighRisk ? 'Uoc luong' : 'Can xem lai',
-        title: allowHighRisk ? 'Nguy co an uong can tranh' : 'Thong tin suc khoe can xem lai',
+        confidenceLabel: allowHighRisk ? 'Ước lượng' : 'Cần xem lại',
+        title: allowHighRisk ? 'Nguy cơ ăn uống cần tránh' : 'Thông tin sức khỏe cần xem lại',
       });
     }
 
@@ -251,8 +251,8 @@ export class ItineraryService {
       signals.push({
         keyword: 'di chuyen',
         severity: allowHighRisk ? 'LUU_Y' : 'CAN_XEM_LAI',
-        confidenceLabel: allowHighRisk ? 'Goi y' : 'Can xem lai',
-        title: 'Can luu y lich trinh di chuyen',
+        confidenceLabel: allowHighRisk ? 'Gợi ý' : 'Cần xem lại',
+        title: 'Cần lưu ý lịch trình di chuyển',
       });
     }
 
@@ -260,8 +260,8 @@ export class ItineraryService {
       signals.push({
         keyword: 'an chay',
         severity: allowHighRisk ? 'LUU_Y' : 'CAN_XEM_LAI',
-        confidenceLabel: allowHighRisk ? 'Goi y' : 'Can xem lai',
-        title: 'Can doi chieu nhu cau an uong',
+        confidenceLabel: allowHighRisk ? 'Gợi ý' : 'Cần xem lại',
+        title: 'Cần đối chiếu nhu cầu ăn uống',
       });
     }
 
@@ -273,8 +273,8 @@ export class ItineraryService {
       signals.push({
         keyword: 'di ung',
         severity: 'NGUY_CO_CAO',
-        confidenceLabel: 'Uoc luong',
-        title: 'Nguy co cao voi ho so suc khoe',
+        confidenceLabel: 'Ước lượng',
+        title: 'Nguy cơ cao với hồ sơ sức khỏe',
       });
     }
 
@@ -295,14 +295,14 @@ export class ItineraryService {
       return {
         memberId,
         signals,
-        parserConfidence: signals.length > 0 ? 'Uoc luong' : 'Goi y',
+        parserConfidence: signals.length > 0 ? 'Ước lượng' : 'Gợi ý',
       };
     } catch {
       const signals = this.collectHealthKeywords(healthProfile, false);
       return {
         memberId,
         signals,
-        parserConfidence: 'Can xem lai',
+        parserConfidence: 'Cần xem lại',
       };
     }
   }
@@ -354,12 +354,12 @@ export class ItineraryService {
           ? 'CAN_XEM_LAI'
           : 'LUU_Y';
       const confidenceLabel: AiConfidenceLabel = matchedSignals.some(
-        (signal) => signal.parserConfidence === 'Can xem lai',
+        (signal) => signal.parserConfidence === 'Cần xem lại',
       )
-        ? 'Can xem lai'
-        : matchedSignals.some((signal) => signal.confidenceLabel === 'Uoc luong')
-          ? 'Uoc luong'
-          : 'Goi y';
+        ? 'Cần xem lại'
+        : matchedSignals.some((signal) => signal.confidenceLabel === 'Ước lượng')
+          ? 'Ước lượng'
+          : 'Gợi ý';
 
       warnings.push({
         itemId: item.id,
@@ -368,12 +368,12 @@ export class ItineraryService {
           severity === 'NGUY_CO_CAO'
             ? 'Nguy co cao'
             : severity === 'CAN_XEM_LAI'
-              ? 'Can xem lai'
-              : 'Luu y',
+              ? 'Cần xem lại'
+              : 'Lưu ý',
         message:
-          confidenceLabel === 'Can xem lai'
-            ? 'Ho so suc khoe dang duoc doc theo tu khoa, nen xac nhan lai truoc khi chot mon.'
-            : 'Muc nay co the xung dot voi nhu cau suc khoe cua mot vai thanh vien trong doan.',
+          confidenceLabel === 'Cần xem lại'
+            ? 'Hồ sơ sức khỏe đang được đọc theo từ khóa, nên xác nhận lại trước khi chốt món.'
+            : 'Mục này có thể xung đột với nhu cầu sức khỏe của một vài thành viên trong đoàn.',
         confidenceLabel,
         affectedMemberIds,
       });
@@ -791,7 +791,7 @@ export class ItineraryService {
       lng: item.lng,
       reason:
         index === 0
-          ? 'Bat dau tu diem co thu tu hien tai som nhat de de doi chieu lich trinh.'
+          ? 'Bắt đầu từ điểm có thứ tự hiện tại sớm nhất để dễ đối chiếu lịch trình.'
           : this.buildHopReason(ordered[index - 1], item, dto.travelMode ?? 'WALKING'),
     }));
 
@@ -800,10 +800,10 @@ export class ItineraryService {
     );
     const hasMissingCoords = ordered.some((item) => item.lat === null || item.lng === null);
     const confidenceLabel: AiConfidenceLabel = hasMissingCoords
-      ? 'Can xem lai'
+      ? 'Cần xem lại'
       : normalizeVietnamese(dto.travelMode ?? 'WALKING') === 'walking'
-        ? 'Goi y'
-        : 'Uoc luong';
+        ? 'Gợi ý'
+        : 'Ước lượng';
 
     return {
       suggestionId: this.buildSuggestionId(tripId, ordered.map((item) => item.id)),
