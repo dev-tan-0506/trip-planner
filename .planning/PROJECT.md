@@ -14,26 +14,25 @@ Maximum convenience and the total elimination of group-travel "pain points" by c
 
 <!-- Shipped and confirmed valuable. -->
 
-(None yet — ship to validate)
+- [x] **Culinary Routing:** Validated in Phase 05. AI drafts a route inside the trip workspace, and leaders explicitly apply any itinerary rewrite.
+- [x] **AI Outfit Planner (Optional):** Validated in Phase 05. Outfit suggestions stay lightweight, confidence-labeled, and capped for fast review.
+- [x] **Auto-parsing Hub:** Validated in Phase 05. Booking emails land as reviewable drafts before any itinerary mutation.
+- [x] **Dynamic Itinerary & Profile Matching:** Validated in Phase 05. Health-profile conflicts render as inline advisory warnings instead of silent failures.
+- [x] **Local Expert AI & Cultural Warning:** Validated in Phase 05. Menu translation and hidden-spot guidance remain compact, contextual, and trust-sensitive.
+- [x] **Local Cost Benchmarking:** Validated in Phase 05. Finance warnings compare spending against destination-aware local benchmarks without blocking expense entry.
+- [x] **Smart Discovery & AI Daily Podcast:** Validated in Phase 05. AI daily recap persists per trip day with browser playback fallback and text backup.
 
 ### Active (V1 Web App PWA)
 
 <!-- Current scope. Building toward these. -->
 
 - [ ] **Flexible Planning & 1-Click Marketplace:** Support diverse group sizes. Provide a Community Template Library (copy an itinerary with 1 click). Integrate a Tinder-style swipe feature to vote on food/activities via Web.
-- [ ] **Culinary Routing:** "Route by stomach." After selecting desired food spots, AI automatically drafts the most logical geographical route.
-- [ ] **AI Outfit Planner (Optional):** AI suggests outfit colors/styles based on the destination's weather/scenery.
 - [ ] **Smart Room & Ride Allocation:** Drag-and-drop web UI to distribute people into cars/rooms via 3 modes (Leader manual, Member auto-register, Randomizer).
 - [ ] **Photo-Proof Check-in (Web-based):** Leader sets gathering points. Members must upload/take a selfie (via browser camera) to confirm "Arrived".
-- [ ] **Auto-parsing Hub:** AI scans forwarded emails, extracting booking codes into Timeline slots.
-- [ ] **Dynamic Itinerary & Profile Matching:** Displays timeline. Red-alerts if an added spot violates the group's health/dietary profile.
-- [ ] **Local Expert AI & Cultural Warning:** Translates menus, suggests hidden gems. Warns about culturally sensitive areas.
-- [ ] **Local Cost Benchmarking:** Cross-references planned expenses with Big Data to alert users of rip-offs.
 - [ ] **Smart To-do & Logistics:** Leader delegates shared packing items. Tracks completion status.
 - [ ] **Fund Management & Expenses:** Centralized pool managed by treasurer, MoMo/Bank QR codes for money collection.
 - [ ] **Digital Vault:** Cloud drive to gather ID cards and flight tickets for the Leader.
 - [ ] **Souvenir Planner:** Recommends local specialties and sends reminders.
-- [ ] **Smart Discovery & AI Daily Podcast:** Weather forecasting and an end-of-day audio broadcast summing up the trip.
 - [ ] **Reunion Organizer:** Sends e-invites for a post-trip meetup.
 - [ ] **On-demand Concierge & SOS:** Quick access to local mechanics or medical support. Basic Web SOS button.
 - [ ] **Anonymous Post-trip Feedback:** Fun, incognito survey at the end of the trip.
@@ -65,6 +64,7 @@ Maximum convenience and the total elimination of group-travel "pain points" by c
 |----------|-----------|---------|
 | [Web App First Strategy] | Optimizes viral onboarding and complex UI building over deep-tech tracking. | — Pending |
 | [Centralized Fund over Split Bill] | Easier to control risks and guarantee upfront capital. | — Pending |
+| [Phase 05 AI trust model] | AI features should draft, warn, or summarize without silently mutating trip structure. | Validated in Phase 05 |
 
 ---
-*Last updated: 2026-03-28 (Pivoted to Web App V1)*
+*Last updated: 2026-04-02 (Phase 05 complete)*

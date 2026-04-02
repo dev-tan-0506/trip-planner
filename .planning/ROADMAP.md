@@ -25,13 +25,14 @@ Notes: Verification fully closed on 2026-03-31 after Plan `02-05` hardened leade
 - [x] 4.2: Weather, Crowd predictions, and Safety Directory (SAFE-01, SAFE-02, SAFE-04).
 - [x] 4.3: Web-based SOS and Cultural Warning popups (SAFE-03, SAFE-05).
 
-## Phase 5: Deep AI Integration
+## Phase 5: Deep AI Integration ✅
 **Focus**: The magic computational features that act as extreme differentiators.
 - [x] 5.1: Culinary Routing & Health profile matching (PLAN-04, PLAN-05).
-- [ ] 5.2: Auto-parsing Hub for Booking Emails (AIX-01).
-- [ ] 5.3: Local Expert AI Menu Translator & Outfit Planner (AIX-02, AIX-03).
-- [ ] 5.4: AI Daily Podcast generator (AIX-04).
-- [ ] 5.5: Local Cost Benchmarking API (FINA-04).
+- [x] 5.2: Auto-parsing Hub for Booking Emails (AIX-01).
+- [x] 5.3: Local Expert AI Menu Translator & Outfit Planner (AIX-02, AIX-03).
+- [x] 5.4: AI Daily Podcast generator (AIX-04).
+- [x] 5.5: Local Cost Benchmarking API (FINA-04).
+Notes: Phase 5 closed on 2026-04-02 after wave `05-05` added advisory local cost benchmarking and the full `phase-05-deep-ai-integration.e2e-spec.ts` suite passed.
 
 ## Phase 6: Post-trip & Memories
 **Focus**: Ending the trip gracefully and driving retention.
