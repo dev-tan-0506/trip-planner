@@ -128,6 +128,16 @@ describe('Phase 05 Deep AI Integration API', () => {
         .expect(201);
       foodItemIds = res.body.days[0].items.map((createdItem: { id: string }) => createdItem.id);
     }
+
+    const fundRes = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/fund`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        targetAmount: '5000000',
+        currency: 'VND',
+      })
+      .expect(201);
+
   });
 
   afterAll(async () => {
@@ -430,5 +440,73 @@ describe('Phase 05 Deep AI Integration API', () => {
     expect(words.length).toBeGreaterThanOrEqual(220);
     expect(words.length).toBeLessThanOrEqual(300);
     expect(generated.body.recapText).toContain('BROWSER_TTS');
+  });
+
+  it('cost benchmark: keeps normal-range expenses as light LUU_Y guidance', async () => {
+    const created = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/fund/expenses`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        title: 'Bua trua gan bien',
+        amount: '95000',
+        category: 'FOOD',
+        incurredAt: '2026-06-01T12:00:00.000Z',
+        merchantLabel: 'Quan trua',
+        quantityHint: '2 nguoi',
+      })
+      .expect(201);
+
+    const expense = created.body.expenses.find((item: { title: string }) => item.title === 'Bua trua gan bien');
+    expect(expense.severity).toBe('LUU_Y');
+    expect(expense.benchmarkMedianAmount).toBe('90000');
+    expect(expense.confidenceLabel).toBe('Goi y');
+  });
+
+  it('cost benchmark: flags clearly overpriced expenses as NGUY_CO_CAO', async () => {
+    const created = await request(app.getHttpServer())
+      .post(`/trips/${tripId}/fund/expenses`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        title: 'Hai san view dep',
+        amount: '260000',
+        category: 'FOOD',
+        incurredAt: '2026-06-01T19:00:00.000Z',
+      })
+      .expect(201);
+
+    const expense = created.body.expenses.find((item: { title: string }) => item.title === 'Hai san view dep');
+    expect(expense.severity).toBe('NGUY_CO_CAO');
+    expect(expense.sourceLabel).toContain('Da Nang');
+  });
+
+  it('cost benchmark: returns non-blocking Can xem lai fallback when local data is missing', async () => {
+    await request(app.getHttpServer())
+      .post(`/trips/${tripId}/fund/expenses`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .send({
+        title: 'Thuoc du phong',
+        amount: '500000',
+        category: 'EMERGENCY',
+        incurredAt: '2026-06-02T08:00:00.000Z',
+      })
+      .expect(201);
+
+    const benchmarks = await request(app.getHttpServer())
+      .get(`/trips/${tripId}/fund/cost-benchmarks`)
+      .set('Authorization', `Bearer ${leaderToken}`)
+      .expect(200);
+
+    expect(benchmarks.body.tripId).toBe(tripId);
+    expect(benchmarks.body.currency).toBe('VND');
+    expect(benchmarks.body.warnings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          title: 'Thuoc du phong',
+          severity: 'CAN_XEM_LAI',
+          confidenceLabel: 'Can xem lai',
+          note: expect.stringContaining('canh bao mem'),
+        }),
+      ]),
+    );
   });
 });

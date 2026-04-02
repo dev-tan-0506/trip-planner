@@ -20,6 +20,12 @@ export class FundController {
     return this.fundService.getFundSnapshot(tripId, user.sub);
   }
 
+  @Get('cost-benchmarks')
+  @ApiOperation({ summary: 'Get trip fund cost benchmark warnings' })
+  getCostBenchmarks(@Param('tripId') tripId: string, @CurrentUser() user: JwtPayload) {
+    return this.fundService.getCostBenchmarks(tripId, user.sub);
+  }
+
   @Post()
   @ApiOperation({ summary: 'Create a trip fund' })
   createFund(

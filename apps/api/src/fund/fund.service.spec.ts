@@ -3,12 +3,16 @@ import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { FundService } from './fund.service';
+import { LocalCostBenchmarkProvider } from './provider/local-cost-benchmark.provider';
 
 describe('FundService', () => {
   let service: FundService;
 
   const mockPrisma = {
     tripMember: {
+      findUnique: jest.fn(),
+    },
+    trip: {
       findUnique: jest.fn(),
     },
     tripFund: {
@@ -30,7 +34,11 @@ describe('FundService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [FundService, { provide: PrismaService, useValue: mockPrisma }],
+      providers: [
+        FundService,
+        LocalCostBenchmarkProvider,
+        { provide: PrismaService, useValue: mockPrisma },
+      ],
     }).compile();
 
     service = module.get(FundService);
@@ -43,6 +51,9 @@ describe('FundService', () => {
       id: 'tm-leader',
       role: 'LEADER',
       user: { id: 'u1', name: 'Leader', avatarUrl: null },
+    });
+    prisma.trip.findUnique.mockResolvedValue({
+      destination: 'Da Nang',
     });
     prisma.tripFund.findUnique.mockResolvedValue({
       id: 'fund-1',
@@ -116,5 +127,40 @@ describe('FundService', () => {
     await expect(service.confirmContribution('trip-1', 'missing', 'u1')).rejects.toThrow(
       NotFoundException,
     );
+  });
+
+  it('evaluates clearly overpriced expenses as NGUY_CO_CAO', async () => {
+    prisma.trip.findUnique.mockResolvedValue({
+      destination: 'Da Nang',
+    });
+
+    const result = await service.evaluateCostBenchmark('trip-1', {
+      title: 'Hai san',
+      amount: new Prisma.Decimal('260000'),
+      category: 'FOOD',
+      currency: 'VND',
+    });
+
+    expect(result.severity).toBe('NGUY_CO_CAO');
+    expect(result.confidenceLabel).toBe('Goi y');
+    expect(result.benchmarkMedianAmount).toBe('90000');
+  });
+
+  it('falls back to Can xem lai when destination-category data is missing', async () => {
+    prisma.trip.findUnique.mockResolvedValue({
+      destination: 'Da Nang',
+    });
+
+    const result = await service.evaluateCostBenchmark('trip-1', {
+      title: 'Vien phi',
+      amount: new Prisma.Decimal('500000'),
+      category: 'EMERGENCY',
+      currency: 'VND',
+      quantityHint: '1 lan',
+    });
+
+    expect(result.severity).toBe('CAN_XEM_LAI');
+    expect(result.confidenceLabel).toBe('Can xem lai');
+    expect(result.note).toContain('Kiem tra them so luong');
   });
 });

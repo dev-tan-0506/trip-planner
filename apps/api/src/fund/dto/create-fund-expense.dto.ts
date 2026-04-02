@@ -16,4 +16,12 @@ export class CreateFundExpenseDto {
   @IsOptional()
   @IsString()
   linkedItineraryItemId?: string;
+
+  @IsOptional()
+  @IsString()
+  merchantLabel?: string;
+
+  @IsOptional()
+  @IsString()
+  quantityHint?: string;
 }
