@@ -58,7 +58,7 @@ created: 2026-03-28
 - [ ] `apps/api/test/phase-03-logistics.e2e-spec.ts` — room/ride allocation and member self-join flow
 - [ ] `apps/api/src/checklists/checklists.service.spec.ts` — group ordering, assignee ownership, and completion-toggle coverage
 - [ ] `apps/api/src/attendance/attendance.service.spec.ts` — session window, optional location, and submission-state coverage
-- [ ] `apps/api/test/phase-03-attendance.e2e-spec.ts` — leader session creation plus member proof submission flow
+- [ ] `apps/api/test/phase-03-attendance.e2e-spec.ts` — leader session creation plus leader/member proof submission flow
 - [ ] `apps/web/src/components/trip/__tests__/logistics-board.test.tsx` or equivalent — allocation board rendering, self-join affordance, and leader move controls
 - [ ] `apps/web/src/components/trip/__tests__/checklist-panel.test.tsx` or equivalent — shared categories plus personal-task rendering and editing
 - [ ] `apps/web/src/components/trip/__tests__/attendance-panel.test.tsx` or equivalent — camera/upload fallback and dashboard-state rendering
@@ -71,7 +71,7 @@ created: 2026-03-28
 |----------|-------------|------------|-------------------|
 | Leader drag-and-drop allocation feels usable on both desktop and touch layouts | LOGI-02 | Pointer interaction quality and mobile ergonomics are hard to prove from unit tests alone | Open the logistics board as leader, move members between room and ride slots on desktop-width and mobile-width layouts, and confirm the board remains understandable and assignments persist |
 | Member self-join flow communicates remaining capacity clearly | LOGI-03 | Capacity messaging and affordance clarity are presentation-heavy | Open a trip as member, join an available slot, confirm the slot count changes, then attempt to join a full slot and verify the denial message is clear |
-| Photo-proof check-in works with real browser permissions and fallback paths | LOGI-04, LOGI-05 | Camera and geolocation permissions vary by device, browser, and local environment | Create a check-in round, submit one proof with camera + location allowed and another with location denied or upload fallback, then verify both states render correctly on the leader dashboard |
+| Photo-proof check-in works with real browser permissions and fallback paths for both leader and member | LOGI-04, LOGI-05 | Camera and geolocation permissions vary by device, browser, and local environment | Create a check-in round, have both leader and a member submit proof across camera/location allowed and denied-or-upload fallback paths, then verify both states render correctly on the leader dashboard |
 | Attendance dashboard feels realtime enough for leader monitoring | LOGI-04, LOGI-05 | Perceived freshness and broadcast timing are easier to judge manually than from isolated tests | Keep the leader dashboard open while another member submits proof, and confirm the arrived/missing counts and member rows update without a manual page reload |
 
 ---

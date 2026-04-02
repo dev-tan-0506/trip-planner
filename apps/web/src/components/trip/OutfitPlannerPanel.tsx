@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { localExpertApi, type OutfitPlanCard } from '../../lib/api-client';
+import { useEffect, useMemo, useState } from 'react';
+import { localExpertApi, type DayGroup, type OutfitPlanCard, type SafetyOverviewSnapshot } from '../../lib/api-client';
 
 const confidenceClass: Record<OutfitPlanCard['confidenceLabel'], string> = {
   'Gợi ý': 'bg-emerald-100 text-emerald-700',
@@ -11,24 +11,92 @@ const confidenceClass: Record<OutfitPlanCard['confidenceLabel'], string> = {
 
 interface OutfitPlannerPanelProps {
   tripId: string;
+  days?: DayGroup[];
+  weatherForecast?: SafetyOverviewSnapshot['weather'];
 }
 
-export function OutfitPlannerPanel({ tripId }: OutfitPlannerPanelProps) {
-  const [weatherLabel, setWeatherLabel] = useState('mưa nhẹ');
+function buildActivityLabels(day: DayGroup | undefined) {
+  if (!day) {
+    return ['đi bộ', 'ăn tối'];
+  }
+
+  const labels = day.items
+    .map((item) => item.title.trim())
+    .filter(Boolean)
+    .slice(0, 3);
+
+  return labels.length > 0 ? labels : ['đi bộ', 'ăn tối'];
+}
+
+function buildWeatherLabel(
+  forecast: SafetyOverviewSnapshot['weather'][number] | undefined,
+  fallback = 'trời âm',
+) {
+  if (!forecast) {
+    return fallback;
+  }
+
+  if (forecast.rainChancePercent >= 50) {
+    return `${forecast.condition}, dễ mưa ${forecast.rainChancePercent}%`;
+  }
+
+  return `${forecast.condition}, khoảng ${forecast.temperatureC}°C`;
+}
+
+function getDefaultDayIndex(days: DayGroup[]) {
+  const lastDayWithItems = [...days].reverse().find((day) => day.items.length > 0);
+  return lastDayWithItems?.dayIndex ?? days[0]?.dayIndex ?? 0;
+}
+
+export function OutfitPlannerPanel({
+  tripId,
+  days = [],
+  weatherForecast = [],
+}: OutfitPlannerPanelProps) {
+  const [selectedDayIndex, setSelectedDayIndex] = useState(() => getDefaultDayIndex(days));
+  const [weatherLabel, setWeatherLabel] = useState('trời âm');
   const [aestheticHint, setAestheticHint] = useState('nổi bật');
   const [cards, setCards] = useState<OutfitPlanCard[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [weatherTouched, setWeatherTouched] = useState(false);
+
+  useEffect(() => {
+    setSelectedDayIndex(getDefaultDayIndex(days));
+  }, [days]);
+
+  const dayOptions = useMemo(() => {
+    if (!days.length) {
+      return [{ dayIndex: 0, label: 'Ngày 1' }];
+    }
+
+    return days.map((day) => ({
+      dayIndex: day.dayIndex,
+      label: `Ngày ${day.dayIndex + 1}${day.items.length > 0 ? ` · ${day.items.length} hoạt động` : ''}`,
+    }));
+  }, [days]);
+
+  const selectedDay = useMemo(
+    () => days.find((day) => day.dayIndex === selectedDayIndex),
+    [days, selectedDayIndex],
+  );
+
+  const selectedForecast = weatherForecast[selectedDayIndex];
+
+  useEffect(() => {
+    setWeatherTouched(false);
+    setWeatherLabel(buildWeatherLabel(selectedForecast));
+  }, [selectedDayIndex, selectedForecast]);
 
   const loadOutfits = async () => {
     try {
       setLoading(true);
       setError(null);
       const result = await localExpertApi.requestOutfitPlan(tripId, {
-        dayIndex: 0,
+        dayIndex: selectedDayIndex,
         aestheticHint,
         weatherLabel,
-        activityLabels: ['đi bộ', 'ăn tối'],
+        activityLabels: buildActivityLabels(selectedDay),
       });
       setCards(result.cards.slice(0, 3));
     } catch (err) {
@@ -47,6 +115,9 @@ export function OutfitPlannerPanel({ tripId }: OutfitPlannerPanelProps) {
           <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
             Tối đa 3 card để chọn nhanh. Nếu thời tiết hoặc vibe chưa chắc, card sẽ hiện chip "Cần xem lại".
           </p>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
+            Planner sẽ ưu tiên lấy ngày hành trình và gợi ý thời tiết từ ngữ cảnh chuyến đi, nhưng bạn vẫn có thể sửa tay trước khi chạy.
+          </p>
         </div>
         <button
           type="button"
@@ -58,14 +129,34 @@ export function OutfitPlannerPanel({ tripId }: OutfitPlannerPanelProps) {
         </button>
       </div>
 
-      <div className="mt-4 grid gap-3 md:grid-cols-2">
+      <div className="mt-4 grid gap-3 md:grid-cols-3">
+        <label className="space-y-2 rounded-2xl bg-gray-50 p-4 text-sm text-gray-700">
+          <span className="block text-xs font-bold uppercase tracking-[0.14em] text-gray-500">Ngày hành trình</span>
+          <select
+            value={selectedDayIndex}
+            onChange={(event) => setSelectedDayIndex(Number(event.target.value))}
+            className="w-full rounded-2xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none focus:border-brand-blue"
+          >
+            {dayOptions.map((option) => (
+              <option key={option.dayIndex} value={option.dayIndex}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
         <label className="space-y-2 rounded-2xl bg-gray-50 p-4 text-sm text-gray-700">
           <span className="block text-xs font-bold uppercase tracking-[0.14em] text-gray-500">Thời tiết</span>
           <input
             value={weatherLabel}
-            onChange={(event) => setWeatherLabel(event.target.value)}
+            onChange={(event) => {
+              setWeatherTouched(true);
+              setWeatherLabel(event.target.value);
+            }}
             className="w-full rounded-2xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none focus:border-brand-blue"
           />
+          {selectedForecast && !weatherTouched && (
+            <p className="text-xs text-gray-500">Đang dùng gợi ý từ tab Quỹ & an toàn cho ngày này.</p>
+          )}
         </label>
         <label className="space-y-2 rounded-2xl bg-gray-50 p-4 text-sm text-gray-700">
           <span className="block text-xs font-bold uppercase tracking-[0.14em] text-gray-500">Mood</span>
@@ -75,6 +166,11 @@ export function OutfitPlannerPanel({ tripId }: OutfitPlannerPanelProps) {
             className="w-full rounded-2xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none focus:border-brand-blue"
           />
         </label>
+      </div>
+
+      <div className="mt-4 rounded-2xl bg-gray-50 px-4 py-3 text-sm text-gray-600">
+        <span className="font-bold text-gray-800">Ngữ cảnh ngày chọn:</span>{' '}
+        {buildActivityLabels(selectedDay).join(' · ')}
       </div>
 
       {error && (

@@ -11,6 +11,7 @@ import type {
   ItineraryItem,
   ItinerarySnapshot,
   OutfitPlanCard,
+  SafetyOverviewSnapshot,
   Trip,
 } from '../../../lib/api-client';
 
@@ -155,6 +156,24 @@ const memberSnapshot: ItinerarySnapshot = {
   canEdit: false,
 };
 
+const multiDayLeaderSnapshot: ItinerarySnapshot = {
+  ...leaderSnapshot,
+  days: [
+    { dayIndex: 0, items: [itineraryItemOne] },
+    {
+      dayIndex: 1,
+      items: [
+        {
+          ...itineraryItemTwo,
+          id: 'item-3',
+          dayIndex: 1,
+          title: 'Ăn tối ven sông',
+        },
+      ],
+    },
+  ],
+};
+
 const mockTrip: Trip = {
   id: 'trip-1',
   name: 'Đà Nẵng',
@@ -224,6 +243,9 @@ vi.mock('../../../lib/api-client', async () => {
       requestHiddenSpots: vi.fn(),
       requestOutfitPlan: vi.fn(),
     },
+    safetyApi: {
+      getSafetyOverview: vi.fn(),
+    },
     proposalsApi: {
       listProposals: vi.fn().mockResolvedValue([]),
     },
@@ -236,7 +258,7 @@ vi.mock('../../../lib/api-client', async () => {
   };
 });
 
-import { bookingImportApi, dailyPodcastApi, itineraryApi, localExpertApi } from '../../../lib/api-client';
+import { bookingImportApi, dailyPodcastApi, itineraryApi, localExpertApi, safetyApi } from '../../../lib/api-client';
 
 const podcastRecap: DailyPodcastRecap = {
   id: 'recap-1',
@@ -289,6 +311,30 @@ const benchmarkWarnings: CostBenchmarkWarning[] = [
   },
 ];
 
+const safetyOverview: SafetyOverviewSnapshot = {
+  tripId: 'trip-1',
+  destinationLabel: 'Đà Nẵng',
+  contextLabel: 'Đà Nẵng • 2026-05-01',
+  weather: [
+    {
+      date: '2026-05-01',
+      label: 'Đà Nẵng - Hôm nay',
+      condition: 'nắng nhẹ',
+      temperatureC: 31,
+      rainChancePercent: 10,
+    },
+    {
+      date: '2026-05-02',
+      label: 'Đà Nẵng - Ngày 2',
+      condition: 'mưa nhẹ',
+      temperatureC: 27,
+      rainChancePercent: 60,
+    },
+  ],
+  crowd: [],
+  directoryQuickPicks: [],
+};
+
 describe('Phase 5 AI workspace', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -302,6 +348,7 @@ describe('Phase 5 AI workspace', () => {
     vi.mocked(bookingImportApi.listBookingImportDrafts).mockResolvedValue([bookingDraft]);
     vi.mocked(dailyPodcastApi.getDailyPodcast).mockResolvedValue({ recap: podcastRecap });
     vi.mocked(dailyPodcastApi.generateDailyPodcast).mockResolvedValue(podcastRecap);
+    vi.mocked(safetyApi.getSafetyOverview).mockResolvedValue(safetyOverview);
     Object.defineProperty(window, 'speechSynthesis', {
       configurable: true,
       value: {
@@ -516,15 +563,16 @@ describe('Phase 5 AI workspace', () => {
     ];
 
     vi.mocked(localExpertApi.requestOutfitPlan).mockResolvedValue({
-      dayIndex: 0,
-      weatherLabel: 'mưa nhẹ',
+      dayIndex: 1,
+      weatherLabel: 'mưa nhẹ, dễ mưa 60%',
       aestheticHint: 'nổi bật',
-      activityLabels: ['đi bộ', 'ăn tối'],
+      activityLabels: ['Ăn tối ven sông'],
       cards,
     });
 
-    render(<AiAssistTab tripId="trip-1" initialSnapshot={leaderSnapshot} />);
+    render(<AiAssistTab tripId="trip-1" initialSnapshot={multiDayLeaderSnapshot} />);
 
+    expect(await screen.findByDisplayValue('mưa nhẹ, dễ mưa 60%')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Lên đồ cho hôm nay' }));
 
     expect(await screen.findByText('Lên đồ cho hôm nay')).toBeInTheDocument();
@@ -532,6 +580,39 @@ describe('Phase 5 AI workspace', () => {
     expect(screen.getByText('Set 3')).toBeInTheDocument();
     expect(screen.queryByText('Set 4')).not.toBeInTheDocument();
     expect(screen.getAllByText('Cần xem lại').length).toBeGreaterThan(0);
+    await waitFor(() => {
+      expect(localExpertApi.requestOutfitPlan).toHaveBeenCalledWith('trip-1', {
+        dayIndex: 1,
+        aestheticHint: 'nổi bật',
+        weatherLabel: 'mưa nhẹ, dễ mưa 60%',
+        activityLabels: ['Ăn tối ven sông'],
+      });
+    });
+  });
+
+  it('lets the user override the derived weather label before requesting outfits', async () => {
+    vi.mocked(localExpertApi.requestOutfitPlan).mockResolvedValue({
+      dayIndex: 1,
+      weatherLabel: 'gió mạnh về tối',
+      aestheticHint: 'nổi bật',
+      activityLabels: ['Ăn tối ven sông'],
+      cards: [],
+    });
+
+    render(<AiAssistTab tripId="trip-1" initialSnapshot={multiDayLeaderSnapshot} />);
+
+    const weatherInput = await screen.findByDisplayValue('mưa nhẹ, dễ mưa 60%');
+    fireEvent.change(weatherInput, { target: { value: 'gió mạnh về tối' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Lên đồ cho hôm nay' }));
+
+    await waitFor(() => {
+      expect(localExpertApi.requestOutfitPlan).toHaveBeenCalledWith('trip-1', {
+        dayIndex: 1,
+        aestheticHint: 'nổi bật',
+        weatherLabel: 'gió mạnh về tối',
+        activityLabels: ['Ăn tối ven sông'],
+      });
+    });
   });
 
   it('renders podcast recap controls and uses the browser tts playback branch', async () => {

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import {
   bookingImportApi,
+  safetyApi,
   type BookingImportConfig,
   type BookingImportDraft,
   type BookingImportParsedItem,
@@ -10,6 +11,7 @@ import {
   type CulinaryRouteSuggestion,
   type ItineraryItem,
   type ItinerarySnapshot,
+  type SafetyOverviewSnapshot,
 } from '../../lib/api-client';
 import { BookingImportCard } from './BookingImportCard';
 import { BookingImportReviewSheet } from './BookingImportReviewSheet';
@@ -45,6 +47,7 @@ export function AiAssistTab({
   const [bookingConfig, setBookingConfig] = useState<BookingImportConfig | null>(null);
   const [bookingDrafts, setBookingDrafts] = useState<BookingImportDraft[]>([]);
   const [loadingBooking, setLoadingBooking] = useState(true);
+  const [safetyOverview, setSafetyOverview] = useState<SafetyOverviewSnapshot | null>(null);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [selectedDraft, setSelectedDraft] = useState<BookingImportDraft | null>(null);
   const [creatingDraft, setCreatingDraft] = useState(false);
@@ -109,6 +112,25 @@ export function AiAssistTab({
         if (active) {
           setLoadingBooking(false);
         }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [tripId]);
+
+  useEffect(() => {
+    let active = true;
+
+    safetyApi
+      .getSafetyOverview(tripId)
+      .then((overview) => {
+        if (!active) return;
+        setSafetyOverview(overview);
+      })
+      .catch(() => {
+        if (!active) return;
+        setSafetyOverview(null);
       });
 
     return () => {
@@ -326,7 +348,11 @@ export function AiAssistTab({
 
       <LocalExpertPanel tripId={tripId} />
 
-      <OutfitPlannerPanel tripId={tripId} />
+      <OutfitPlannerPanel
+        tripId={tripId}
+        days={snapshot?.days ?? []}
+        weatherForecast={safetyOverview?.weather ?? []}
+      />
 
       <DailyPodcastCard tripId={tripId} days={snapshot?.days ?? []} />
 

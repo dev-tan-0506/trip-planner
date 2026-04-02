@@ -1,9 +1,9 @@
 ---
 phase: 06
 slug: post-trip-memories
-status: draft
+status: complete
 nyquist_compliant: true
-wave_0_complete: false
+wave_0_complete: true
 created: 2026-04-02
 ---
 
@@ -20,7 +20,7 @@ created: 2026-04-02
 | **Framework** | jest + vitest |
 | **Config file** | `apps/api/test/jest-e2e.json`, `apps/web/vitest.config.ts` |
 | **Quick run command** | `npx vitest run --config apps/web/vitest.config.ts apps/web/src/components/trip/__tests__/post-trip-memories.test.tsx` |
-| **Full suite command** | `npx jest --config apps/api/test/jest-e2e.json --runInBand apps/api/test/phase-06-post-trip-memories.e2e-spec.ts && npx vitest run --config apps/web/vitest.config.ts apps/web/src/components/trip/__tests__/post-trip-memories.test.tsx` |
+| **Full suite command** | `cd apps/api && npx dotenv -e ../../.env -- npm run test:e2e -- test/phase-06-post-trip-memories.e2e-spec.ts` plus `npx vitest run --config apps/web/vitest.config.ts apps/web/src/components/trip/__tests__/post-trip-memories.test.tsx` |
 | **Estimated runtime** | quick smoke ~20-30 seconds; full suite ~45-70 seconds |
 
 ---
@@ -28,7 +28,7 @@ created: 2026-04-02
 ## Sampling Rate
 
 - **After every task commit:** Run the task-scoped smoke command from the verification map below
-- **After every plan wave:** Run `npx jest --config apps/api/test/jest-e2e.json --runInBand apps/api/test/phase-06-post-trip-memories.e2e-spec.ts && npx vitest run --config apps/web/vitest.config.ts apps/web/src/components/trip/__tests__/post-trip-memories.test.tsx`
+- **After every plan wave:** Run `cd apps/api && npx dotenv -e ../../.env -- npm run test:e2e -- test/phase-06-post-trip-memories.e2e-spec.ts` and `npx vitest run --config apps/web/vitest.config.ts apps/web/src/components/trip/__tests__/post-trip-memories.test.tsx`
 - **Before `$gsd-verify-work`:** Full suite must be green
 - **Max feedback latency:** 30 seconds for task smoke checks; 70 seconds at wave boundaries
 
@@ -38,15 +38,15 @@ created: 2026-04-02
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 06-01-01 | 01 | 1 | MEMO-01 | prisma/service smoke | `npx jest apps/api/src/memories/memories.service.spec.ts --runInBand --testNamePattern "vault|document"` | planned via 06-01 | pending |
-| 06-01-02 | 01 | 1 | MEMO-01 | e2e/api | `npx jest --config apps/api/test/jest-e2e.json --runInBand apps/api/test/phase-06-post-trip-memories.e2e-spec.ts --testNamePattern "vault|memory tab"` | planned via 06-01 | pending |
-| 06-02-01 | 02 | 2 | MEMO-01 | ui smoke | `npx vitest run --config apps/web/vitest.config.ts apps/web/src/components/trip/__tests__/post-trip-memories.test.tsx --testNamePattern "vault|Kỷ niệm"` | depends on 06-01 | pending |
-| 06-03-01 | 03 | 3 | MEMO-02 | service/unit | `npx jest apps/api/src/memories/memories.service.spec.ts --runInBand --testNamePattern "anonymous feedback|receipt"` | depends on 06-02 | pending |
-| 06-03-02 | 03 | 3 | MEMO-02 | e2e/api | `npx jest --config apps/api/test/jest-e2e.json --runInBand apps/api/test/phase-06-post-trip-memories.e2e-spec.ts --testNamePattern "feedback|anonymous"` | depends on 06-02 | pending |
-| 06-03-03 | 03 | 3 | MEMO-02 | ui smoke | `npx vitest run --config apps/web/vitest.config.ts apps/web/src/components/trip/__tests__/post-trip-memories.test.tsx --testNamePattern "ẩn danh|feedback"` | depends on 06-02 | pending |
-| 06-04-01 | 04 | 4 | MEMO-03, MEMO-04 | service/unit | `npx jest apps/api/src/memories/memories.service.spec.ts --runInBand --testNamePattern "souvenir|reunion|dispatch|final day"` | depends on 06-03 | pending |
-| 06-05-01 | 05 | 5 | MEMO-03, MEMO-04 | e2e/api | `npx jest --config apps/api/test/jest-e2e.json --runInBand apps/api/test/phase-06-post-trip-memories.e2e-spec.ts --testNamePattern "souvenir|reunion|availability|final day"` | depends on 06-04 | pending |
-| 06-05-02 | 05 | 5 | MEMO-03, MEMO-04 | ui smoke | `npx vitest run --config apps/web/vitest.config.ts apps/web/src/components/trip/__tests__/post-trip-memories.test.tsx --testNamePattern "souvenir|reunion"` | depends on 06-04 | pending |
+| 06-01-01 | 01 | 1 | MEMO-01 | prisma/service smoke | `cd apps/api && npx jest src/memories/memories.service.spec.ts --runInBand --testNamePattern "vault|document"` | implemented in 06-01 | green |
+| 06-01-02 | 01 | 1 | MEMO-01 | e2e/api | `cd apps/api && npx dotenv -e ../../.env -- npm run test:e2e -- test/phase-06-post-trip-memories.e2e-spec.ts` | implemented in 06-01 | green |
+| 06-02-01 | 02 | 2 | MEMO-01 | ui smoke | `npx vitest run --config apps/web/vitest.config.ts apps/web/src/components/trip/__tests__/post-trip-memories.test.tsx --testNamePattern "vault|Kỷ niệm"` | implemented in 06-02 | green |
+| 06-03-01 | 03 | 3 | MEMO-02 | service/unit | `cd apps/api && npx jest src/memories/memories.service.spec.ts --runInBand --testNamePattern "anonymous feedback|receipt"` | implemented in 06-03 | green |
+| 06-03-02 | 03 | 3 | MEMO-02 | e2e/api | `cd apps/api && npx dotenv -e ../../.env -- npm run test:e2e -- test/phase-06-post-trip-memories.e2e-spec.ts` | implemented in 06-03 | green |
+| 06-03-03 | 03 | 3 | MEMO-02 | ui smoke | `npx vitest run --config apps/web/vitest.config.ts apps/web/src/components/trip/__tests__/post-trip-memories.test.tsx --testNamePattern "ẩn danh|feedback"` | implemented in 06-03 | green |
+| 06-04-01 | 04 | 4 | MEMO-03, MEMO-04 | service/unit | `cd apps/api && npx jest src/memories/memories.service.spec.ts --runInBand --testNamePattern "souvenir|reunion|dispatch|final day"` | implemented in 06-04 | green |
+| 06-05-01 | 05 | 5 | MEMO-03, MEMO-04 | e2e/api | `cd apps/api && npx dotenv -e ../../.env -- npm run test:e2e -- test/phase-06-post-trip-memories.e2e-spec.ts` | implemented in 06-05 | green |
+| 06-05-02 | 05 | 5 | MEMO-03, MEMO-04 | ui smoke | `npx vitest run --config apps/web/vitest.config.ts apps/web/src/components/trip/__tests__/post-trip-memories.test.tsx --testNamePattern "souvenir|reunion"` | implemented in 06-05 | green |
 
 Status legend: `pending`, `green`, `red`, `flaky`
 
@@ -69,6 +69,6 @@ Status legend: `pending`, `green`, `red`, `flaky`
 - [x] Sampling continuity keeps every plan covered by e2e or UI smoke checks
 - [x] No watch-mode flags
 - [x] `nyquist_compliant: true` set in frontmatter
-- [ ] Execution still pending
+- [x] Execution completed and Phase 06 UAT passed in [06-UAT.md](./06-UAT.md)
 
-**Approval:** pending
+**Approval:** approved on 2026-04-03

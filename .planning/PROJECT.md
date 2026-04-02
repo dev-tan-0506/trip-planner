@@ -8,6 +8,18 @@ A comprehensive, all-in-one trip planning web application (PWA) for solo travele
 
 Maximum convenience and the total elimination of group-travel "pain points" by centralizing itinerary, finances, logistics, and memories into a single, seamless web platform requiring zero app installation for onboarding.
 
+## Current State
+
+- `v1.0` web milestone is closed as the shipped baseline.
+- The product now covers onboarding, trip creation/join, itinerary, logistics, finance/safety, AI helpers, and post-trip memories in one connected workspace.
+- `v2` is intentionally not opened yet because the next milestone direction is being reconsidered.
+
+## Next Milestone Gate
+
+Before opening `v2`, the team should reset planning around the new direction instead of extending the `v1` roadmap by inertia.
+
+See: [.planning/PRE-V2-RESET.md](/c:/Users/quoct/OneDrive/Desktop/code/designapp/trip-planner/.planning/PRE-V2-RESET.md) and [.planning/PRE-V2-WORKING-BRIEF.md](/c:/Users/quoct/OneDrive/Desktop/code/designapp/trip-planner/.planning/PRE-V2-WORKING-BRIEF.md)
+
 ## Requirements
 
 ### Validated
@@ -22,20 +34,11 @@ Maximum convenience and the total elimination of group-travel "pain points" by c
 - [x] **Local Cost Benchmarking:** Validated in Phase 05. Finance warnings compare spending against destination-aware local benchmarks without blocking expense entry.
 - [x] **Smart Discovery & AI Daily Podcast:** Validated in Phase 05. AI daily recap persists per trip day with browser playback fallback and text backup.
 
-### Active (V1 Web App PWA)
+### Active (Awaiting Next Milestone Reset)
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] **Flexible Planning & 1-Click Marketplace:** Support diverse group sizes. Provide a Community Template Library (copy an itinerary with 1 click). Integrate a Tinder-style swipe feature to vote on food/activities via Web.
-- [ ] **Smart Room & Ride Allocation:** Drag-and-drop web UI to distribute people into cars/rooms via 3 modes (Leader manual, Member auto-register, Randomizer).
-- [ ] **Photo-Proof Check-in (Web-based):** Leader sets gathering points. Members must upload/take a selfie (via browser camera) to confirm "Arrived".
-- [ ] **Smart To-do & Logistics:** Leader delegates shared packing items. Tracks completion status.
-- [ ] **Fund Management & Expenses:** Centralized pool managed by treasurer, MoMo/Bank QR codes for money collection.
-- [ ] **Digital Vault:** Cloud drive to gather ID cards and flight tickets for the Leader.
-- [ ] **Souvenir Planner:** Recommends local specialties and sends reminders.
-- [ ] **Reunion Organizer:** Sends e-invites for a post-trip meetup.
-- [ ] **On-demand Concierge & SOS:** Quick access to local mechanics or medical support. Basic Web SOS button.
-- [ ] **Anonymous Post-trip Feedback:** Fun, incognito survey at the end of the trip.
+- [ ] **Next milestone requirements pending reset:** The `v1` roadmap is now archived. Define a fresh requirement set for `v2` after revisiting product direction, carry-over debt, and platform scope.
 
 ### Out of Scope (Deferred to Phase 2 / Native App)
 
@@ -67,4 +70,4 @@ Maximum convenience and the total elimination of group-travel "pain points" by c
 | [Phase 05 AI trust model] | AI features should draft, warn, or summarize without silently mutating trip structure. | Validated in Phase 05 |
 
 ---
-*Last updated: 2026-04-02 (Phase 05 complete)*
+*Last updated: 2026-04-03 after v1.0 close-out prep*
