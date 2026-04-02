@@ -1290,6 +1290,11 @@ export interface FundExpenseRow {
   category: 'FOOD' | 'TRANSPORT' | 'ACCOMMODATION' | 'TICKETS' | 'EMERGENCY' | 'OTHER';
   incurredAt: string;
   linkedItineraryItemId: string | null;
+  severity: HealthWarningSeverity;
+  benchmarkMedianAmount: string | null;
+  sourceLabel: string;
+  confidenceLabel: AiConfidenceLabel;
+  note: string;
   createdBy: {
     tripMemberId: string;
     userId: string;
@@ -1297,8 +1302,21 @@ export interface FundExpenseRow {
   };
 }
 
+export interface CostBenchmarkWarning {
+  expenseId: string;
+  title: string;
+  amount: string;
+  category: FundExpenseRow['category'];
+  severity: HealthWarningSeverity;
+  benchmarkMedianAmount: string | null;
+  sourceLabel: string;
+  confidenceLabel: AiConfidenceLabel;
+  note: string;
+}
+
 export interface FundSnapshot {
   tripId: string;
+  destinationLabel?: string | null;
   hasFund: boolean;
   isLeader: boolean;
   currentTripMemberId: string;
@@ -1317,6 +1335,7 @@ export interface FundSnapshot {
   } | null;
   contributions: FundContributionRow[];
   expenses: FundExpenseRow[];
+  benchmarkWarnings: CostBenchmarkWarning[];
   summary: {
     targetAmount: string;
     collectedAmount: string;
@@ -1404,6 +1423,15 @@ export const fundApi = {
     return request<FundSnapshot>(`/trips/${tripId}/fund`);
   },
 
+  async getCostBenchmarks(tripId: string): Promise<{
+    tripId: string;
+    destinationLabel: string | null | undefined;
+    currency: string;
+    warnings: CostBenchmarkWarning[];
+  }> {
+    return request(`/trips/${tripId}/fund/cost-benchmarks`);
+  },
+
   async createFund(
     tripId: string,
     body: {
@@ -1458,6 +1486,8 @@ export const fundApi = {
       category: 'FOOD' | 'TRANSPORT' | 'ACCOMMODATION' | 'TICKETS' | 'EMERGENCY' | 'OTHER';
       incurredAt: string;
       linkedItineraryItemId?: string;
+      merchantLabel?: string;
+      quantityHint?: string;
     },
   ): Promise<FundSnapshot> {
     return request<FundSnapshot>(`/trips/${tripId}/fund/expenses`, {

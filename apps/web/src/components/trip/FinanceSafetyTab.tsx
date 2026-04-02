@@ -18,6 +18,7 @@ import { SafetyOverviewPanel } from './SafetyOverviewPanel';
 import { SafetyDirectoryList } from './SafetyDirectoryList';
 import { CulturalWarningBanner } from './CulturalWarningBanner';
 import { SOSPanel } from './SOSPanel';
+import { CostBenchmarkWarningCard } from './CostBenchmarkWarningCard';
 
 interface FinanceSafetyTabProps {
   tripId: string;
@@ -129,6 +130,11 @@ export function FinanceSafetyTab({ tripId }: FinanceSafetyTabProps) {
       )}
 
       <FundOverviewPanel snapshot={fundSnapshot} />
+      <CostBenchmarkWarningCard
+        warnings={fundSnapshot.benchmarkWarnings}
+        currency={fundSnapshot.fund?.currency ?? 'VND'}
+        destinationLabel={fundSnapshot.destinationLabel}
+      />
 
       <FundContributionSheet
         snapshot={fundSnapshot}

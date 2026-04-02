@@ -3,8 +3,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TripWorkspaceShell } from '../TripWorkspaceShell';
 import { AiAssistTab } from '../AiAssistTab';
 import { TimelineDaySection } from '../TimelineDaySection';
+import { CostBenchmarkWarningCard } from '../CostBenchmarkWarningCard';
 import type {
   BookingImportDraft,
+  CostBenchmarkWarning,
   DailyPodcastRecap,
   ItineraryItem,
   ItinerarySnapshot,
@@ -250,6 +252,42 @@ const podcastRecap: DailyPodcastRecap = {
   createdAt: '2026-04-01T12:00:00.000Z',
   updatedAt: '2026-04-01T12:00:00.000Z',
 };
+
+const benchmarkWarnings: CostBenchmarkWarning[] = [
+  {
+    expenseId: 'expense-1',
+    title: 'Hai san view dep',
+    amount: '260000',
+    category: 'FOOD',
+    severity: 'NGUY_CO_CAO',
+    benchmarkMedianAmount: '90000',
+    sourceLabel: 'Mat bang quan an pho bien Da Nang',
+    confidenceLabel: 'Goi y',
+    note: 'Nen kiem tra lai vi tri quan, phu thu va so luong truoc khi chot.',
+  },
+  {
+    expenseId: 'expense-2',
+    title: 'Thuoc du phong',
+    amount: '500000',
+    category: 'EMERGENCY',
+    severity: 'CAN_XEM_LAI',
+    benchmarkMedianAmount: '500000',
+    sourceLabel: 'Can doi chieu tai cho',
+    confidenceLabel: 'Can xem lai',
+    note: 'Chua co moc gia on dinh, hay doi chieu them voi nha thuoc hoac le tan.',
+  },
+  {
+    expenseId: 'expense-3',
+    title: 'Bua trua gan bien',
+    amount: '95000',
+    category: 'FOOD',
+    severity: 'LUU_Y',
+    benchmarkMedianAmount: '90000',
+    sourceLabel: 'Mat bang quan an pho bien Da Nang',
+    confidenceLabel: 'Uoc luong',
+    note: 'Gia nay gan median, van nen doi chieu voi set an da chon.',
+  },
+];
 
 describe('Phase 5 AI workspace', () => {
   beforeEach(() => {
@@ -532,5 +570,35 @@ describe('Phase 5 AI workspace', () => {
       await screen.findByText(/May nay chua ho tro speechSynthesis/i),
     ).toBeInTheDocument();
     expect(screen.getByText('Ban text van hien ro rang du may khong phat audio.')).toBeInTheDocument();
+  });
+
+  it('renders Chi phi dia phuong warnings with all three severity labels', () => {
+    render(
+      <CostBenchmarkWarningCard
+        warnings={benchmarkWarnings}
+        currency="VND"
+        destinationLabel="Da Nang"
+      />,
+    );
+
+    expect(screen.getByText('Chi phi dia phuong')).toBeInTheDocument();
+    expect(screen.getByText('Nguy co cao')).toBeInTheDocument();
+    expect(screen.getAllByText('Can xem lai').length).toBeGreaterThan(0);
+    expect(screen.getByText('Luu y')).toBeInTheDocument();
+    expect(screen.getByText(/Mat bang quan an pho bien Da Nang/i)).toBeInTheDocument();
+  });
+
+  it('renders missing-data fallback copy for cost benchmarks as non-blocking guidance', () => {
+    render(
+      <CostBenchmarkWarningCard
+        warnings={[benchmarkWarnings[1]]}
+        currency="VND"
+        destinationLabel="Da Nang"
+      />,
+    );
+
+    expect(screen.getAllByText('Can xem lai').length).toBeGreaterThan(0);
+    expect(screen.getByText(/Chua co moc gia on dinh/i)).toBeInTheDocument();
+    expect(screen.getByText(/Nguon doi chieu/i)).toBeInTheDocument();
   });
 });
