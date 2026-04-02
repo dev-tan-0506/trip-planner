@@ -365,6 +365,134 @@ export interface DailyPodcastRecap {
   updatedAt: string;
 }
 
+export type VaultDocumentKind =
+  | 'ID_CARD'
+  | 'PASSPORT'
+  | 'FLIGHT_TICKET'
+  | 'HOTEL_BOOKING'
+  | 'OTHER';
+export type VaultDocumentStatus = 'PENDING_REVIEW' | 'READY_FOR_CHECK_IN' | 'ARCHIVED';
+
+export interface VaultDocumentRow {
+  id: string;
+  kind: VaultDocumentKind;
+  status: VaultDocumentStatus;
+  fileName: string;
+  mimeType: string;
+  fileUrl: string;
+  note: string | null;
+  expiresAt: string;
+  createdAt: string;
+  updatedAt: string;
+  reviewedAt: string | null;
+  uploadedBy: {
+    tripMemberId: string;
+    userId: string;
+    name: string | null;
+    avatarUrl: string | null;
+  };
+  reviewedBy: {
+    tripMemberId: string;
+    userId: string;
+    name: string | null;
+    avatarUrl: string | null;
+  } | null;
+}
+
+export interface VaultSnapshot {
+  tripId: string;
+  isLeader: boolean;
+  currentTripMemberId: string;
+  retentionLabel: string;
+  supportedMimeTypes: string[];
+  documents: VaultDocumentRow[];
+}
+
+export interface FeedbackResponseRow {
+  id: string;
+  moodScore: number;
+  highlight: string;
+  wishNextTime: string;
+  createdAt: string;
+}
+
+export interface FeedbackSnapshot {
+  tripId: string;
+  isLeader: boolean;
+  currentTripMemberId: string;
+  status: 'LOCKED' | 'OPEN' | 'CLOSED';
+  isEligible: boolean;
+  canSubmit: boolean;
+  hasSubmitted: boolean;
+  submittedCount: number;
+  openedAt: string | null;
+  closedAt: string | null;
+  moodBreakdown: Array<{ score: number; count: number }>;
+  responses: FeedbackResponseRow[];
+}
+
+export interface SouvenirSuggestion {
+  locationName: string;
+  locationType: string;
+  areaLabel: string;
+  reason: string;
+  souvenirHint: string;
+}
+
+export interface SouvenirSnapshot {
+  tripId: string;
+  eligible: boolean;
+  destinationLabel: string;
+  reminderLabel: string;
+  suggestions: SouvenirSuggestion[];
+}
+
+export interface ReunionDeliveryStatus {
+  recipientEmail: string;
+  status: string;
+  sentAt: string | null;
+  errorMessage: string | null;
+}
+
+export interface ReunionAvailabilityRow {
+  tripMemberId: string;
+  selectedDates: string[];
+  note: string | null;
+}
+
+export interface ReunionSnapshot {
+  tripId: string;
+  eligible: boolean;
+  isLeader?: boolean;
+  status: string;
+  unlocksAt: string;
+  title?: string;
+  message?: string;
+  suggestedDateOptions: string[];
+  recommendedDate: string | null;
+  finalizedDate: string | null;
+  deliveryStatus: ReunionDeliveryStatus[];
+  availability: ReunionAvailabilityRow[];
+}
+
+export interface SubmitAnonymousFeedbackPayload {
+  moodScore: number;
+  highlight: string;
+  wishNextTime: string;
+}
+
+export interface UploadVaultDocumentPayload {
+  documentKind: VaultDocumentKind;
+  fileName: string;
+  mimeType: string;
+  fileDataUrl: string;
+  note?: string;
+}
+
+export interface ReviewVaultDocumentPayload {
+  status: Extract<VaultDocumentStatus, 'READY_FOR_CHECK_IN' | 'ARCHIVED'>;
+}
+
 export interface GenerateDailyPodcastPayload {
   tone?: string;
   refresh?: boolean;
@@ -627,6 +755,82 @@ export const dailyPodcastApi = {
     body: GenerateDailyPodcastPayload,
   ): Promise<DailyPodcastRecap> {
     return request<DailyPodcastRecap>(`/trips/${tripId}/daily-podcast/${dayIndex}/generate`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+};
+
+export const memoriesApi = {
+  async getVaultSnapshot(tripId: string): Promise<VaultSnapshot> {
+    return request<VaultSnapshot>(`/trips/${tripId}/memories/vault`);
+  },
+
+  async uploadVaultDocument(
+    tripId: string,
+    body: UploadVaultDocumentPayload,
+  ): Promise<VaultSnapshot> {
+    return request<VaultSnapshot>(`/trips/${tripId}/memories/vault/documents`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async reviewVaultDocument(
+    tripId: string,
+    documentId: string,
+    body: ReviewVaultDocumentPayload,
+  ): Promise<VaultSnapshot> {
+    return request<VaultSnapshot>(`/trips/${tripId}/memories/vault/documents/${documentId}/review`, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async getFeedbackSnapshot(tripId: string): Promise<FeedbackSnapshot> {
+    return request<FeedbackSnapshot>(`/trips/${tripId}/memories/feedback`);
+  },
+
+  async submitAnonymousFeedback(
+    tripId: string,
+    body: SubmitAnonymousFeedbackPayload,
+  ): Promise<FeedbackSnapshot> {
+    return request<FeedbackSnapshot>(`/trips/${tripId}/memories/feedback/submissions`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async closeFeedbackPoll(tripId: string): Promise<FeedbackSnapshot> {
+    return request<FeedbackSnapshot>(`/trips/${tripId}/memories/feedback/close`, {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+  },
+
+  async getSouvenirSnapshot(tripId: string): Promise<SouvenirSnapshot> {
+    return request<SouvenirSnapshot>(`/trips/${tripId}/memories/souvenirs`);
+  },
+
+  async getReunionSnapshot(tripId: string): Promise<ReunionSnapshot> {
+    return request<ReunionSnapshot>(`/trips/${tripId}/memories/reunion`);
+  },
+
+  async respondReunionAvailability(
+    tripId: string,
+    body: { selectedDates: string[]; note?: string },
+  ): Promise<ReunionSnapshot> {
+    return request<ReunionSnapshot>(`/trips/${tripId}/memories/reunion/availability`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  },
+
+  async finalizeReunionInvite(
+    tripId: string,
+    body: { finalizedDate: string },
+  ): Promise<ReunionSnapshot> {
+    return request<ReunionSnapshot>(`/trips/${tripId}/memories/reunion/finalize`, {
       method: 'POST',
       body: JSON.stringify(body),
     });

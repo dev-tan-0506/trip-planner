@@ -46,6 +46,7 @@ import { ChecklistTab } from './ChecklistTab';
 import { AttendanceTab } from './AttendanceTab';
 import { FinanceSafetyTab } from './FinanceSafetyTab';
 import { AiAssistTab } from './AiAssistTab';
+import { MemoriesTab } from './MemoriesTab';
 
 type Tab =
   | 'Lich trinh'
@@ -55,7 +56,8 @@ type Tab =
   | 'Checklist'
   | 'Check-in'
   | 'Quy an toan'
-  | 'Trợ lý AI';
+  | 'Trợ lý AI'
+  | 'Kỷ niệm';
 
 interface TripWorkspaceShellProps {
   trip: Trip;
@@ -303,6 +305,11 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
       key: 'Trợ lý AI',
       label: 'Trợ lý AI',
       icon: <Loader2 size={18} />,
+    },
+    {
+      key: 'Kỷ niệm',
+      label: 'Kỷ niệm',
+      icon: <Upload size={18} />,
     },
   ];
 
@@ -615,6 +622,17 @@ export function TripWorkspaceShell({ trip, joinCode }: TripWorkspaceShellProps) 
               initialSnapshot={snapshot}
               onSnapshotUpdate={handleSnapshotUpdate}
             />
+          </motion.div>
+        )}
+
+        {activeTab === 'Kỷ niệm' && (
+          <motion.div
+            key="memories"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <MemoriesTab tripId={tripId} />
           </motion.div>
         )}
       </AnimatePresence>

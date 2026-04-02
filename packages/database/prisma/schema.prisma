@@ -29,6 +29,7 @@ model User {
   approvedVoteSessions     VoteSession[]        @relation("VoteSessionApprover")
   publishedTemplates       CommunityTemplate[]  @relation("TemplatePublisher")
   voteBallots              VoteBallot[]
+  reunionInviteDeliveries  ReunionInviteDelivery[]
 }
 
 model RefreshToken {
@@ -75,6 +76,11 @@ model Trip {
   safetyAlerts         SafetyAlert[]
   bookingImportDrafts  BookingImportDraft[]
   dailyPodcastRecaps   DailyPodcastRecap[]
+  vaultDocuments       VaultDocument[]
+  feedbackPoll         TripFeedbackPoll?
+  anonymousFeedbackSubmissions AnonymousFeedbackSubmission[]
+  feedbackSubmissionReceipts   FeedbackSubmissionReceipt[]
+  reunionInvite        ReunionInvite?
 }
 
 enum TripRole {
@@ -105,8 +111,153 @@ model TripMember {
   acknowledgedSafetyAlerts    SafetyAlert[]          @relation("SafetyAlertAcknowledger")
   createdBookingImportDrafts  BookingImportDraft[]   @relation("BookingImportDraftCreator")
   reviewedBookingImportDrafts BookingImportDraft[]   @relation("BookingImportDraftReviewer")
+  uploadedVaultDocuments      VaultDocument[]        @relation("VaultDocumentUploader")
+  reviewedVaultDocuments      VaultDocument[]        @relation("VaultDocumentReviewer")
+  feedbackSubmissionReceipts  FeedbackSubmissionReceipt[]
+  reunionAvailabilities       ReunionAvailability[]
 
   @@unique([userId, tripId])
+}
+
+model ReunionInvite {
+  id                   String   @id @default(cuid())
+  tripId               String   @unique
+  status               String   @default("PENDING_SEND")
+  title                String
+  message              String
+  suggestedDateOptions String[]
+  recommendedDate      String?
+  finalizedDate        String?
+  unlockedAt           DateTime
+  sentAt               DateTime?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  trip          Trip                    @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  availabilities ReunionAvailability[]
+  deliveries    ReunionInviteDelivery[]
+}
+
+model ReunionAvailability {
+  id              String   @id @default(cuid())
+  reunionInviteId String
+  tripMemberId    String
+  selectedDates   String[]
+  note            String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  reunionInvite ReunionInvite @relation(fields: [reunionInviteId], references: [id], onDelete: Cascade)
+  tripMember     TripMember    @relation(fields: [tripMemberId], references: [id], onDelete: Cascade)
+
+  @@unique([reunionInviteId, tripMemberId])
+}
+
+model ReunionInviteDelivery {
+  id              String   @id @default(cuid())
+  reunionInviteId String
+  userId          String
+  recipientEmail  String
+  status          String   @default("PENDING")
+  subjectLine     String
+  sentAt          DateTime?
+  errorMessage    String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  reunionInvite ReunionInvite @relation(fields: [reunionInviteId], references: [id], onDelete: Cascade)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reunionInviteId, userId])
+}
+
+enum FeedbackPollStatus {
+  LOCKED
+  OPEN
+  CLOSED
+}
+
+model TripFeedbackPoll {
+  id        String             @id @default(cuid())
+  tripId     String             @unique
+  status     FeedbackPollStatus @default(LOCKED)
+  openedAt   DateTime?
+  closedAt   DateTime?
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  trip                     Trip                          @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  submissions              AnonymousFeedbackSubmission[]
+  submissionReceipts       FeedbackSubmissionReceipt[]
+}
+
+model AnonymousFeedbackSubmission {
+  id           String   @id @default(cuid())
+  tripId       String
+  pollId       String
+  moodScore    Int
+  highlight    String
+  wishNextTime String
+  createdAt    DateTime @default(now())
+
+  trip  Trip             @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  poll  TripFeedbackPoll @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  receipt FeedbackSubmissionReceipt?
+
+  @@index([tripId, createdAt])
+}
+
+model FeedbackSubmissionReceipt {
+  id           String   @id @default(cuid())
+  tripId       String
+  pollId       String
+  tripMemberId String
+  submissionId String   @unique
+  submittedAt  DateTime @default(now())
+
+  trip        Trip                      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  poll        TripFeedbackPoll          @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  tripMember  TripMember                @relation(fields: [tripMemberId], references: [id], onDelete: Cascade)
+  submission  AnonymousFeedbackSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@unique([pollId, tripMemberId])
+}
+
+enum VaultDocumentKind {
+  ID_CARD
+  PASSPORT
+  FLIGHT_TICKET
+  HOTEL_BOOKING
+  OTHER
+}
+
+enum VaultDocumentStatus {
+  PENDING_REVIEW
+  READY_FOR_CHECK_IN
+  ARCHIVED
+}
+
+model VaultDocument {
+  id                     String              @id @default(cuid())
+  tripId                 String
+  uploadedByTripMemberId String
+  reviewedByTripMemberId String?
+  kind                   VaultDocumentKind
+  status                 VaultDocumentStatus @default(PENDING_REVIEW)
+  fileName               String
+  mimeType               String
+  fileUrl                String
+  note                   String?
+  expiresAt              DateTime
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+
+  trip        Trip        @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  uploadedBy  TripMember  @relation("VaultDocumentUploader", fields: [uploadedByTripMemberId], references: [id], onDelete: Cascade)
+  reviewedBy  TripMember? @relation("VaultDocumentReviewer", fields: [reviewedByTripMemberId], references: [id])
+
+  @@index([tripId, status])
+  @@index([tripId, uploadedByTripMemberId])
 }
 
 enum BookingImportDraftStatus {
