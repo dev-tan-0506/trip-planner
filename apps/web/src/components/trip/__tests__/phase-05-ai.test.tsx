@@ -443,7 +443,7 @@ describe('Phase 5 AI workspace', () => {
   it('renders inline health warnings in the timeline day section', async () => {
     render(
       <TimelineDaySection
-        day={leaderSnapshot.days[0]}
+        day={leaderSnapshot.days[0]!}
         tripStartDate="2026-05-01"
         canEdit
         overlapWarnings={[]}
@@ -672,7 +672,7 @@ describe('Phase 5 AI workspace', () => {
   it('renders missing-data fallback copy for cost benchmarks as non-blocking guidance', () => {
     render(
       <CostBenchmarkWarningCard
-        warnings={[benchmarkWarnings[1]]}
+        warnings={[benchmarkWarnings[1]!]}
         currency="VND"
         destinationLabel="Đà Nẵng"
       />,

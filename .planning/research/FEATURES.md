@@ -1,35 +1,66 @@
 # Project Research: Features Dimension
 
-## Target Domain
-Trip Planning & Travel Utility App ("Mình Đi Đâu Thế")
+## Target Milestone
+`v2.0` - redesign the full web app to match Stitch while refactoring FE and BE structure.
 
-## Feature Categorization
+## Feature Categories For This Milestone
 
-### Table Stakes (Must-Have or Users Leave)
-*These are standard baseline features that users expect from any travel planner today.*
-- User Authentication & Profile Management.
-- Trip Creation (Dates, Destination, Inviting Members via Link).
-- Static Itinerary Timeline (Days -> Hours -> Activities).
-- Basic Map Integration (Pinning locations on Google/Apple Maps).
-- Budget Logging (Simple expense tracking).
-- Push Notifications for basic updates.
+### Category A: Design System Foundation
+These are table stakes for a full-app redesign.
+- Shared tokens for color, spacing, typography, radius, elevation, and motion
+- Reusable primitives in `packages/ui`
+- Consistent app shell, section headers, cards, forms, dialogs, tabs, and action bars
+- Clear responsive behavior across auth, dashboard, trip workspace, and supporting screens
 
-### Differentiators (Competitive Advantage)
-*These features define the "Core Value" and will disrupt current market options.*
-- **Interactive Tinder-Swipe Voting**: Eliminates text-chat arguments for food/destinations.
-- **Photo-Proof Attendance**: Gamified and strict check-ins.
-- **Group Fund & MoMo QR Integration**: Solving the immediate payment friction cleanly.
-- **Auto-Parsing Hub**: AI reads forwarded emails to build the timeline instantly.
-- **Live Location & Offline Mesh Network**: Safety and communication in remote areas.
-- **Local Expert AI & Cultural Warnings**: Highly contextual hyper-personalization.
-- **Driver/Room Smart Allocation**: The drag-and-drop / randomizer for large groups.
+### Category B: Full-App Screen Redesign
+These are the visible user-facing surfaces that should align with the Stitch design direction.
+- Auth flows
+- Dashboard and trip creation flow
+- Trip preview and trip workspace shell
+- All major workspace tabs: itinerary, proposals, votes, logistics, checklist, attendance, finance/safety, AI, memories
+- Supporting screens such as voting and templates
 
-### Anti-Features (Do Deliberately NOT Build in V1)
-- **Real-Time Co-editing Itinerary**: Leads to data conflicts, UI clutter, and destroys the "Leader" concept. High engineering cost with low utility.
-- **Automatic Micro Split-Bills**: Calculating who owes who down to the penny ruins the fun travel vibe and causes disputes. Use "Group Fund" instead.
-- **Auto-rendered AR Video/Vlogs**: Extensively high rendering costs, server bills, and takes focus away from the core utility function.
+### Category C: Frontend Architecture Refactor
+These are maintainability features, not just cleanup.
+- Replace oversized route/page files with screen composition patterns
+- Replace oversized feature components with smaller view-model / presentational splits
+- Split API client by domain
+- Introduce stable feature boundaries so redesign work does not keep leaking across unrelated files
 
-### Feature Dependencies
-- *Outfit Planner* depends on *Itinerary Timeline* and *Weather APIs*.
-- *AI Podcast* depends on *Photo Vault*, *Live Location (Distance)*, and *To-Do tracking*.
-- *Mesh Network* depends strictly on *Native Device Capabilities (BLE)*.
+### Category D: Backend Architecture Refactor
+These are structural features needed so FE redesign does not sit on top of increasingly hard-to-change services.
+- Break oversized services into narrower responsibilities
+- Make domain contracts easier to follow and test
+- Isolate orchestration from pure logic and persistence details
+- Preserve current behavior while reducing blast radius of future changes
+
+### Category E: Regression Safety
+These are required for confidence during redesign and refactor.
+- Existing core behavior remains intact
+- Typecheck, tests, and builds stay green
+- Critical user flows keep working: auth, trip creation/join, workspace navigation, major tab workflows
+
+## Recommended In-Scope Set
+
+For this milestone, all five categories above should be treated as in scope:
+- Design system foundation
+- Full-app screen redesign
+- Frontend architecture refactor
+- Backend architecture refactor
+- Regression safety
+
+## What Should Not Become Scope In This Milestone
+
+- New product-direction pivots
+- Native/mobile expansion
+- New large AI capabilities beyond what is needed to support the redesign or architecture cleanup
+- Broad schema/domain rewrites that change shipped product behavior unless strictly required by refactor
+
+## Milestone Shape
+
+This milestone is best treated as a **platform hardening + UX modernization** milestone:
+- redesign every core screen
+- refactor the structure underneath
+- avoid piling on unrelated new product bets
+
+That keeps the milestone coherent and makes success measurable.

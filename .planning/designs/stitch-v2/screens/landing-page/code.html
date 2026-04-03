@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mình Đi Đâu Thế? - Đi là ghiền!</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#4f2dd2",
+              "on-tertiary-fixed-variant": "#006832",
+              "on-primary-fixed-variant": "#571400",
+              "secondary-container": "#d4cbff",
+              "inverse-on-surface": "#9e9c9c",
+              "background": "#f9f6f5",
+              "surface-container-highest": "#dfdcdc",
+              "surface-tint": "#a93000",
+              "on-background": "#2f2e2e",
+              "surface-dim": "#d6d4d3",
+              "outline-variant": "#afacac",
+              "tertiary-fixed-dim": "#24f07e",
+              "surface-variant": "#dfdcdc",
+              "secondary": "#5a3bdd",
+              "on-surface-variant": "#5c5b5b",
+              "primary-fixed": "#ff784d",
+              "on-secondary-container": "#451dc8",
+              "primary-dim": "#942900",
+              "surface-container-low": "#f3f0ef",
+              "primary-fixed-dim": "#ff5d26",
+              "on-error": "#ffefee",
+              "secondary-fixed-dim": "#c6bbff",
+              "surface-container-high": "#e5e2e1",
+              "inverse-surface": "#0e0e0e",
+              "tertiary": "#006a33",
+              "primary": "#a93000",
+              "error": "#b31b25",
+              "on-surface": "#2f2e2e",
+              "on-error-container": "#570008",
+              "on-tertiary-fixed": "#004820",
+              "tertiary-container": "#3fff8b",
+              "outline": "#787676",
+              "tertiary-dim": "#005c2b",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-fixed": "#3fff8b",
+              "on-tertiary": "#cdffd3",
+              "surface-container": "#eae7e7",
+              "on-tertiary-container": "#005d2c",
+              "error-container": "#fb5151",
+              "secondary-dim": "#4e2bd1",
+              "on-primary": "#ffefeb",
+              "surface-bright": "#f9f6f5",
+              "on-secondary": "#f6f0ff",
+              "error-dim": "#9f0519",
+              "secondary-fixed": "#d4cbff",
+              "inverse-primary": "#ff571a",
+              "on-primary-fixed": "#000000",
+              "primary-container": "#ff784d",
+              "on-secondary-fixed": "#3200a7",
+              "surface": "#f9f6f5",
+              "on-primary-container": "#460f00"
+            },
+            fontFamily: {
+              "headline": ["Be Vietnam Pro"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+      .tonal-shift-bg { background-color: rgba(243, 240, 239, 0.8); }
+      .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+      .kinetic-shadow { shadow: 0 32px 64px -12px rgba(47, 46, 46, 0.08); }
+      .text-glow { text-shadow: 0 0 20px rgba(169, 48, 0, 0.2); }
+      .three-d-card { transform: perspective(1000px) rotateX(2deg) rotateY(-2deg); transition: transform 0.3s ease; }
+      .three-d-card:hover { transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(-8px); }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl shadow-2xl shadow-orange-500/5">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-black text-orange-600 dark:text-orange-500 italic font-headline tracking-tight">
+                Mình Đi Đâu Thế?
+            </div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-orange-600 dark:text-orange-400 border-b-4 border-orange-600 font-black font-headline hover:text-orange-500 hover:scale-105 transition-all" href="#">Khám phá</a>
+<a class="text-zinc-600 dark:text-zinc-400 font-medium font-headline hover:text-orange-500 hover:scale-105 transition-all" href="#">Lên lịch</a>
+<a class="text-zinc-600 dark:text-zinc-400 font-medium font-headline hover:text-orange-500 hover:scale-105 transition-all" href="#">Nhóm đi</a>
+<a class="text-zinc-600 dark:text-zinc-400 font-medium font-headline hover:text-orange-500 hover:scale-105 transition-all" href="#">Cộng đồng</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 text-on-surface hover:bg-surface-container rounded-full transition-colors">search</button>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-full font-headline font-bold hover:scale-95 duration-150 ease-in-out">Chốt đơn!</button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative h-[921px] min-h-[700px] w-full flex items-center justify-center pt-20 px-6 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Ha Giang Mountains" class="w-full h-full object-cover" data-alt="Stunning aerial view of Mu Cang Chai rice terraces at sunrise with golden light illuminating the green and yellow fields and soft mountain mist" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBh1jj5QtxKj5TqqJqHbGCqRZEqulIedicrt0eErYELlN70A8APU5D2EY6M-dMNSsDglp5OdIAEs_4qeia0KWWuKdNNFH9ySJ7Yklorn-U_q8m2AqPH2Ob2hZIViTcUNG4A8OglA6-7o2c3mkFFnI192CJolFb9G1e956J1S0rjzPR0PgZL9JqoXhnv33IZPOL0YwovmlMl9WAcAqlwLHKHh9YphV_HnegFJFumJpNpI3aXI9NRC75LkzcnzCFha3Jo7qnSaFC31Yg2"/>
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background"></div>
+</div>
+<div class="relative z-10 glass-card p-8 md:p-16 rounded-xl max-w-4xl w-full border border-white/30 shadow-2xl flex flex-col items-center text-center">
+<h1 class="font-headline font-black text-4xl md:text-7xl leading-tight text-on-surface tracking-tighter mb-6">
+                CHỐT KÈO ĐI QUẨY, <span class="text-primary italic">KHÔNG ĐỂ AI LẠI PHÍA SAU!</span> 🚀
+            </h1>
+<p class="font-body text-lg md:text-xl text-on-surface-variant max-w-2xl mb-10">
+                App lên lịch trình, quản lý quỹ và quẹt chọn địa điểm cực cháy dành cho hội bạn thân. Tạm biệt "để mai tính", đi ngay chờ chi!
+            </p>
+<div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+<button class="bg-primary text-on-primary px-10 py-5 rounded-full font-headline font-extrabold text-xl shadow-[0_10px_0_0_#942900] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2">
+                    Lên đồ ngay! 🎒
+                </button>
+<button class="bg-surface-container-lowest text-on-surface border-2 border-primary/20 px-10 py-5 rounded-full font-headline font-bold text-xl hover:bg-primary/5 transition-all">
+                    Xem cách quẩy
+                </button>
+</div>
+</div>
+</section>
+<!-- Feature Showcase -->
+<section class="max-w-7xl mx-auto px-6 py-24">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+<div>
+<span class="text-secondary font-black tracking-widest uppercase text-sm">Tính năng bao cháy</span>
+<h2 class="font-headline font-black text-4xl md:text-5xl text-on-surface mt-2 italic">Dẹp bỏ drama, quẩy thả ga! 🛵</h2>
+</div>
+<p class="font-body text-on-surface-variant max-w-sm">Dùng app là hết cảnh "sao cũng được", "ai cũng được". Chỉ có "chốt đơn" và "đi thôi"!</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- AI Planner -->
+<div class="three-d-card bg-surface-container-lowest p-8 rounded-xl shadow-xl flex flex-col items-start h-full">
+<div class="w-16 h-16 bg-primary-container text-primary rounded-2xl flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-4xl" data-weight="fill">smart_toy</span>
+</div>
+<h3 class="font-headline font-extrabold text-2xl mb-4 text-on-surface">Lên lịch 'mlem'</h3>
+<p class="font-body text-on-surface-variant mb-6 leading-relaxed">AI tự động bắt trend, sắp xếp lộ trình ăn chơi trong 30 giây. Đúng gu, đúng mood, không tốn sức!</p>
+<div class="mt-auto w-full">
+<img alt="Trendy Travel" class="rounded-lg w-full h-48 object-cover -rotate-2 hover:rotate-0 transition-transform duration-500" data-alt="Close-up of a smartphone screen showing a colorful travel itinerary app with maps and photos of Vietnamese street food" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeS_Bm9w7jk0RjQhcF7RweA-_it0aox_yVClz4NsRkcHgF7hTYQsyj-pdnxU3OkoCAZsF8blWm-JH1ETn0avVUfdousfsYMUveXnL5ChbyFezx1TCIZL54Bb7kzWcejoV1TBRrSc-LsgAMM5Ifr5RRC2_gE6rUrw_ryqnsBJU5Lgy2ZXBg9U5iQollMCflZ8wX4ffNHqGazvMJxFuP-8DW3MmlJS9F6vwyIV4H7pKP0qeqkJvqEm3xeTmclaSYB-R_jDGYf_DkuBbT"/>
+</div>
+</div>
+<!-- Group Fund -->
+<div class="three-d-card bg-surface-container-lowest p-8 rounded-xl shadow-xl flex flex-col items-start h-full mt-4 md:mt-12">
+<div class="w-16 h-16 bg-tertiary-container text-on-tertiary-container rounded-2xl flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-4xl" data-weight="fill">account_balance_wallet</span>
+</div>
+<h3 class="font-headline font-extrabold text-2xl mb-4 text-on-surface">Quỹ nhóm Chốt Đơn</h3>
+<p class="font-body text-on-surface-variant mb-6 leading-relaxed">Quét QR MoMo đóng tiền, minh bạch 100%, không lo 'đòi nợ'. Tiền nong sòng phẳng, bạn bè bền lâu!</p>
+<div class="mt-auto w-full">
+<img alt="QR Payment" class="rounded-lg w-full h-48 object-cover rotate-2 hover:rotate-0 transition-transform duration-500" data-alt="Minimalist top-down shot of a smartphone scanning a QR code next to a small cup of Vietnamese iced coffee on a clean wooden table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpkO2NCeBUUuyuTKOXJWhfJF7tLK8qOmAii5T-DKwtLhms3GKV6wNe0Xtac5O1MWORyU1p1Eqaadq7ewIXYTVeJKV6B9GrDFaL8B9xCzTzrStEhSodl0nbpPe1ATp2G3oLz2mfkiT2tAC38ZszGkO90oUnZCZwq4SkP4rKSMZbh9-oDZWYeyJ5RNpvxA-1M2z_oEJ_TmWTu2qI3FJFGVtAeZNS03KzZpfuCeASjnxIOXbNLRjhzfiwPH85buhO_tWue_mp0TnSijKj"/>
+</div>
+</div>
+<!-- Tinder Swipe -->
+<div class="three-d-card bg-surface-container-lowest p-8 rounded-xl shadow-xl flex flex-col items-start h-full">
+<div class="w-16 h-16 bg-secondary-container text-on-secondary-container rounded-2xl flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-4xl" data-weight="fill">favorite</span>
+</div>
+<h3 class="font-headline font-extrabold text-2xl mb-4 text-on-surface">Quẹt chọn kèo thơm</h3>
+<p class="font-body text-on-surface-variant mb-6 leading-relaxed">Cả hội cùng swipe để chọn món ăn/địa điểm, ai cũng hài lòng. Tỷ lệ Match càng cao, đi chơi càng máu!</p>
+<div class="mt-auto w-full">
+<img alt="Swiping choices" class="rounded-lg w-full h-48 object-cover -rotate-1 hover:rotate-0 transition-transform duration-500" data-alt="Group of stylish Gen Z friends laughing and looking at a phone together at a vibrant night market stall in Da Lat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpo-PG-d_PUgDsGlhWENYSAdNqP18gVAuLLNn52dIk81vsb3K5j3SQisWsvF5bvhI5JNJw3P5_JMUbBQ9doIIxFltB4e43fzLQwS7UqFReSeuPSKZKCFyIQM_2mxpCulGA7NiwGdi60wM2RXgJQszlgFW7D5antz5flu4ZUuASqH1pO0jnhmVYT-7CJePcAKx-qJydqlV7ZIUHSyrx_W0lK894mcngLGBy-4RCTpT2kFYPMqGnDUta143rIeAUWbwlQmMafUhQXAP2"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Safety Section -->
+<section class="w-full bg-zinc-900 py-24 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-96 h-96 bg-primary opacity-20 blur-[120px] rounded-full -mr-48 -mt-48"></div>
+<div class="absolute bottom-0 left-0 w-96 h-96 bg-secondary opacity-10 blur-[120px] rounded-full -ml-48 -mb-48"></div>
+<div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center gap-16">
+<div class="md:w-1/2">
+<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-error-container text-on-error-container font-black text-xs mb-6 uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm">emergency_home</span> Cảnh báo ét ô ét
+                </div>
+<h2 class="font-headline font-black text-4xl md:text-6xl text-white mb-8 leading-tight">
+                    An toàn là trên hết <span class="text-error">(ét ô ét)</span>
+</h2>
+<ul class="space-y-6">
+<li class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white text-sm">cloud</span>
+</div>
+<div>
+<h4 class="font-bold text-white text-xl">Dự báo thời tiết 24/7</h4>
+<p class="text-zinc-400">Tránh mưa, né bão cực chuẩn để "mlem" không bị gián đoạn.</p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white text-sm">groups</span>
+</div>
+<div>
+<h4 class="font-bold text-white text-xl">Mật độ đám đông thực tế</h4>
+<p class="text-zinc-400">Check xem chỗ đó có đang quá tải hay không trước khi phi tới.</p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white text-sm">sos</span>
+</div>
+<div>
+<h4 class="font-bold text-white text-xl">Nút SOS thần thánh</h4>
+<p class="text-zinc-400">Gửi định vị và tín hiệu cầu cứu đến bạn bè/cơ quan chức năng ngay lập tức.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="md:w-1/2 w-full">
+<div class="relative group">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+<div class="relative bg-zinc-800 rounded-xl overflow-hidden aspect-[4/3] border border-white/10 shadow-2xl">
+<img alt="Safety App" class="w-full h-full object-cover" data-alt="Digital map of Vietnam on a smartphone screen showing real-time weather alerts and emergency contact buttons with glowing red accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0ThTHqFrnV_L-YkhjfRcOpiuHEmkuD2hhTIi2ynPjvMEOdrI9FnYO-XrPgElBp7Wgv4XcSQzo41uRUXxBBSWcvb78sBSqcwsnZiU97ogvkM4pYUqzFzpVIV9xnKc9qyK6cBP5wsFCGfSJybbW5szRgYbToo-NfVr58KMFPLPL6s-NXFdQpnrtq7O3TEiwhKADLsrNBeqgTClO3Sd5UdkS1cVYCgmPjkBPqBpQPVLXBVbC1desNUV_VUEmG5q7kmo3YzhMwBVXXTw9"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Social Proof Gallery -->
+<section class="max-w-7xl mx-auto px-6 py-24 overflow-hidden">
+<div class="text-center mb-16">
+<h2 class="font-headline font-black text-4xl md:text-5xl text-on-surface italic">Vibe check cực căng từ cộng đồng 🔥</h2>
+<p class="font-body text-on-surface-variant mt-4">Hơn 10,000+ nhóm bạn đã "chốt kèo" thành công. Còn bạn?</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]">
+<div class="col-span-2 row-span-2 rounded-xl overflow-hidden shadow-lg group">
+<img alt="Group travel 1" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Dynamic shot of four young friends on motorbikes riding through a winding mountain pass in Ha Giang at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqfMzIIEucrYD8Y5Bx5m60wb8_4TMdk19QoYluAryAeFYuExQMSnFTcN-6JN-MqW5HI1zCVRsmMBhzixRCZ2dXl4L4pp0RAEZRotTqImad8b4YoElUieWJQkUIvuy6R4iingyh8w7wE2o2ileGM74uUwZoQYgybIJCbIa36rOF3d8OUrYYA8n7ZPc3ElntypAquizJR89ibgKhuo35g6PQIK164w9q3UBS0k4DWDQ8OI7O9wh6j9snbEYHoMbK_Sf6fCYWKU5Sq1x0"/>
+</div>
+<div class="rounded-xl overflow-hidden shadow-lg group">
+<img alt="Travel vibe" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Young man with a backpack standing on a high cliff overlooking a turquoise sea with limestone islands in Ha Long Bay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiR9Tw4CWtbBY_yQpM-F09XQh5MHIKoHLfmz1JkLdYPZ3gPeup9uPdJFWgoiWu_mFik_iQJ7RK3aP915WNVMnhwpiJi6EHnxCc2KzBGmk_2zWC3sviRAbgJxPaWVo61rfmuo7zvMIar5it0E8NE-WrQAJ_IsP6P7DWPTatzqLH76wKHbnQUkOmtAW2iCpA0TMJHZK557uajAOEgzgHY9D92BfkcjW92QbhNDs_ELR8Xqpiw5Rxp04MwdBpWigFmLpBcyrEMC8anLH7"/>
+</div>
+<div class="rounded-xl overflow-hidden shadow-lg group row-span-2">
+<img alt="City travel" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Candid photo of a trendy Gen Z group enjoying street food at a bustling outdoor market in Saigon with colorful lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYZu7bTF29qR10-ndoq2cLCuECXvgwdkuCG3vsd8kQnfSj90cAarZvklCdpArYvXKo5lDfRYHeXRuIsgxT8hFubPqa00KAE9LYiRXgzYK0AMSZ6YSqEanhFQeereSTSt7ZvVrivxOh42nmhQEaiCRLiraqpiX2IvWw5G3QtBvfbC6HzhKoAn9cLROC2IGWLCdkD0f1Kzzc8P4RLOmiH8l7p2KT0cI6E2r38m0NhoTQ4j0p9bjHNnoqJWOJyM4Q71KjnrR1H05rL03i"/>
+</div>
+<div class="rounded-xl overflow-hidden shadow-lg group">
+<img alt="Nature trek" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A woman in colorful ethnic wear trekking through golden rice paddies in Sapa with misty mountains in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKCpXQxUKD1zO6oglKTCywRmlrIOGYqk1Z8rC_hHXvT7Syy1STsbrwnTmlT71yAA7gFfTbRDtQmjIBlTOImPDdtMH7Ckd7nbmC9Sg08iMTuFykAF_R5hqs5XeUII6eMdTp2vYT2sdhFS-y0zbDF1hj2-_xYHJJ4ga8xw4az02AE4REoKo7-vgNi0Foa3j1UgZC2Y2F5uOcPusj3n-P-6hfwkVYRwq51o0IPLdZZ5GMQyZt8ePAsjUmSXc6SuSflgscwjtVKVc0hWCT"/>
+</div>
+<div class="col-span-2 rounded-xl overflow-hidden shadow-lg group">
+<img alt="Modern travel" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Group of friends laughing and taking a selfie in a modern, stylish homestay in Da Lat with big glass windows and pine forest view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRrzB6xSH0sARB3xwzkGLe_K3lzlD2IbJVVag1u5UFBXgpOQX16CqTIzrHsEAHsmjK2rLGgnhF3Yj-2jdOnsBYi96oE8X0Ov4alzlykCJ7KXIP0EfCb9tsw8_uKhkY44EFcdQicrCgmDlnwCmpqLoWUH2qzpHddsVA6D8OCK9eISJ_Cpe5ozqa9phz8rPWLoG3Fs7yfYD673BFbiU_zh-Q4cNPP6N5m0p8mr956HxSz0hL_sPanCRAKGDkldOjk08YsbWQLGJs_6YA"/>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="max-w-7xl mx-auto px-6 py-12 mb-20">
+<div class="bg-gradient-to-br from-primary to-orange-500 rounded-xl p-12 md:p-24 text-center relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.8),transparent)]"></div>
+<h2 class="font-headline font-black text-4xl md:text-7xl text-on-primary mb-8 relative z-10 leading-tight">Hết lố bạn iu,<br/>tạo kèo ngay thôi!</h2>
+<div class="relative z-10 flex flex-col items-center gap-6">
+<button class="bg-surface-container-lowest text-primary px-12 py-6 rounded-full font-headline font-black text-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all">
+                    Chốt đơn lẹ! ⚡️
+                </button>
+<div class="flex items-center gap-4 text-on-primary/80 font-medium">
+<span class="flex -space-x-3">
+<img class="w-8 h-8 rounded-full border-2 border-primary" data-alt="User avatar 1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg0gQfCEq1JQVFgOkj3uLZ9wCkUUc62p2bmSD36KFvG28kKiYmTNsG_uBG-MsECdT_GxHpuHrCYv5Pd2vqsgg1tx-VEiffPNrFhbfGpZPCkBzE5V_Ro2UhgQgCbLAK6PHi2VdAvHRGcrD-l8ZRahTVVzjjoDN2g_zPyeejEnvdlaODSCH7e80Z1jJSMtJbfdm_jDyoqwxE7uVD8QYfZb9cw3WmCDCypva32t3rUr95saBnBcTeBMLhmV8aA9-IHt3xXIIp94ZVPvVc"/>
+<img class="w-8 h-8 rounded-full border-2 border-primary" data-alt="User avatar 2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3vrwY2BgF78o6je-bqr6ctfP5NkiJs0MniLSmcl8SSJKXPKAf79cxF082E69bmaJZxKACmPketSeq5YqQPsj4JoXmSnjTdfBqKWXoL6Rn3gOvLN9ngDe6MwzBiNmLeRs4r4f_CRPrtzO-VP6oTfwQPpwtUrPclHN3nBkBwOhylAM0VhbtmN_vg-XCsxNZk_f0uhRA2hMUlV5j2YnKYmowOax8HsRXP2FDunhG0KyIZVaBC29Rl8-t9JDfkriAktuVNTmLI_VT1lvM"/>
+<img class="w-8 h-8 rounded-full border-2 border-primary" data-alt="User avatar 3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALy3cd-gYXt0j_cX3-oyqE1KB2_7Mbsakf9sGNiRxPe2xMDYFLOtZbyZKjAwm00S_gKsygQDDNff0LCt9wtrSDkhkMqoOOWv0ufbuGdSZJll1PLOkLqN3aYNpqrJo1FYRFLmGreOGCVy5wqJsF6XhgrUjv0Yd0on0i-pbCoG3vQWsPvkeuFGAEVzq7ZdOzK1vuSZwc6bU2nG3sWsBh2608JrEKpl0dsrbcGlXL8V_PdXFSvXOgb5Ehh9MOZtx0xRbZvmOkVpyRJCP0"/>
+</span>
+                    +500 người đang lên lịch ngay lúc này
+                </div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full rounded-t-[3rem] mt-20 bg-zinc-50 dark:bg-zinc-950 font-['Be_Vietnam_Pro'] text-sm">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-12 py-16 gap-8 max-w-7xl mx-auto">
+<div class="flex flex-col items-center md:items-start gap-4">
+<div class="text-xl font-black text-zinc-900 dark:text-white">Mình Đi Đâu Thế?</div>
+<div class="text-zinc-500 dark:text-zinc-500 max-w-xs text-center md:text-left">
+                    Ứng dụng du lịch số 1 cho Gen Z Việt Nam. Đi là ghiền, chốt đơn là bay!
+                </div>
+</div>
+<div class="flex flex-wrap justify-center gap-x-8 gap-y-4">
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-orange-500 underline decoration-2 underline-offset-4 transition-colors duration-200" href="#">Về tụi mình</a>
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-orange-500 underline decoration-2 underline-offset-4 transition-colors duration-200" href="#">Điều khoản</a>
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-orange-500 underline decoration-2 underline-offset-4 transition-colors duration-200" href="#">Bảo mật</a>
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-orange-500 underline decoration-2 underline-offset-4 transition-colors duration-200" href="#">Liên hệ</a>
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-orange-500 underline decoration-2 underline-offset-4 transition-colors duration-200" href="#">Tuyển dụng</a>
+</div>
+<div class="text-zinc-500 dark:text-zinc-500 font-medium">
+                © 2024 Mình Đi Đâu Thế? - Đi là ghiền!
+            </div>
+</div>
+</footer>
+<!-- FAB for mobile context -->
+<button class="fixed bottom-8 right-8 w-16 h-16 bg-primary text-on-primary rounded-full shadow-2xl shadow-primary/40 flex items-center justify-center z-40 md:hidden hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-weight="fill">add</span>
+</button>
+</body></html>

@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: complete
-stopped_at: Closed v1.0 planning baseline before opening v2
-last_updated: "2026-04-03T00:45:00+07:00"
+milestone: v2.0
+milestone_name: Stitch Redesign & Architecture Refactor
+status: planning
+stopped_at: Phase 07 context captured, ready for planning
+last_updated: "2026-04-03T13:10:00+07:00"
 last_activity: 2026-04-03
 progress:
   total_phases: 6
-  completed_phases: 6
-  total_plans: 25
-  completed_plans: 25
-  percent: 100
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -20,90 +20,41 @@ progress:
 
 See: .planning/PROJECT.md (updated 2026-04-03)
 
-**Core value:** Maximum convenience and elimination of group-travel pain points through one seamless web experience.
-**Current focus:** v1.0 archived baseline, awaiting pre-v2 reset
+**Core value:** Maximum convenience and reduced group-travel friction through one seamless web experience.
+**Current focus:** Start phase 07 for `v2.0` design system and shared-shell foundation.
 
 ## Current Position
 
-Phase: v1.0 closed
-Plan: Awaiting next milestone definition
-Status: Archived baseline ready; v2 not opened yet
-Last activity: 2026-04-03
+Phase: 07 Design System & Shared Shell Foundation
+Plan: -
+Status: Context ready, awaiting phase planning
+Last activity: 2026-04-03 - Phase 07 context captured from Stitch inventory and codebase scout
 
-Progress: [██████████] 100%
-
-## Performance Metrics
-
-**Velocity:**
-
-- Total plans completed: 25
-- Average duration: ~15 min
-- Total execution time: ~6.0 hours
-
-**By Phase:**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 01 | 2/2 | ~30 min | ~15 min |
-| 02 | 4/4 | ~60 min | ~15 min |
-| 03 | 4/4 | ~60 min | ~15 min |
-| 04 | 3/3 | ~45 min | ~15 min |
-| 05 | 5/5 | ~220 min | ~44 min |
-| 06 | 5/5 | ~95 min | ~19 min |
-
-**Recent Trend:**
-
-- Last 5 plans: 06-01 ✅, 06-02 ✅, 06-03 ✅, 06-04 ✅, 06-05 ✅
-- Trend: Complete for current milestone
-
-| Phase 05 P01 | 85 | 2 tasks | 13 files |
-| Phase 05 P02 | 42 | 2 tasks | 14 files |
-| Phase 05 P03 | 31 | 2 tasks | 14 files |
-| Phase 05 P04 | 31 | 2 tasks | 12 files |
-| Phase 06 P01-P05 | ~95 | 9 tasks | 20+ files |
+Progress: [----------] 0%
 
 ## Accumulated Context
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
-
-- [Phase 1]: Playful Vietnamese-first UI with leader-controlled structural edits
-- [Phase 2]: Timeline is the source of truth; maps, voting, and templates support it
-- [Phase 2]: Planning split into four execution waves: backend foundation, workspace/map UI, voting, and template cloning
-- [Phase 3]: Logistics tabs live alongside planner tabs; checklist and check-in are first-class trip-workspace surfaces
-- [Phase 3]: Attendance proof is stored locally first, with a stable service contract for future cloud migration
-- [Phase 4]: Finance stays summary-first while SOS uses a distinct serious visual tone inside the same trip workspace
-- [Phase 4]: SOS now includes a clear resolved/de-escalated path and deduped browser notifications per alert id
-- [Phase 5]: AI only analyzes, warns, and creates drafts; structural trip changes still require explicit confirmation
-- [Phase 5]: AI features should live primarily inside the trip workspace, with clear confidence and manual fallback paths
-- [Phase 05]: Phase 5 wave 0 keeps runnable smoke tests instead of skipped placeholders so later plans extend real files. — Wave 0 must leave executable scaffolds behind for downstream plans, not empty shells.
-- [Phase 05]: Low-confidence and warning states are centralized in one shared fixture module before feature plans add deeper assertions. — Using one fixture source keeps confidence labels and trust-sensitive wording aligned between API and UI tests.
-- [Phase 05]: AI route suggestions stay inside the existing trip workspace and only rewrite itinerary order after an explicit leader apply call.
-- [Phase 05]: Health-profile conflicts are advisory snapshot rows rendered inline on itinerary cards with visible severity and confidence labels.
-- [Phase 05]: Trust-sensitive AI review flows stay inside the trip workspace AI tab instead of a separate AI area.
-- [Phase 05]: Leader confirmation remains the only path that can materialize booking drafts into itinerary items.
-- [Phase 05]: Booking imports are stored as drafts with raw excerpts and confidence labels before any itinerary mutation.
-- [Phase 05]: Local Expert and outfit tools stay inside the existing AI trip tab instead of creating a separate assistant surface.
-- [Phase 05]: All new AI responses remain compact cards with confidence labels and next actions instead of freeform chat output.
-- [Phase 05]: Daily recap generation stores one playful summary per trip day and never mutates itinerary data.
-- [Phase 05]: Podcast playback remains web-first by falling back to browser speech synthesis while always keeping a readable text recap.
-- [Phase 06]: Post-trip retention features live together in one `Kỷ niệm` tab instead of spreading across separate trip surfaces.
-- [Phase 06]: Digital Vault uses trip-scoped document storage plus leader-only review so sensitive uploads stay collaborative but controlled.
-- [Phase 06]: Anonymous feedback preserves trust by returning receipts to members while keeping leader review identity-free.
-- [Phase 06]: Souvenir and reunion helpers stay lightweight, suggestive, and context-aware rather than becoming heavy admin workflows.
+- Web-first onboarding remains the growth path for the product.
+- The shared trip workspace remains the architectural center.
+- AI keeps the draft / warn / summarize trust model.
+- `v2.0` is a modernization milestone: Stitch-covered core-surface redesign plus FE/BE structural refactor.
+- Only exported Stitch screens are promised as bespoke redesign targets in the current roadmap.
+- Phase 07 is locked to semantic surface tiers, primitives plus shell blocks, default-hard Stitch brand rules, and a desktop-first mobile-safe foundation.
 
 ### Pending Todos
 
-- [2026-03-28-track-proposal-realtime-sync-follow-up](.planning/todos/pending/2026-03-28-track-proposal-realtime-sync-follow-up.md) - Track proposal realtime sync follow-up
+- Proposal realtime sync follow-up remains the only carry-over product debt worth considering during roadmap design.
 
 ### Blockers/Concerns
 
-- No active verification blockers on completed phases; one pending todo remains for proposal realtime sync follow-up
+- No active delivery blocker, but milestone scope can sprawl if redesign and refactor are mixed with unrelated new product bets.
+- Several shipped surfaces still lack dedicated Stitch exports, so roadmap discipline is required to avoid guessing bespoke redesigns.
+- Existing oversized files are known hotspots and should be addressed explicitly in the roadmap.
 
 ## Session Continuity
 
-Last session: 2026-04-03T00:09:18.4290683+07:00
-Stopped at: Closed v1.0 planning baseline and paused before opening v2
+Last session: 2026-04-03
+Stopped at: Phase 07 context captured for `v2.0`
 Resume file: None

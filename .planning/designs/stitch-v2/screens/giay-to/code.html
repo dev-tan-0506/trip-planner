@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;400;700;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#d6d4d3",
+              "error-container": "#fb5151",
+              "secondary-container": "#d4cbff",
+              "inverse-primary": "#ff571a",
+              "surface-container": "#eae7e7",
+              "inverse-on-surface": "#9e9c9c",
+              "error": "#b31b25",
+              "on-tertiary": "#cdffd3",
+              "on-tertiary-fixed": "#004820",
+              "inverse-surface": "#0e0e0e",
+              "secondary-fixed": "#d4cbff",
+              "surface-variant": "#dfdcdc",
+              "on-surface-variant": "#5c5b5b",
+              "on-primary": "#ffefeb",
+              "background": "#f9f6f5",
+              "surface-container-highest": "#dfdcdc",
+              "tertiary-fixed": "#3fff8b",
+              "secondary-fixed-dim": "#c6bbff",
+              "on-background": "#2f2e2e",
+              "primary": "#a93000",
+              "tertiary-container": "#3fff8b",
+              "on-secondary-fixed-variant": "#4f2dd2",
+              "outline-variant": "#afacac",
+              "tertiary": "#006a33",
+              "on-tertiary-container": "#005d2c",
+              "primary-dim": "#942900",
+              "surface-bright": "#f9f6f5",
+              "outline": "#787676",
+              "tertiary-fixed-dim": "#24f07e",
+              "on-secondary": "#f6f0ff",
+              "primary-container": "#ff784d",
+              "surface-container-low": "#f3f0ef",
+              "on-secondary-fixed": "#3200a7",
+              "on-primary-fixed-variant": "#571400",
+              "on-surface": "#2f2e2e",
+              "tertiary-dim": "#005c2b",
+              "on-primary-fixed": "#000000",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-container": "#460f00",
+              "secondary": "#5a3bdd",
+              "on-tertiary-fixed-variant": "#006832",
+              "secondary-dim": "#4e2bd1",
+              "primary-fixed-dim": "#ff5d26",
+              "on-secondary-container": "#451dc8",
+              "surface-container-high": "#e5e2e1",
+              "on-error": "#ffefee",
+              "surface-tint": "#a93000",
+              "error-dim": "#9f0519",
+              "on-error-container": "#570008",
+              "surface": "#f9f6f5",
+              "primary-fixed": "#ff784d"
+            },
+            fontFamily: {
+              "headline": ["Be Vietnam Pro"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+      }
+      .kinetic-shadow {
+        box-shadow: 0 32px 64px -12px rgba(47, 46, 46, 0.08);
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      }
+      h1, h2, h3, .brand-font {
+        font-family: 'Be Vietnam Pro', sans-serif;
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full w-[280px] p-6 bg-stone-50 dark:bg-stone-950 flex flex-col gap-2 border-r border-stone-200/20 z-50">
+<div class="mb-10 px-6">
+<span class="text-xl font-black text-orange-700 brand-font">Mình Đi Đâu Thế?</span>
+</div>
+<div class="flex items-center gap-4 px-6 mb-8">
+<div class="w-12 h-12 rounded-full overflow-hidden ring-2 ring-orange-700/20">
+<img alt="Avatar" data-alt="close-up portrait of a stylish gen-z person with trendy glasses and a friendly smile, vibrant studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADApBvle5OIeQGdC63m9dg3m145X-XqVgYGKNGUo0-Eo6JUpIeGHbjSGkvXEH8TuxtLXFdWHRx3d0Rj5SC3oUG23R04g4u1oLAUyXsnfnhOZQhgwhm-G9-Anhbhqa6mdDiLEkyjgFVBqV2HwYiHAG_EMemAON6VaC1adHv-M-J9RPTb0cM9ZC7Eu1zU9JmxXDla7bQEsL9vwlIAx0CkydXso_7sOiXMHjhX0n9QXKPtnKjnwsQp2tXkcGOziyfRom2OaGTNdB28KtT"/>
+</div>
+<div>
+<p class="text-xs text-stone-500 font-medium">Hế lô bạn iu!</p>
+<p class="font-bold text-stone-900">Đi đâu đây?</p>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-bold">Khám phá</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="backpack">backpack</span>
+<span class="font-bold">Lên đồ</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="moped">moped</span>
+<span class="font-bold">Phượt thôi</span>
+</a>
+<!-- Active Tab: Giấy tờ (closest to Lên đồ / Chốt đơn context) -->
+<a class="flex items-center gap-4 bg-orange-700 text-white rounded-full px-6 py-4 shadow-orange-900/20 shadow-lg active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-bold">Chốt đơn</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-bold">Bạn hữu</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-bold">Cá nhân</span>
+</a>
+</div>
+<button class="mt-auto bg-orange-700 text-white rounded-full py-4 px-6 font-bold flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+            Tạo chuyến đi ✈️
+        </button>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-20 bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-xl flex justify-between items-center px-8 z-40 shadow-sm">
+<div class="flex items-center gap-6">
+<h1 class="text-2xl font-black text-orange-700 brand-font tracking-tight">Giấy tờ cần thiết 📁</h1>
+<div class="hidden md:flex items-center bg-stone-100 dark:bg-stone-800 rounded-full px-4 py-2 w-80">
+<span class="material-symbols-outlined text-stone-400 text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder:text-stone-400" placeholder="Tìm tên thành viên hoặc loại giấy tờ..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-stone-200/50 transition-all">
+<span class="material-symbols-outlined text-stone-600" data-icon="notifications">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-stone-200/50 transition-all">
+<span class="material-symbols-outlined text-stone-600" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[280px] pt-24 p-8">
+<!-- Hero Section / Context -->
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="max-w-2xl">
+<p class="text-orange-700 font-bold mb-2 uppercase tracking-widest text-xs">An tâm vi vu</p>
+<h2 class="text-4xl font-black mb-4 leading-tight">Cất kỹ "bảo bối" <br/>Check-in trong 1 nốt nhạc! ⚡️</h2>
+<p class="text-on-surface-variant leading-relaxed">Mọi giấy tờ quan trọng của cả nhóm đã được mã hóa và sẵn sàng. Đừng lo quên ví, chỉ cần mang theo điện thoại là đủ "chốt đơn" mọi chuyến đi.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface-container-high px-6 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+                    Chia sẻ nhóm
+                </button>
+<button class="bg-primary text-white px-8 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg shadow-primary/20 hover:scale-105 transition-all">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                    Thêm giấy tờ
+                </button>
+</div>
+</div>
+<!-- Bento Grid for Quick Access -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-12">
+<!-- CCCD / ID Cards Section -->
+<div class="md:col-span-8 bg-surface-container-low rounded-xl p-8 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-8 relative z-10">
+<div>
+<h3 class="text-2xl font-bold mb-1">Căn cước Công dân 🆔</h3>
+<p class="text-sm text-on-surface-variant">4 thành viên đã sẵn sàng</p>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="verified_user">verified_user</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10">
+<!-- ID Card 1 -->
+<div class="bg-white rounded-lg p-5 kinetic-shadow border border-outline-variant/10 group/id transition-all hover:-translate-y-1">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-700 font-bold">AN</div>
+<div>
+<p class="font-bold text-sm">Nguyễn Hoài An</p>
+<p class="text-[10px] text-stone-400">Đã cập nhật: 2 giờ trước</p>
+</div>
+</div>
+<div class="relative rounded-md overflow-hidden aspect-[1.58/1] bg-stone-100 mb-4">
+<img alt="Identity card blurred" class="w-full h-full object-cover blur-md" data-alt="abstract blurred visual of an identification document with holographic elements and official seals in soft blue and white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVPY5LBPYrXwRffn1p_r8WY79O4mZCG43v3olwZ8ZkmX5r1aDCMWi8bK0eFRk0g5kgH4dcKnZZfy0fbxiXRD47kiVKKkAGHSWxSKazudDxhmP5rJpdIYCgt6xnu7dUHU4WGH0CdaX12eleJOwH8JGe0RXr6VWniiytY1CgSXcjiRcd5Yk9w50y5lW-etJsiYBk6YcXmL7yui9Rm47hukLx_qe61Kyo7U7otNwB-n1fvOvq5GayJNqK3c0UX9kWHxPZfnQHVHjEGGTN"/>
+<div class="absolute inset-0 flex items-center justify-center bg-black/5">
+<span class="material-symbols-outlined text-white text-3xl opacity-50" data-icon="lock">lock</span>
+</div>
+</div>
+<button class="w-full py-2 rounded-full border border-orange-700 text-orange-700 text-xs font-bold hover:bg-orange-700 hover:text-white transition-all">Xem nhanh</button>
+</div>
+<!-- ID Card 2 -->
+<div class="bg-white rounded-lg p-5 kinetic-shadow border border-outline-variant/10 transition-all hover:-translate-y-1 opacity-90">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold">BA</div>
+<div>
+<p class="font-bold text-sm">Lê Quốc Bảo</p>
+<p class="text-[10px] text-stone-400">Đã cập nhật: Hôm qua</p>
+</div>
+</div>
+<div class="relative rounded-md overflow-hidden aspect-[1.58/1] bg-stone-100 mb-4">
+<img alt="Identity card blurred" class="w-full h-full object-cover blur-md" data-alt="abstract blurred background of a modern card with soft magenta and purple gradients and subtle texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6eNct6DfLD8xGrKv_uKCL9R_tVoACYXEJvTCVjyQSKt89E1TUQmWzYMLdhJq_gpDJH76Fix_Tjo3Ei_g9_nTpqe8VEkBeP2d5QZA3I_JBBbLOWzprniDHmmOTYA5ykS19VAmAr--7y8ESCuK9TfrYjeCLxYx78U-fjBtUk4NKFUcr6mjeo2bMOOElEyNDsZn_XEJextmNANQzHwqGMFOaEx5bg_ScBKnMa-8MDpELXX5YbqMlmoz0BmL9fthAeyeygDRcE5V5oVp9"/>
+<div class="absolute inset-0 flex items-center justify-center bg-black/5">
+<span class="material-symbols-outlined text-white text-3xl opacity-50" data-icon="lock">lock</span>
+</div>
+</div>
+<button class="w-full py-2 rounded-full border border-orange-700 text-orange-700 text-xs font-bold hover:bg-orange-700 hover:text-white transition-all">Xem nhanh</button>
+</div>
+</div>
+</div>
+<!-- Flight Tickets Section -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<!-- Flight Ticket Card -->
+<div class="bg-secondary p-8 rounded-xl text-white relative overflow-hidden flex-1 group">
+<div class="absolute -right-10 -bottom-10 opacity-10 group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-[120px]" data-icon="flight_takeoff">flight_takeoff</span>
+</div>
+<div class="relative z-10">
+<h3 class="text-2xl font-bold mb-4">Vé máy bay ✈️</h3>
+<div class="bg-white/10 backdrop-blur-md rounded-lg p-4 mb-4 border border-white/20">
+<div class="flex justify-between items-center mb-4">
+<span class="text-2xl font-black">SGN</span>
+<span class="material-symbols-outlined" data-icon="trending_flat">trending_flat</span>
+<span class="text-2xl font-black">DAD</span>
+</div>
+<div class="flex justify-between text-[10px] opacity-70 uppercase tracking-widest">
+<span>Ngày đi: 20/10</span>
+<span>Ghế: 12A, 12B</span>
+</div>
+</div>
+<button class="bg-white text-secondary w-full py-3 rounded-full font-bold hover:bg-secondary-container transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="qr_code">qr_code</span>
+                            Quét mã QR
+                        </button>
+</div>
+</div>
+<!-- Insurance Card -->
+<div class="bg-tertiary p-6 rounded-xl text-white flex items-center gap-4 group cursor-pointer hover:brightness-110 transition-all">
+<div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+<span class="material-symbols-outlined" data-icon="health_and_safety">health_and_safety</span>
+</div>
+<div>
+<h4 class="font-bold">Bảo hiểm du lịch</h4>
+<p class="text-xs opacity-80">2 file PDF sẵn sàng</p>
+</div>
+<span class="material-symbols-outlined ml-auto group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Recent Uploads / All Documents List -->
+<div>
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-2xl font-bold">Tất cả tài liệu 📂</h3>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-orange-700 hover:text-white transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="grid_view">grid_view</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-orange-700 text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="format_list_bulleted">format_list_bulleted</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<!-- List Item 1 -->
+<div class="bg-white p-5 rounded-lg flex items-center gap-6 hover:bg-surface-container-low transition-all group">
+<div class="w-14 h-14 bg-red-100 rounded-lg flex items-center justify-center text-red-600">
+<span class="material-symbols-outlined text-3xl" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold">Ve_may_bay_Khu_Hoi.pdf</h4>
+<p class="text-xs text-stone-400">PDF • 1.2 MB • Tải lên bởi Hoài An</p>
+</div>
+<div class="hidden md:flex flex-col items-end mr-8">
+<span class="text-xs font-bold text-tertiary px-2 py-1 bg-tertiary/10 rounded-full mb-1">Cần thiết nhất</span>
+<p class="text-[10px] text-stone-400">20 Oct 2023, 10:30</p>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-stone-100 transition-all">
+<span class="material-symbols-outlined text-stone-600" data-icon="visibility">visibility</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-stone-100 transition-all">
+<span class="material-symbols-outlined text-stone-600" data-icon="download">download</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-stone-100 text-red-500 transition-all opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- List Item 2 -->
+<div class="bg-white p-5 rounded-lg flex items-center gap-6 hover:bg-surface-container-low transition-all group">
+<div class="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined text-3xl" data-icon="image">image</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold">CCCD_Quoc_Bao_Mat_Truoc.jpg</h4>
+<p class="text-xs text-stone-400">JPG • 4.5 MB • Tải lên bởi Bảo</p>
+</div>
+<div class="hidden md:flex flex-col items-end mr-8">
+<span class="text-xs font-bold text-stone-400 px-2 py-1 bg-stone-100 rounded-full mb-1">Riêng tư</span>
+<p class="text-[10px] text-stone-400">19 Oct 2023, 15:45</p>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-stone-100 transition-all">
+<span class="material-symbols-outlined text-stone-600" data-icon="visibility">visibility</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-stone-100 transition-all">
+<span class="material-symbols-outlined text-stone-600" data-icon="download">download</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-stone-100 text-red-500 transition-all opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- List Item 3 -->
+<div class="bg-white p-5 rounded-lg flex items-center gap-6 hover:bg-surface-container-low transition-all group">
+<div class="w-14 h-14 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+<span class="material-symbols-outlined text-3xl" data-icon="description">description</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold">Booking_Hotel_Da_Nang.pdf</h4>
+<p class="text-xs text-stone-400">PDF • 890 KB • Tải lên bởi Hệ thống</p>
+</div>
+<div class="hidden md:flex flex-col items-end mr-8">
+<span class="text-xs font-bold text-tertiary px-2 py-1 bg-tertiary/10 rounded-full mb-1">Xác nhận</span>
+<p class="text-[10px] text-stone-400">18 Oct 2023, 09:12</p>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-stone-100 transition-all">
+<span class="material-symbols-outlined text-stone-600" data-icon="visibility">visibility</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-stone-100 transition-all">
+<span class="material-symbols-outlined text-stone-600" data-icon="download">download</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-stone-100 text-red-500 transition-all opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB - Suppression on details, but keeping for quick upload in this view -->
+<button class="fixed bottom-10 right-10 w-16 h-16 rounded-full bg-primary text-white shadow-2xl shadow-primary/40 flex items-center justify-center glass-card hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-3xl font-bold" data-icon="upload_file">upload_file</span>
+</button>
+</body></html>

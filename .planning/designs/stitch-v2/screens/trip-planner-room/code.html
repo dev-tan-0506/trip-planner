@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#d6d4d3",
+              "error-container": "#fb5151",
+              "secondary-container": "#d4cbff",
+              "inverse-primary": "#ff571a",
+              "surface-container": "#eae7e7",
+              "inverse-on-surface": "#9e9c9c",
+              "error": "#b31b25",
+              "on-tertiary": "#cdffd3",
+              "on-tertiary-fixed": "#004820",
+              "inverse-surface": "#0e0e0e",
+              "secondary-fixed": "#d4cbff",
+              "surface-variant": "#dfdcdc",
+              "on-surface-variant": "#5c5b5b",
+              "on-primary": "#ffefeb",
+              "background": "#f9f6f5",
+              "surface-container-highest": "#dfdcdc",
+              "tertiary-fixed": "#3fff8b",
+              "secondary-fixed-dim": "#c6bbff",
+              "on-background": "#2f2e2e",
+              "primary": "#a93000",
+              "tertiary-container": "#3fff8b",
+              "on-secondary-fixed-variant": "#4f2dd2",
+              "outline-variant": "#afacac",
+              "tertiary": "#006a33",
+              "on-tertiary-container": "#005d2c",
+              "primary-dim": "#942900",
+              "surface-bright": "#f9f6f5",
+              "outline": "#787676",
+              "tertiary-fixed-dim": "#24f07e",
+              "on-secondary": "#f6f0ff",
+              "primary-container": "#ff784d",
+              "surface-container-low": "#f3f0ef",
+              "on-secondary-fixed": "#3200a7",
+              "on-primary-fixed-variant": "#571400",
+              "on-surface": "#2f2e2e",
+              "tertiary-dim": "#005c2b",
+              "on-primary-fixed": "#000000",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-container": "#460f00",
+              "secondary": "#5a3bdd",
+              "on-tertiary-fixed-variant": "#006832",
+              "secondary-dim": "#4e2bd1",
+              "primary-fixed-dim": "#ff5d26",
+              "on-secondary-container": "#451dc8",
+              "surface-container-high": "#e5e2e1",
+              "on-error": "#ffefee",
+              "surface-tint": "#a93000",
+              "error-dim": "#9f0519",
+              "on-error-container": "#570008",
+              "surface": "#f9f6f5",
+              "primary-fixed": "#ff784d"
+            },
+            fontFamily: {
+              "headline": ["Be Vietnam Pro"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Be Vietnam Pro', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] p-6 bg-stone-50 dark:bg-stone-950 flex flex-col gap-2 border-r border-stone-200/20 z-50">
+<div class="mb-8 px-6">
+<h1 class="text-xl font-black text-orange-700 tracking-tight">Mình Đi Đâu Thế?</h1>
+</div>
+<div class="flex items-center gap-4 px-6 mb-8">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container">
+<img alt="User Avatar" data-alt="close-up portrait of a stylish gen-z person with colorful accessories smiling in a bright urban cafe setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCvHVRCjj2q_0-qX_uWdz9Fezcti0YrQJDbmPccBDiDSJ4WshnIzhqWKEqjUAhyMRWOrwb42gdJG12bVZFuQWqOFJmBcXmajrR9zv3iEtA6aOSW8CaAwmbtuJ8Ifaw2t29oNOSupZPdpnD1Fmj_IQ9CFpjj8aceNlekLQeZ0kdJ4Lo1CGnt72rM2D-svawqSvR7PKg20l3gTwc2BemcVdouspySjMwJHtxMPTmO_1joOY-k1mKhrBLsYiy2BIq2H1rLe75XkQdUxsJ"/>
+</div>
+<div>
+<p class="text-stone-500 text-xs font-medium">Hế lô bạn iu!</p>
+<p class="font-bold text-on-surface">Đi đâu đây?</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-bold">Khám phá</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="backpack">backpack</span>
+<span class="font-bold">Lên đồ</span>
+</a>
+<a class="flex items-center gap-4 bg-orange-700 text-white rounded-full px-6 py-4 shadow-orange-900/20 shadow-lg active:scale-95 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="moped" style="font-variation-settings: 'FILL' 1;">moped</span>
+<span class="font-bold">Phượt thôi</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-bold">Chốt đơn</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-bold">Bạn hữu</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-bold">Cá nhân</span>
+</a>
+</nav>
+<div class="mt-auto px-6 pb-4">
+<button class="w-full bg-primary py-4 rounded-xl text-white font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20 active:scale-95 transition-all">
+                Tạo chuyến đi ✈️
+            </button>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-20 bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-xl flex justify-between items-center px-8 z-40 shadow-sm font-['Be_Vietnam_Pro'] tracking-tight">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-stone-400">search</span>
+<input class="w-full bg-stone-100 dark:bg-stone-800 border-none rounded-full py-2.5 pl-12 pr-4 focus:ring-2 focus:ring-orange-500/20 transition-all text-sm" placeholder="Tìm homestay xịn xò..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden lg:flex items-center gap-8 mr-8">
+<a class="text-orange-700 dark:text-orange-400 font-bold border-b-4 border-orange-700 h-20 flex items-center" href="#">Chỗ ở</a>
+<a class="text-stone-500 dark:text-stone-400 font-medium hover:bg-stone-200/50 dark:hover:bg-stone-800/50 transition-all h-12 px-4 rounded-lg flex items-center" href="#">Lịch trình</a>
+<a class="text-stone-500 dark:text-stone-400 font-medium hover:bg-stone-200/50 dark:hover:bg-stone-800/50 transition-all h-12 px-4 rounded-lg flex items-center" href="#">Chi phí</a>
+</nav>
+<div class="flex items-center gap-2">
+<button class="p-2.5 rounded-full hover:bg-stone-200/50 transition-all active:scale-95">
+<span class="material-symbols-outlined text-stone-600" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2.5 rounded-full hover:bg-stone-200/50 transition-all active:scale-95">
+<span class="material-symbols-outlined text-stone-600" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] pt-28 px-12 pb-20 max-w-[1400px]">
+<header class="mb-12">
+<h2 class="text-4xl font-black text-on-background mb-2 tracking-tight">Nghỉ ngơi thôi! 💤</h2>
+<p class="text-on-surface-variant font-medium">Chi tiết nơi ở của team mình tại Đà Lạt</p>
+</header>
+<!-- Kinetic Bento Grid for Accommodation Details -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Main Preview Card -->
+<div class="col-span-8 bg-surface-container-lowest rounded-xl p-8 relative overflow-hidden shadow-sm">
+<div class="flex justify-between items-start mb-8 relative z-10">
+<div>
+<span class="bg-secondary-container text-on-secondary-fixed px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3 inline-block">⭐ Premium Stay</span>
+<h3 class="text-3xl font-black text-on-surface mb-2">The Wilder-nest Homestay</h3>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="location_on">location_on</span>
+<span class="font-medium">Tuyền Lâm Lake, Phường 4, Đà Lạt, Lâm Đồng</span>
+</div>
+</div>
+<div class="text-right">
+<p class="text-sm font-bold text-on-surface-variant mb-1">Trạng thái:</p>
+<span class="bg-tertiary-container text-on-tertiary-container px-4 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Đã Chốt Đơn!
+                        </span>
+</div>
+</div>
+<!-- Overlapping Image Gallery -->
+<div class="relative h-[400px] mb-8">
+<div class="absolute inset-0 w-[75%] h-full rounded-lg overflow-hidden transform -rotate-1 z-0 shadow-xl">
+<img alt="Main View" class="w-full h-full object-cover" data-alt="luxury eco-friendly cabin nestled in a misty pine forest in Da Lat with large floor-to-ceiling windows and warm interior lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrnJB02ZzmmfG4VqV14ron--tvt9I8QfF8OclI1_tlkUUXfiJ0v0F0ZMX47Xj09HmIacF2xvVGKKw5LigN8MFirzh0bA4jEuajEMnaljG0T8ix_K2snaAI4mgEPeTsGv5rDAArb3JkrciaesLbzA-Z3TKIK_R2pPk_BQj3FIEzi9IFbri-LmxdCYYgnRIW4gd9iOlbAuY_5A5plBSjB-CdI7I9pRDwUMgwrp-nzOydp_4aWCiP0RC3woWWgJTd849BdkeqhCvQlqZ4"/>
+</div>
+<div class="absolute top-1/2 right-0 -translate-y-1/2 w-[40%] h-[80%] rounded-lg overflow-hidden transform rotate-3 z-10 shadow-2xl border-4 border-surface-container-lowest">
+<img alt="Interior View" class="w-full h-full object-cover" data-alt="cozy minimalist bedroom interior with wooden textures, soft beige linens, and local handcrafted decor items" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe4fnj6RbNt8XXhmaeDFm6X1TV7EpmoQxCgCdKm69rDu9wTSzYOM5jcHjV1IYpt-OsfC6qaL-T0p3cSqcHYhi-jBEBeEgSbgJ-KSAXaLC7xRW25yQfkff9dFa9B0MtDGdUxrN3PftBVWExv4_UZppzMbju5DSQMSBtXLG2N0JYu-NcHHGGg0g1Kxc4UdMYi9CmR7pAc5zgcmc2fK3_CFBFeu-3L1lgpbdL9zI-xzOYAEHrLICQyr9_TmE2kziTUqFb3vcrMmwvxrnu"/>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<div class="bg-surface-container-low p-4 rounded-lg flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface-variant uppercase">Check-in</p>
+<p class="font-bold text-on-surface">15 Th04, 14:00</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface-variant uppercase">Check-out</p>
+<p class="font-bold text-on-surface">17 Th04, 12:00</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="bed">bed</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface-variant uppercase">Số phòng</p>
+<p class="font-bold text-on-surface">03 Phòng ngủ</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Booking Summary Side -->
+<div class="col-span-4 space-y-8">
+<!-- Location Map Preview -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm">
+<div class="w-full h-48 rounded-lg overflow-hidden relative group">
+<img alt="Map" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" data-location="Da Lat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAodngnBJkOzNgxb4ZFMMU3egtOY8-L0ErY0WEdgdPxe1sGw1aIBgp38xDm5LpjQDrfPa7ZVbsNfC06Xc4tZPtMRzUz6LLROrrhnl260BYkEjPCF51WBLPqrLZGGK0cPiKprXT1RSfuRpSxSjU-8Q4JPoOnHDJt3TC_WexYZc7c3I7jzF6sr3KDIU7Mh3BR638yt4EcRnwlRqW0_OstfkZ4bGidzrhHHU7wmxchMAQIttkv2TlCzujMJ48rBV9t__8ILpK1ZJrZ6ReJ"/>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-xl animate-bounce">
+<span class="material-symbols-outlined" data-icon="pin_drop" style="font-variation-settings: 'FILL' 1;">pin_drop</span>
+</div>
+</div>
+<div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-3 rounded-lg flex justify-between items-center">
+<p class="text-xs font-bold text-on-surface">Mở Google Maps</p>
+<span class="material-symbols-outlined text-sm" data-icon="open_in_new">open_in_new</span>
+</div>
+</div>
+</div>
+<!-- Rules & Amenities -->
+<div class="bg-secondary-container p-8 rounded-xl relative overflow-hidden">
+<div class="absolute top-[-20px] right-[-20px] opacity-10 rotate-12">
+<span class="material-symbols-outlined text-[120px]" data-icon="coffee">coffee</span>
+</div>
+<h4 class="text-xl font-black text-on-secondary-fixed-variant mb-4">Lưu ý nè! 💡</h4>
+<ul class="space-y-3">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary-dim text-sm mt-1" data-icon="check_circle">check_circle</span>
+<span class="text-sm font-semibold text-on-secondary-fixed">Đã bao gồm bữa sáng local xịn xò</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary-dim text-sm mt-1" data-icon="check_circle">check_circle</span>
+<span class="text-sm font-semibold text-on-secondary-fixed">WiFi 5G bao mượt để check-in</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary-dim text-sm mt-1" data-icon="warning">warning</span>
+<span class="text-sm font-semibold text-on-secondary-fixed">Giữ im lặng sau 22:00 nha mấy ní</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Room & Member List - Horizontal Bento -->
+<div class="col-span-12">
+<header class="flex justify-between items-end mb-6 px-2">
+<div>
+<h3 class="text-2xl font-black text-on-surface">Phân chia địa bàn 🚩</h3>
+<p class="text-on-surface-variant font-medium text-sm">Ai ở đâu, với ai?</p>
+</div>
+<button class="bg-surface-container-high px-6 py-2 rounded-full font-bold text-sm hover:bg-surface-container-highest transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+                        Thay đổi
+                    </button>
+</header>
+<div class="grid grid-cols-3 gap-8">
+<!-- Room 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-t-8 border-orange-500">
+<div class="flex justify-between items-center mb-6">
+<h4 class="text-lg font-black text-on-surface">Phòng 101</h4>
+<span class="text-xs font-bold text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-full">King Size</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low">
+<img alt="Member" class="w-10 h-10 rounded-full border-2 border-white" data-alt="vibrant headshot of a happy gen-z girl with colorful hair and artistic glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpzt6o0gwn0DcYfEbY3eLbpbUDhU1Ckkl_ShjCDVVe_foHYhz7HTX8H5dD_rQANBIap34PshS0VuytlSlIo-zo0-seMgckyLfP5S10aN13tZQ1G5aV4-eihcI4q1rYebTSb7dPlJN0JN2lEqkurUoeU6MBgnhItBvolHl3_ptjQ1YFckp2btmoTV5ihWuCqNRpbonO1E7HDAFaZjrJu09LBFfqQO_-cyKDIvP84vYPB9PvV3QJn1Biawte1m02G_vKOR5Q06VOp82_"/>
+<div>
+<p class="font-bold text-sm text-on-surface">Thanh Thảo</p>
+<p class="text-[10px] font-bold text-primary uppercase">Trưởng phòng</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-stone-50 transition-all">
+<img alt="Member" class="w-10 h-10 rounded-full border-2 border-white" data-alt="cool gen-z boy headshot wearing a trendy beanie and smiling in natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCspaZZT-r7GfhNJ4xfWopIgDWEhG1mcXDmWSvF4CEZwe5LGv4R5C_7LcZpfHVU225StihuteDeL46mIZoJBs-MK634jUunWRyrFcfnoYjxMonkjNJ8TabVumUNcg8etZZfiwM9dMz8eOy6-Ag2qMq8RcifBS_rbZ7lNQJ_al4pBPA-NOdQGRUEIYHdCPbmNEq4EGM6qXIHVnrFpdzISl8ypft8lAgTj5d0bZGD1gQYIXBmo_XuADzLeWrmxevf_lWTAAzowJ5mlxR"/>
+<div>
+<p class="font-bold text-sm text-on-surface">Hoàng Anh</p>
+<p class="text-[10px] font-medium text-on-surface-variant">Thành viên</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Room 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-t-8 border-secondary">
+<div class="flex justify-between items-center mb-6">
+<h4 class="text-lg font-black text-on-surface">Phòng 102</h4>
+<span class="text-xs font-bold text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-full">Twin Bed</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low">
+<img alt="Member" class="w-10 h-10 rounded-full border-2 border-white" data-alt="stylized headshot of a gen-z man with modern haircut and denim jacket" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAflPRisFi_dSBXg0gS-n-0dO7jkNgxGScdZY-JYkt6jgpkAVzUZ9o7Wv0O_20q_2UX7UK6tQqx7mgqOj9_0ncVT34iBUJxGI1_KlaXoMltKU-joIjjG5IcuToH-D6fsAwSxeY-7-1FdGsJH52cVvXgt6plQvplpeahhleLRpGV4DAU-3nPlFWmYdmyICY_mb5jMqEgTEak5kq5m2ysyTNXxIaTA1yxZSPK5UoNaXjLQgZGS4ZwKYfiPi-0VFR1Eu3goaJM52J9YVSP"/>
+<div>
+<p class="font-bold text-sm text-on-surface">Minh Triết</p>
+<p class="text-[10px] font-bold text-secondary uppercase">Trưởng phòng</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-stone-50 transition-all">
+<img alt="Member" class="w-10 h-10 rounded-full border-2 border-white" data-alt="portrait of a young gen-z woman with minimalist aesthetic and calm expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtSt0fD-VpMEYAgvkHz8-TPdKQKB67eLahkhzgpo9Wj98ck3qgLMpJMWdHjBpjkv1UKianDS6ZoSwh_YaoFPLBFHMpI1vkbP2Zqa3fbI17YsNNjVnBliefoFjVGSxv_kOSJ2g8WM-bMM0JIydyqcW_6kUAQTSQHf4BIH6OUfwDXAkAkw3VDc4QZM5W8oPtXJC233gqLoanuNNoWY8YZE6_3zorrRfzDUd8RbEBOsC2Mr4maWYPJtxwnLGWUYtGdbr02S5mnE1SFTwA"/>
+<div>
+<p class="font-bold text-sm text-on-surface">Bảo Ngọc</p>
+<p class="text-[10px] font-medium text-on-surface-variant">Thành viên</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Room 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-t-8 border-tertiary">
+<div class="flex justify-between items-center mb-6">
+<h4 class="text-lg font-black text-on-surface">Phòng 201</h4>
+<span class="text-xs font-bold text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-full">Deluxe</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low">
+<img alt="Member" class="w-10 h-10 rounded-full border-2 border-white" data-alt="close-up of a young woman with a trendy wolf cut hairstyle and urban fashion style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-mqJiC9Ovv91evoXmXvnCFXah7hGUAstMt7wxeqxB3JTaMcfVzvM1hysYHBn9fKsrC9hyjIeNxnHRp2TyoI0NUYmFdlcKHb8NDdXKW1MsG01XDFhSet0WquRriZy9UtbrD2veJP0ztNxh-Iw4Ky0xAzt54a1zj7zwYxwqShKpzZxWmF3YTXzV1w1GBaLkpIS2aGjqGpqkt_f41fOBiBbj-QXOQrGt8_q7xDRn7PwAVgmI3sBzU2o4ZKoFkfT__0A8W6RO6kj-lm28"/>
+<div>
+<p class="font-bold text-sm text-on-surface">Khánh Huyền</p>
+<p class="text-[10px] font-bold text-tertiary uppercase">Trưởng phòng</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg hover:bg-stone-50 transition-all">
+<img alt="Member" class="w-10 h-10 rounded-full border-2 border-white" data-alt="modern headshot of a gen-z creative professional with headphones and smart casual look" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCExybuThSZVZot0BZjUJpKACsp4tMiJaPjI4_NXJ6nK1r5RWj0b7lBM45QIJ2J4OhecbqqviQXTD9Rd4zoSGdeNXD6O_6gO9CNGTl4Wju8D0nMF8qqyqDQ9sUORfqLiSjRjRTBzll54kQSXVn8_f9nWgxDv4xTNEhGllYD8lOFd92MwkZfmXkjYAOZZLAThtYrGrW4nux0Bb83wj-GHObgbo9IcqDhpByqNbw6JqcYNirs8jjCUBq_MK8Iz2rToVP0C3SwnEROLha-"/>
+<div>
+<p class="font-bold text-sm text-on-surface">Đức Duy</p>
+<p class="text-[10px] font-medium text-on-surface-variant">Thành viên</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lên kèo đi quẩy mới! - Mình Đi Đâu Thế?</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-dim": "#005c2b",
+                        "background": "#f9f6f5",
+                        "on-surface": "#2f2e2e",
+                        "secondary-container": "#d4cbff",
+                        "on-tertiary-fixed-variant": "#006832",
+                        "surface-container-low": "#f3f0ef",
+                        "surface-bright": "#f9f6f5",
+                        "secondary-fixed-dim": "#c6bbff",
+                        "on-primary-fixed": "#000000",
+                        "primary-container": "#ff784d",
+                        "outline-variant": "#afacac",
+                        "tertiary": "#006a33",
+                        "surface-dim": "#d6d4d3",
+                        "secondary-dim": "#4e2bd1",
+                        "surface-container-high": "#e5e2e1",
+                        "on-secondary-container": "#451dc8",
+                        "on-surface-variant": "#5c5b5b",
+                        "inverse-primary": "#ff571a",
+                        "error": "#b31b25",
+                        "tertiary-fixed": "#3fff8b",
+                        "primary": "#a93000",
+                        "on-tertiary-container": "#005d2c",
+                        "primary-dim": "#942900",
+                        "primary-fixed-dim": "#ff5d26",
+                        "inverse-on-surface": "#9e9c9c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#004820",
+                        "on-secondary": "#f6f0ff",
+                        "surface": "#f9f6f5",
+                        "outline": "#787676",
+                        "on-error": "#ffefee",
+                        "secondary-fixed": "#d4cbff",
+                        "on-secondary-fixed": "#3200a7",
+                        "surface-container": "#eae7e7",
+                        "surface-tint": "#a93000",
+                        "primary-fixed": "#ff784d",
+                        "on-primary": "#ffefeb",
+                        "surface-container-highest": "#dfdcdc",
+                        "error-dim": "#9f0519",
+                        "on-primary-fixed-variant": "#571400",
+                        "tertiary-fixed-dim": "#24f07e",
+                        "on-secondary-fixed-variant": "#4f2dd2",
+                        "surface-variant": "#dfdcdc",
+                        "tertiary-container": "#3fff8b",
+                        "error-container": "#fb5151",
+                        "on-primary-container": "#460f00",
+                        "secondary": "#5a3bdd",
+                        "inverse-surface": "#0e0e0e",
+                        "on-error-container": "#570008",
+                        "on-tertiary": "#cdffd3",
+                        "on-background": "#2f2e2e"
+                    },
+                    fontFamily: {
+                        "headline": ["Be Vietnam Pro"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .white-3d-card {
+            background: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 
+                0 10px 25px -5px rgba(0, 0, 0, 0.04),
+                0 8px 10px -6px rgba(0, 0, 0, 0.04),
+                inset 0 -4px 6px -1px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .nav-active {
+            background: #ff5d26;
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(255, 93, 38, 0.3);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5e2e1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-[#F8F6F4] font-body text-on-surface min-h-screen flex">
+<!-- Sidebar Navigation -->
+<aside class="w-72 fixed h-screen bg-white rounded-r-[3rem] shadow-[10px_0_50px_rgba(0,0,0,0.02)] z-50 flex flex-col py-10 px-6">
+<div class="px-4 mb-10 flex flex-col gap-1">
+<span class="text-xl font-black text-primary uppercase tracking-tighter">Mình Đi Đâu Thế?</span>
+<div class="mt-8 flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden shadow-sm border-2 border-surface-container">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXIQy7KIsgI50IF2BbWKzPu8b12rPJN30PXxB0r332TL678zB1ZpPw0Fb064crQZOgP_CgNdPBTt76HF3N3OkIgLBugr3o36Lkf_GcjVeq-2aLIYyRaP2bG4iXxlEC7BxVCE7f933fhcXrQyqK99Zo0mE2d6FOEjy5NdV6xd_g1FjCerccDUN_9OWxwC5WLaNGglU428aMG-iddAp4j9zLCqByozyL0TNAR1sRGuRLxB0hEI1Rn7anxmfo05PctIXmgpNYjIB2lPoC"/>
+</div>
+<div>
+<p class="text-on-surface text-base font-bold">Hế lơ bạn iu!</p>
+<p class="text-on-surface-variant text-xs font-medium">Đi đâu hôm nay?</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 px-6 py-4 text-on-surface-variant hover:bg-surface-container rounded-full transition-all group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">dashboard</span>
+<span class="font-bold">Bảng điều khiển</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-4 nav-active rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">flight_takeoff</span>
+<span class="font-bold">Chuyến đi của tôi</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-4 text-on-surface-variant hover:bg-surface-container rounded-full transition-all group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">explore</span>
+<span class="font-bold">Khám phá</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-4 text-on-surface-variant hover:bg-surface-container rounded-full transition-all group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">group</span>
+<span class="font-bold">Bạn bè</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-4 text-on-surface-variant hover:bg-surface-container rounded-full transition-all group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">settings</span>
+<span class="font-bold">Cài đặt</span>
+</a>
+</nav>
+<div class="mt-auto">
+<button class="w-full py-4 bg-[#5E41E2] text-white rounded-2xl font-black text-sm shadow-xl shadow-[#5E41E2]/20 hover:scale-105 transition-transform">
+                Lên đồ ngay! 🚀
+            </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 ml-72 p-10">
+<div class="max-w-7xl mx-auto">
+<!-- Header Section -->
+<header class="flex justify-between items-start mb-12">
+<div>
+<h1 class="font-headline font-black text-5xl text-on-surface tracking-tight mb-2">Lên kèo đi quẩy mới! 🚀</h1>
+<p class="text-on-surface-variant text-lg font-medium">Bắt đầu hành trình siêu "mlem" của bạn ngay nào.</p>
+</div>
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm border border-white hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-on-surface">notifications</span>
+</button>
+<button class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm border border-white hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-on-surface">help_outline</span>
+</button>
+</div>
+</header>
+<div class="grid grid-cols-12 gap-10">
+<!-- Left Column -->
+<div class="col-span-7 space-y-10">
+<!-- Section: Thông tin chuyến đi -->
+<section class="space-y-6">
+<div class="flex items-center gap-3">
+<div class="w-1.5 h-6 bg-primary rounded-full"></div>
+<h2 class="font-headline font-bold text-xl text-on-surface uppercase tracking-wider">Thông tin chuyến đi</h2>
+</div>
+<div class="space-y-6">
+<div class="white-3d-card p-8">
+<label class="block text-[10px] font-black text-primary tracking-[0.2em] uppercase mb-4">Tên kèo này là...</label>
+<input class="w-full bg-[#F0F0F0] border-none rounded-2xl p-5 font-bold text-lg focus:ring-2 focus:ring-primary/20" placeholder="e.g., Phá đảo Phú Quốc" type="text" value="Phá đảo Phú Quốc"/>
+</div>
+<div class="white-3d-card p-8">
+<label class="block text-[10px] font-black text-primary tracking-[0.2em] uppercase mb-4">Điểm đến mlem mlem</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary">location_on</span>
+<input class="w-full bg-[#F0F0F0] border-none rounded-2xl p-5 pl-12 font-bold text-lg focus:ring-2 focus:ring-primary/20" placeholder="e.g., Phú Quốc" type="text" value="Phú Quốc"/>
+</div>
+</div>
+<div class="white-3d-card p-8">
+<label class="block text-[10px] font-black text-primary tracking-[0.2em] uppercase mb-4">Ngày đi - Ngày về</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary">calendar_month</span>
+<input class="w-full bg-[#F0F0F0] border-none rounded-2xl p-5 pl-12 font-bold text-lg focus:ring-2 focus:ring-primary/20" placeholder="Chọn ngày quẩy..." type="text" value="15/12 - 20/12/2024"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Chọn Vibe -->
+<section class="space-y-6">
+<div class="flex items-center gap-3">
+<div class="w-1.5 h-6 bg-secondary rounded-full"></div>
+<h2 class="font-headline font-bold text-xl text-on-surface uppercase tracking-wider">Chọn Vibe Chuyến Đi</h2>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<button class="white-3d-card p-6 flex flex-col items-center gap-3 hover:border-primary/30 transition-all group">
+<div class="text-4xl group-hover:scale-110 transition-transform">🧘‍♂️</div>
+<span class="font-bold text-on-surface">Chill</span>
+</button>
+<button class="p-6 flex flex-col items-center gap-3 rounded-[2rem] bg-gradient-to-br from-[#FF5D26] to-[#FF8A65] shadow-lg shadow-primary/30 text-white transform hover:-translate-y-1 transition-all">
+<div class="text-4xl">💃</div>
+<span class="font-black uppercase text-xs tracking-widest">Quẩy</span>
+</button>
+<button class="white-3d-card p-6 flex flex-col items-center gap-3 hover:border-primary/30 transition-all group">
+<div class="text-4xl group-hover:scale-110 transition-transform">🧭</div>
+<span class="font-bold text-on-surface">Khám phá</span>
+</button>
+</div>
+</section>
+<!-- Action Button -->
+<div class="pt-4">
+<button class="w-full py-8 bg-gradient-to-r from-[#A93000] via-[#FF5D26] to-[#FF8A65] text-white rounded-[2.5rem] font-headline font-black text-3xl shadow-[0_25px_50px_-12px_rgba(255,93,38,0.4)] hover:scale-[1.02] transition-all uppercase tracking-tighter">
+                            Chốt kèo ngay! 🔥
+                        </button>
+</div>
+</div>
+<!-- Right Column -->
+<div class="col-span-5 space-y-10">
+<!-- Section: Live Preview -->
+<section class="space-y-6">
+<div class="flex items-center gap-3">
+<div class="w-1.5 h-6 bg-primary-container rounded-full"></div>
+<h2 class="font-headline font-bold text-xl text-on-surface uppercase tracking-wider">Xem trước "Kèo" quẩy</h2>
+</div>
+<div class="relative rounded-[3rem] overflow-hidden aspect-[4/5] shadow-2xl group">
+<img alt="Destination Preview" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkbMP81soIzbJIUzTbEFSene0dBDqVBEMqiqSiG3D6B-XCabSAqpFBt5tnRjOdSIdNXoLcnuyhFMtKVh1ZinwAQ2HIrgIl2yGYbw9kOJcr_6R2t4hDaG9sqds9SJq0dduurb81066CHCTA3Ytfv6_zu1-v5qq5V7NEq9_7tlAX9dKiRxLqTGIgtILbP10fWWK6FBmZ6gZBnNpMaLVuIVXjp63oNefzhTTJ6JKEUTV1Jbx4PQgl2U35wvq5JljYsY1GFoa0frmE4Db4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-10 flex flex-col justify-end">
+<div class="mb-4">
+<span class="bg-[#FF5D26]/90 backdrop-blur-md text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2 w-fit">
+<span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+                                        Vibe: Quẩy cực sung
+                                    </span>
+</div>
+<h3 class="text-white font-headline font-black text-4xl mb-6 leading-tight">Phá đảo Phú Quốc</h3>
+<div class="space-y-4 border-t border-white/20 pt-6">
+<div class="flex items-center gap-3 text-white/90">
+<span class="material-symbols-outlined text-[#FF8A65]">location_on</span>
+<span class="font-bold">Phú Quốc, Kiên Giang</span>
+</div>
+<div class="flex items-center gap-3 text-white/90">
+<span class="material-symbols-outlined text-[#FF8A65]">calendar_today</span>
+<span class="font-bold">15 tháng 12 - 20 tháng 12</span>
+</div>
+<div class="flex items-center gap-3 text-white/60 text-sm">
+<span class="material-symbols-outlined text-[#FF8A65]">group</span>
+<span>Chưa có thành viên nào tham gia</span>
+</div>
+</div>
+<p class="text-white/50 text-xs mt-8 italic">"Hành trình vạn dặm bắt đầu từ một cái chốt kèo. Đừng để thanh xuân trôi qua trong văn phòng! 🤘"</p>
+</div>
+</div>
+</section>
+<!-- Section: Templates -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-1.5 h-6 bg-secondary-dim rounded-full"></div>
+<h2 class="font-headline font-bold text-xl text-on-surface uppercase tracking-wider">Kèo thơm có sẵn</h2>
+</div>
+<button class="text-[#5E41E2] font-black text-xs uppercase hover:underline">Xem tất cả</button>
+</div>
+<div class="space-y-4">
+<!-- Template Item -->
+<div class="white-3d-card p-4 flex items-center gap-4 hover:translate-x-2 transition-transform cursor-pointer group">
+<div class="w-16 h-16 rounded-2xl overflow-hidden bg-surface-container">
+<img alt="Da Lat" class="w-full h-full object-cover group-hover:scale-110 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx_f1F_vA6WfKz_H7vS4Z5A6U_S8Xm4W7v_Y_Z_G8_U_S8Xm4W7v_Y_Z_G8_U_S8Xm4W7v_Y_Z_G8_U_S8Xm4W7v_Y_Z_G8_U_S8Xm4W7v_Y_Z_G8"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-on-surface">Đà Lạt Chill Vibes</h4>
+<p class="text-[10px] text-on-surface-variant font-medium">3 ngày 2 đêm • Chill 🧘‍♂️</p>
+<div class="flex items-center gap-1 mt-1 text-[10px] text-orange-500 font-bold">
+<span class="material-symbols-outlined text-xs FILL">star</span>
+<span>4.9 (1.2k clone)</span>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full bg-[#5E41E2] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-sm">content_copy</span>
+</button>
+</div>
+<!-- Template Item -->
+<div class="white-3d-card p-4 flex items-center gap-4 hover:translate-x-2 transition-transform cursor-pointer group">
+<div class="w-16 h-16 rounded-2xl overflow-hidden bg-surface-container">
+<img alt="Phu Quoc" class="w-full h-full object-cover group-hover:scale-110 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkbMP81soIzbJIUzTbEFSene0dBDqVBEMqiqSiG3D6B-XCabSAqpFBt5tnRjOdSIdNXoLcnuyhFMtKVh1ZinwAQ2HIrgIl2yGYbw9kOJcr_6R2t4hDaG9sqds9SJq0dduurb81066CHCTA3Ytfv6_zu1-v5qq5V7NEq9_7tlAX9dKiRxLqTGIgtILbP10fWWK6FBmZ6gZBnNpMaLVuIVXjp63oNefzhTTJ6JKEUTV1Jbx4PQgl2U35wvq5JljYsY1GFoa0frmE4Db4"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-on-surface">Phá đảo Phú Quốc</h4>
+<p class="text-[10px] text-on-surface-variant font-medium">5 ngày 4 đêm • Quẩy 💃</p>
+<div class="flex items-center gap-1 mt-1 text-[10px] text-orange-500 font-bold">
+<span class="material-symbols-outlined text-xs FILL">star</span>
+<span>4.8 (2.5k clone)</span>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full bg-[#5E41E2] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-sm">content_copy</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+<!-- Decorative Gradients -->
+<div class="fixed top-0 right-0 w-1/3 h-1/3 bg-primary/5 blur-[150px] -z-10"></div>
+<div class="fixed bottom-0 left-1/4 w-1/2 h-1/2 bg-secondary/5 blur-[200px] -z-10"></div>
+</body></html>

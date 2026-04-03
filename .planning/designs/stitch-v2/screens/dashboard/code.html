@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#FF4D00",
+              "background": "#F4F6F8",
+              "background-dark": "#1a1614",
+              "on-surface": "#2f2e2e",
+              "on-surface-variant": "#5c5b5b",
+              "surface-container-low": "#f3f0ef",
+              "surface-container-high": "#e5e2e1",
+              "secondary": "#5a3bdd",
+              "on-secondary": "#f6f0ff",
+            },
+            fontFamily: {
+              "headline": ["Be Vietnam Pro"],
+              "body": ["Plus Jakarta Sans"],
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            boxShadow: {
+              'soft-deep': '0 20px 50px -12px rgba(0, 0, 0, 0.08)',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+      }
+      .kinetic-tilt {
+        transform: rotate(-1deg);
+      }
+      .kinetic-tilt-alt {
+        transform: rotate(1deg);
+      }
+      .tab-active {
+        background: white;
+        box-shadow: 0 4px 15px -3px rgba(0,0,0,0.1);
+        color: #a93000;
+      }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-screen w-64 rounded-r-[3rem] border-r-0 bg-white dark:bg-neutral-950 flex flex-col py-8 gap-y-2 z-50 shadow-[20px_0_60px_-15px_rgba(0,0,0,0.05)] animate-in slide-in-from-left duration-500">
+<div class="px-8 mb-10">
+<div class="w-16 h-16 rounded-full bg-primary-container mb-4 overflow-hidden border-4 border-white shadow-lg">
+<img alt="User Avatar" data-alt="Portrait of a stylish Gen Z woman with trendy glasses and a bright smile, colorful urban background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4mdTbZANjRh-H9FC9iZJykBjCxP02a3TZv7I93fVdsdHkC5150-lyDxQaj5igd1tDTqZZDKWmeHtBkl81QBkSPM0YK2Ua2VRB8JgF-oluLwqtMda-76T6y8EaUqDd5_l1qQVoxcWNx0T_j-UdYBrwTFABktN6ZooDYsMQcsw_i_lwnyWPRvDsXh00SOScECEwLQwz4-VWBrccBhReIMicCosOTdYnJFNurDXZWPHUjxdWW6h5bUZyZSODxEfZ02IhsbtcIWRbGEoP"/>
+</div>
+<h2 class="font-headline font-bold text-xl text-on-surface">Hế lố bạn iu!</h2>
+<p class="text-on-surface-variant text-sm">Đi đâu đây?</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 text-neutral-600 dark:text-neutral-400 mx-4 py-4 px-6 hover:translate-x-2 transition-transform hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded-full font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span>Khám phá</span>
+</a>
+<a class="flex items-center gap-4 bg-gradient-to-r from-[#a93000] to-[#ff4d00] text-white rounded-full mx-4 py-4 px-6 shadow-lg shadow-orange-500/20 font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span>Lịch trình</span>
+</a>
+<a class="flex items-center gap-4 text-neutral-600 dark:text-neutral-400 mx-4 py-4 px-6 hover:translate-x-2 transition-transform hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded-full font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Bạn bè</span>
+</a>
+<a class="flex items-center gap-4 text-neutral-600 dark:text-neutral-400 mx-4 py-4 px-6 hover:translate-x-2 transition-transform hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded-full font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="local_offer">local_offer</span>
+<span>Ưu đãi</span>
+</a>
+<a class="flex items-center gap-4 text-neutral-600 dark:text-neutral-400 mx-4 py-4 px-6 hover:translate-x-2 transition-transform hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded-full font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Cài đặt</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full py-4 bg-secondary text-on-secondary rounded-full font-bold shadow-lg shadow-secondary/20 hover:scale-105 transition-transform">
+            Lên đồ ngay! ✈️
+        </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen">
+<!-- TopNavBar -->
+<header class="w-full sticky top-0 z-40 bg-background/80 backdrop-blur-md dark:bg-neutral-900/80 flex justify-between items-center px-12 py-4 h-24">
+<div class="flex items-center gap-8">
+<h1 class="text-2xl font-black text-primary dark:text-primary uppercase tracking-tighter">Mình Đi Đâu Thế?</h1>
+<div class="relative group">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline/50">search</span>
+<input class="pl-12 pr-6 py-3 bg-white border-none rounded-full w-96 shadow-sm focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-outline/40" placeholder="Tìm kèo thơm..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-4 p-2 bg-white/60 dark:bg-neutral-800/60 backdrop-blur-xl rounded-full border border-white/20 shadow-sm">
+<button class="relative w-11 h-11 flex items-center justify-center rounded-full hover:bg-white dark:hover:bg-neutral-800 transition-all group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary" data-icon="notifications">notifications</span>
+<span class="absolute top-3 right-3 w-2.5 h-2.5 bg-primary border-2 border-white dark:border-neutral-900 rounded-full animate-pulse"></span>
+</button>
+<div class="h-8 w-[1px] bg-neutral-200 dark:bg-neutral-700"></div>
+<button class="flex items-center gap-3 pr-5 pl-1.5 py-1.5 rounded-full hover:bg-white dark:hover:bg-neutral-800 transition-all group">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4mdTbZANjRh-H9FC9iZJykBjCxP02a3TZv7I93fVdsdHkC5150-lyDxQaj5igd1tDTqZZDKWmeHtBkl81QBkSPM0YK2Ua2VRB8JgF-oluLwqtMda-76T6y8EaUqDd5_l1qQVoxcWNx0T_j-UdYBrwTFABktN6ZooDYsMQcsw_i_lwnyWPRvDsXh00SOScECEwLQwz4-VWBrccBhReIMicCosOTdYnJFNurDXZWPHUjxdWW6h5bUZyZSODxEfZ02IhsbtcIWRbGEoP"/>
+</div>
+<span class="text-sm font-bold text-on-surface hidden sm:block">Bạn iu nè!</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<div class="p-12 max-w-7xl mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+<div class="relative">
+<h2 class="font-headline font-black text-5xl md:text-6xl text-on-surface tracking-tighter mb-4 leading-none relative z-10 whitespace-nowrap">Kèo thơm của tui</h2>
+<p class="text-on-surface-variant text-xl font-medium opacity-80">Đã máu thì đừng hỏi bố cháu là ai. Đi thôi!</p>
+</div>
+<!-- Tab Switching - Modern Pill Style -->
+<div class="flex p-1 rounded-full w-fit bg-surface-container-high whitespace-nowrap overflow-hidden flex-nowrap">
+<button class="px-10 py-3.5 rounded-full tab-active font-bold transition-all duration-300 text-primary flex-shrink-0">Sắp tới</button>
+<button class="px-10 py-3.5 rounded-full text-on-surface-variant/60 font-bold hover:text-on-surface transition-all duration-300 flex-shrink-0">Đang đi</button>
+<button class="px-10 py-3.5 rounded-full text-on-surface-variant/60 font-bold hover:text-on-surface transition-all duration-300 flex-shrink-0">Đã đi</button>
+</div>
+</div>
+<!-- Kinetic Bento Grid -->
+<div class="grid grid-cols-12 gap-8 items-stretch">
+<!-- NEW TRIP CARD -->
+<div class="col-span-12 lg:col-span-4 group relative">
+<div class="relative h-full bg-white rounded-3xl overflow-hidden shadow-soft-deep flex flex-col items-center justify-between p-12 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-1">
+<div class="mt-8">
+<div class="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center mx-auto mb-8 transition-transform group-hover:scale-110 duration-500">
+<span class="material-symbols-outlined text-primary text-5xl" data-icon="rocket_launch" data-weight="fill">rocket_launch</span>
+</div>
+<h3 class="font-headline font-black text-3xl mb-6 leading-tight">Xách ba lô lên và đi thôi!</h3>
+<p class="text-on-surface-variant/70 text-base leading-relaxed max-w-[200px] mx-auto">Chốt đơn một chuyến đi rực rỡ cùng hội cạ cứng ngay và luôn.</p>
+</div>
+<button class="w-full bg-primary text-white py-5 rounded-2xl font-black text-lg shadow-xl shadow-primary/25 hover:shadow-primary/40 active:scale-[0.98] transition-all flex items-center justify-center gap-3 mt-12">
+<span class="material-symbols-outlined">add_circle</span>
+                        TẠO KÈO MỚI
+                    </button>
+</div>
+</div>
+<!-- TRIP 1: Dalat -->
+<div class="col-span-12 lg:col-span-8">
+<div class="group relative h-full bg-white rounded-3xl overflow-hidden shadow-soft-deep hover:shadow-2xl transition-all duration-500">
+<div class="h-80 w-full relative">
+<img alt="Da Lat fog" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVAw_8C5H2l0Oc6LtOgTFabGZ7SvggeBUJMsM50NIIa9QXjZ8S9gaFT6Jpz_hNijfy-1XvAWw6uq1KyVFNgnansqZ2y7mVLJ93R67OeAsaS0LYTZfvxnZZOp0fO9Fcb_bJYEzKNELhQQicWSyNVX-bSWiKynaZoMBXoSplM7om11jtAm4a3yKx97JoVpY-uGbp55K_sVV01p-Hrv8BJB7GvWobxy8Cy6hbJ_qLUQOPq-7xh8pgo4jPOYeDbyMa59gkmhGKKFUmgxef"/>
+<div class="absolute top-8 left-8">
+<span class="glass-card px-5 py-2.5 rounded-full font-bold text-primary flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-base">event</span>
+                                15/10 - 18/10
+                            </span>
+</div>
+<div class="absolute bottom-8 right-8 flex -space-x-3">
+<div class="w-11 h-11 rounded-full border-2 border-white overflow-hidden bg-neutral-200"><img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2JP1VR3v9mqGhqa1EGJX_i3auQyTXlpT3Ou44d_UwMdqBd7WbmNyOyDXxi9cFFLGsPt6jRIrEOrKULNss6sUZoBCbfvH8ZxCTsNXb7rafLFqArYyCl_YTZ5X2BvkgkIazCKKZsbMip73za06y3_Jdo0A9PCq_y4fjeIaf1O0WS_DlvCglcGQxL1TfRmBMkOE4UyfDZvvFt6gKRCE7-qx-c_U1tOGt6JiKX85jELYqtlPok8f_GYoIILWq7Y1pZSd-YZmdn60k4i8t"/></div>
+<div class="w-11 h-11 rounded-full border-2 border-white overflow-hidden bg-neutral-200"><img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0p_y2NwP0b8jPnENVDQB9zptwVAoVFjvIb_aeYwS6VKJ1Tx0y_PRPuvChg1ImGrWxNtOwDVUotOaG38eF3c_ZbFVQQFuY82qmDxuA_STYKPuRF2oBQi91Hp6DAVALJyURT3zAMK35ys2XGe3Mo9e2LahZh-AqD_AKG6kAqAEtY96uirFZcHbGZTwUv_dv4GEoVpXH-MDz6fpAKeJvZvu2mrA2kQOY096uh3NJnbsr_YeR-YhORCwh8plZtzPVR5RGs5igBP_hBl9W"/></div>
+<div class="w-11 h-11 rounded-full border-2 border-white overflow-hidden bg-secondary text-white flex items-center justify-center text-xs font-black shadow-inner">+3</div>
+</div>
+</div>
+<div class="p-10">
+<div class="flex justify-between mb-6 gap-4 items-center">
+<h3 class="font-headline font-black text-3xl md:text-4xl">Đà Lạt Chốt Đơn! 🍓</h3>
+<span class="bg-secondary/10 text-secondary px-6 py-2 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest whitespace-nowrap">Vibe check cực căng</span>
+</div>
+<p class="text-on-surface-variant leading-relaxed text-lg opacity-80">Quẩy nát Đà Lạt thôi các mình ơi! Săn mây, cafe chill và ăn sập chợ đêm thôi nào.</p>
+</div>
+</div>
+</div>
+<!-- TRIP 2: Phu Quoc -->
+<div class="col-span-12 md:col-span-6 kinetic-tilt">
+<div class="group bg-white rounded-3xl overflow-hidden shadow-soft-deep hover:shadow-2xl transition-all duration-500">
+<div class="h-64 relative overflow-hidden">
+<img alt="Phu Quoc beach" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB3l000O-39W4ppKAIZI3HxE95YbY6gdc9jOn2PwzKd93H2TXaL0mo5MQvuJoWc5QeV-gD59F0CX9TLLebMcioS6X_WnEfhdxenhUiNFvneMQJp6R-fy8S82qs5PudWay5S6wuy8CCf7zjk70xpnPRhIYeRe_zRQs4x9tT1M-U9Oj5wVNYWglgB-cLN7Ll6-WwvgUKttBf1Ptvb5H_4RC-t5OOqwdrKdLPrZk_c9J0T3u9iCQ_QfDbVhHnnuwRZUQJYoT-p06WEPFD"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+<div class="absolute bottom-6 left-8">
+<h3 class="font-headline font-bold text-2xl text-white mb-1">Phú Quốc Chill Out 🏖️</h3>
+<p class="text-white/80 font-bold text-sm tracking-wide">05/11 - 09/11</p>
+</div>
+</div>
+<div class="p-8">
+<div class="flex items-center gap-2 mb-6 opacity-70">
+<span class="material-symbols-outlined text-primary text-xl">location_on</span>
+<span class="font-bold text-sm">Phú Quốc, Kiên Giang</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-9 h-9 rounded-full border-2 border-white overflow-hidden bg-neutral-100"><img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy8PHA5D40v4gSAnmdz2OZjH-hsqpX0XkNbEWR6zXblikmgxUzYDbnaA0HIRomtWeuPz3oXNSboXZs8gRMtxinvIUrtG5ALoG0w9UFJXgwqPsiv7WdQfA87IHoMGsCUqq2zBhfDgyElnrfSZ4ksLI4zEsqDLrQrcU_Em_APO_z2cxr4lsyvV6cGwTe-ic_ChZQd5FHzHCmJcQTniX96pWARdaiTTjVlr78bgUrLCs2FaG10obBBlbRQbeqp6-10h8tnDrSE09MTbug"/></div>
+<div class="w-9 h-9 rounded-full border-2 border-white overflow-hidden bg-neutral-100"><img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPXTChgjrs2bTwkumxI9CtmhAWU1bIs2J84Jig3hmyAHYu9HcknI--nnDBW1BouYa4nI8oNFitbwlniCIFQn7dDed8rJheOyQY-W18zmsbo9oseaw2HxGvrpYsRl9vZIezbnvZPFZ2OvktOlMPBugtwqfmzVogMcGtGSepDjbaPnbkSMAZxmXGA2r7gOMqneT_S7-ZeAyHNUjyjX_5ZhgdrOcJjBGZrl9iy3BV4e5enJK-9MxKBI2xur22sYl67LsPZ5Gn2CckpQAk"/></div>
+</div>
+<button class="text-primary font-black uppercase text-xs tracking-[0.2em] flex items-center gap-2 group-hover:gap-3 transition-all">
+                                Chi tiết <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- TRIP 3: Ha Giang -->
+<div class="col-span-12 md:col-span-6 kinetic-tilt-alt">
+<div class="group bg-white rounded-3xl overflow-hidden shadow-soft-deep hover:shadow-2xl transition-all duration-500">
+<div class="h-64 relative overflow-hidden">
+<img alt="Ha Giang loop" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBS2R007b3mYJfa85NStVOEIdTL1M-FMqSsV1WDa_QmUeX38ghkucPykHPygm9BK6zysb_PwZ_whT7Tb2AN3zfvC4hUnqUqMXEzggZT2JxnQeX8XMYe9JNtD_A2FqVGN8kcyriFfncgOyqEKyVGI-7Y9CpBlfGV6_Ce3HObXWeQ0ymMZGlLbeTaLWcSfDYFIg4rHEPAVjt-pSv7QroJTf1Bt4MkzNtweGzgWTVtbEHh9UIbMhQnAkuDw_LHL5EcphkZY5wiAxPGJBy8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+<div class="absolute bottom-6 left-8">
+<h3 class="font-headline font-bold text-2xl text-white mb-1">Hà Giang Xịn Xò 🏍️</h3>
+<p class="text-white/80 font-bold text-sm tracking-wide">20/11 - 25/11</p>
+</div>
+</div>
+<div class="p-8">
+<div class="flex items-center gap-2 mb-6 opacity-70">
+<span class="material-symbols-outlined text-primary text-xl">location_on</span>
+<span class="font-bold text-sm">Hà Giang, Việt Nam</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-9 h-9 rounded-full border-2 border-white overflow-hidden bg-neutral-100"><img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB567e1HdnzZc2Pd38o4WbqGpZrPbXLgwp-F2K1Q46GDElc0bFI_7_1Pn3bWpxpIFM09V0fYTiAZ5LpFHewV-3CNv_ke3ckTouGvBUXhiBReAWggrw4nxdtBTqEgdIqTqYK_vempPcX426zhOk8_1Inc7MO3IL179LGUyJDrO4Hz0QHuLuYYLSDFpYU8_93P9fFEXoK5QbUVKC0oIDyCtA_1zUKOLL0PEpWtk_DMYQ4ttWhsgpZO_Im-ubc3YxIBIZwq5f7FsncpwyZ"/></div>
+<div class="w-9 h-9 rounded-full border-2 border-white overflow-hidden bg-neutral-100"><img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkMakz42-a8y12ecsUd7K0h0EV-w0UX7kpFeIvqd3q8SUbb28K8EA5zp4HK4Z6S4TQPX1PrBAjcMa-xqHD1YuyvHRnJkHJMeww1hpyFB-CEMDDeD206-gO7zqws4g1rbZxKu7CXORA_p26UUpSpVKcJy0sM_Rw4pTdRraFJK8dr_X9rBHOlcDkPXyQVddq3dfMHRfLPqEM9onQwBf8FzzES9PG8WXmmWUMG5u9DRTCCZs4Ldw6pwYuRIjdJW9Dhb2oQvLo3RqZOv_M"/></div>
+<div class="w-9 h-9 rounded-full border-2 border-white overflow-hidden bg-neutral-100"><img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk0CVmMqw6yfHRUx-l5Urb9re7CHN5csXutTf50NeQxMgv7cPiAXcNAjyu0f3-hQ50joA1mX__cqQeuMQwrFg7eXuRnPwoejL8ynXrSfoYflkHE-ktVXQonzYnJ_47GClGYSsn_rzqlWA6OLEe_vaIcWgxVHjoHjDMrcDYXm7tF_1M7CFCEfmDYakwPS1hhNVTU15iIeKqQckCflknalXfXwVABkAQ6GeXrzQy95cG_1Hhwe_2iclVEPoSAYeVOGvF6_YV0xf9YM-O"/></div>
+</div>
+<button class="text-primary font-black uppercase text-xs tracking-[0.2em] flex items-center gap-2 group-hover:gap-3 transition-all">
+                                Chi tiết <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats & Vibes Section -->
+<div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-10">
+<div class="bg-white p-10 rounded-3xl shadow-soft-deep border border-neutral-100/50 text-center hover:scale-105 transition-transform duration-500">
+<div class="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="travel_explore">travel_explore</span>
+</div>
+<h4 class="font-headline font-black text-5xl text-on-surface mb-2">12</h4>
+<p class="font-bold text-on-surface-variant/60 uppercase tracking-widest text-xs">Điểm đã check-in</p>
+</div>
+<div class="bg-white p-10 rounded-3xl shadow-soft-deep border border-neutral-100/50 text-center hover:scale-105 transition-transform duration-500">
+<div class="w-16 h-16 bg-secondary/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="photo_library">photo_library</span>
+</div>
+<h4 class="font-headline font-black text-5xl text-on-surface mb-2">1.2k</h4>
+<p class="font-bold text-on-surface-variant/60 uppercase tracking-widest text-xs">Ảnh siêu xịn xò</p>
+</div>
+<div class="bg-white p-10 rounded-3xl shadow-soft-deep border border-neutral-100/50 text-center hover:scale-105 transition-transform duration-500">
+<div class="w-16 h-16 bg-green-500/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
+<span class="material-symbols-outlined text-green-500 text-3xl" data-icon="favorite">favorite</span>
+</div>
+<h4 class="font-headline font-black text-5xl text-on-surface mb-2">100%</h4>
+<p class="font-bold text-on-surface-variant/60 uppercase tracking-widest text-xs">Độ hài lòng</p>
+</div>
+</div>
+</div>
+<!-- Floating Action Button -->
+<button class="fixed bottom-12 right-12 bg-[#a93000] text-white w-20 h-20 rounded-full flex items-center justify-center shadow-[0_20px_50px_rgba(169,48,0,0.3)] hover:scale-110 hover:rotate-90 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-4xl font-bold" data-icon="add" data-weight="fill">add</span>
+</button>
+</main>
+</body></html>

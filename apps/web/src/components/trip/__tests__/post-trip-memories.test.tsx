@@ -308,7 +308,7 @@ describe('Post-trip memories workspace', () => {
     render(<TripWorkspaceShell trip={mockTrip} joinCode="trip-join" />);
 
     fireEvent.click(await screen.findByRole('button', { name: /Kỷ niệm/i }));
-    const refreshButton = (await screen.findAllByRole('button', { name: /Làm mới/i }))[1];
+    const refreshButton = (await screen.findAllByRole('button', { name: /Làm mới/i }))[1]!;
     fireEvent.click(refreshButton);
 
     await waitFor(() => {

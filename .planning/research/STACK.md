@@ -1,24 +1,60 @@
 # Project Research: Stack Dimension
 
-## Target Domain
-Trip Planning & Travel Utility App ("Mình Đi Đâu Thế")
+## Target Milestone
+`v2.0` - Stitch redesign and architecture refactor for the existing web product.
 
-## Recommended Core Stack
-**1. Frontend (Web App V1)**
-- **Framework**: Next.js (React) deployed as a Progressive Web App (PWA).
-- **Justification**: Maximum virality. A user can invite 10 friends via a Zalo link and they are immediately interacting (voting, viewing timeline) without an 80MB app download. Next.js excels at complex Drag-and-Drop UIs (for Smart Room Allocation).
-- **State Management**: Zustand.
-- **UI/UX**: TailwindCSS + Framer Motion.
+## Existing Stack Worth Keeping
 
-**2. Backend & Database**
-- **API Server**: NestJS (REST API + Swagger).
-- **Authentication**: Self-built using Passport.js (Local + JWT strategies), bcrypt for password hashing, and refresh token rotation stored in PostgreSQL.
-- **Database**: PostgreSQL managed by Prisma ORM.
-- **Justification**: Full control over auth flow, no vendor lock-in, no third-party dependency for core auth. Passport.js is battle-tested with 500+ strategies for future Social Auth (Google, Facebook). JWT access token (15m) + secure refresh token rotation ensures both security and UX.
+### Frontend
+- **Next.js 16 + React 19** remain the right app shell for the current product.
+- **Tailwind CSS 4 + Framer Motion** are already sufficient for implementing a Stitch-driven redesign.
+- **Zustand + React Hook Form + Zod** already cover local state, forms, and validation needs without forcing a state rewrite.
 
-**3. Future Phase (Native App V2)**
-- **Framework**: Expo / React Native.
-- **Deferred Tech**: `react-native-ble-plx` (for Offline Mesh) and Background Location Tracking APIs. These require native modules which will be built after V1 Web App validation.
+### Backend
+- **NestJS + Prisma + PostgreSQL** remain the right backend stack for the current domain.
+- Existing domain modules already exist (`itinerary`, `votes`, `memories`, `fund`, `logistics`, etc.), so the refactor should deepen boundaries rather than replace the framework.
 
-## Confidence Level
-High (95%). Self-built auth within NestJS provides maximum flexibility and eliminates external service dependency. Passport.js is the most widely adopted Node.js auth middleware with easy extensibility for future Social Auth integration.
+## Recommended Stack Direction For v2
+
+### Core principle
+Do **not** add a major platform change during this milestone. `v2.0` is about:
+- visual redesign
+- module boundaries
+- file decomposition
+- safer contracts between FE and BE
+
+### Frontend recommendations
+- Promote `packages/ui` from placeholder package into the real shared design-system package.
+- Move reusable primitives, layout shells, and design tokens into `packages/ui`.
+- Keep route-level screens in `apps/web/app`, but move feature logic into feature folders under `apps/web/src/features` or equivalent domain slices.
+- Split `apps/web/src/lib/api-client.ts` into domain clients instead of keeping a single 1500+ line transport/types file.
+
+### Backend recommendations
+- Keep NestJS modules, but split large services into:
+  - orchestration services
+  - pure domain helpers
+  - mappers / serializers
+  - policy / permission helpers
+  - repository-style Prisma access helpers where useful
+- Standardize DTO, response-shaping, and shared domain types per module so service files stop being the dumping ground for every concern.
+
+## Stack Additions Worth Considering
+
+These are optional and only justified if they directly accelerate the redesign/refactor:
+- **Storybook or equivalent isolated component workflow** for the new design system
+- **shared FE contract modules** for API types by domain
+- **lint or architectural boundaries** to prevent slipping back into oversized files
+
+None of these are required to start `v2.0`. The milestone can begin successfully with the current runtime stack.
+
+## Integration Findings From Current Codebase
+
+- `packages/ui` exists but is barely used and still contains starter placeholder components.
+- The frontend currently carries too much design and state logic directly inside route screens and large feature components.
+- The backend already has domain folders, but several services have grown into "god service" files.
+- The safest path is evolutionary refactor inside the current monorepo, not a stack migration.
+
+## Confidence
+High.
+
+The codebase already proves the product works end to end on the current stack. The bottleneck is maintainability and visual consistency, not missing runtime technology.

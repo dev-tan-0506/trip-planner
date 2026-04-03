@@ -29,6 +29,7 @@ const mockFundSnapshot: FundSnapshot = {
   },
   contributions: [],
   expenses: [],
+  benchmarkWarnings: [],
   summary: {
     targetAmount: '2000000',
     collectedAmount: '500000',

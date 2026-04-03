@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Biệt đội báo thủ - Mình Đi Đâu Thế?</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;300;400;500;600;700;800;900&amp;family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#d6d4d3",
+              "error-container": "#fb5151",
+              "secondary-container": "#d4cbff",
+              "inverse-primary": "#ff571a",
+              "surface-container": "#eae7e7",
+              "inverse-on-surface": "#9e9c9c",
+              "error": "#b31b25",
+              "on-tertiary": "#cdffd3",
+              "on-tertiary-fixed": "#004820",
+              "inverse-surface": "#0e0e0e",
+              "secondary-fixed": "#d4cbff",
+              "surface-variant": "#dfdcdc",
+              "on-surface-variant": "#5c5b5b",
+              "on-primary": "#ffefeb",
+              "background": "#f9f6f5",
+              "surface-container-highest": "#dfdcdc",
+              "tertiary-fixed": "#3fff8b",
+              "secondary-fixed-dim": "#c6bbff",
+              "on-background": "#2f2e2e",
+              "primary": "#a93000",
+              "tertiary-container": "#3fff8b",
+              "on-secondary-fixed-variant": "#4f2dd2",
+              "outline-variant": "#afacac",
+              "tertiary": "#006a33",
+              "on-tertiary-container": "#005d2c",
+              "primary-dim": "#942900",
+              "surface-bright": "#f9f6f5",
+              "outline": "#787676",
+              "tertiary-fixed-dim": "#24f07e",
+              "on-secondary": "#f6f0ff",
+              "primary-container": "#ff784d",
+              "surface-container-low": "#f3f0ef",
+              "on-secondary-fixed": "#3200a7",
+              "on-primary-fixed-variant": "#571400",
+              "on-surface": "#2f2e2e",
+              "tertiary-dim": "#005c2b",
+              "on-primary-fixed": "#000000",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-container": "#460f00",
+              "secondary": "#5a3bdd",
+              "on-tertiary-fixed-variant": "#006832",
+              "secondary-dim": "#4e2bd1",
+              "primary-fixed-dim": "#ff5d26",
+              "on-secondary-container": "#451dc8",
+              "surface-container-high": "#e5e2e1",
+              "on-error": "#ffefee",
+              "surface-tint": "#a93000",
+              "error-dim": "#9f0519",
+              "on-error-container": "#570008",
+              "surface": "#f9f6f5",
+              "primary-fixed": "#ff784d"
+            },
+            fontFamily: {
+              "headline": ["Be Vietnam Pro"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .kinetic-card:hover {
+        transform: rotate(-1deg) scale(1.02);
+      }
+      .glass-effect {
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body antialiased">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="fixed left-0 top-0 h-full w-[280px] p-6 bg-stone-50 dark:bg-stone-950 flex flex-col gap-2 border-r border-stone-200/20 z-50">
+<div class="mb-8 px-4">
+<h1 class="text-xl font-black text-orange-700 font-headline uppercase tracking-tighter">MÌNH ĐI ĐÂU THẾ?</h1>
+<div class="mt-6 flex items-center gap-3">
+<img alt="User Avatar" class="w-12 h-12 rounded-full object-cover ring-2 ring-primary" data-alt="Close up portrait of a smiling young man with trendy haircut and stylish glasses in warm sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWQLxzBbVG7JwbSbgWK08_ggEHimP_SwHN3aLn5muqYHe4bXQd_Rv1sC50bU_sOJgLWypw_tKPL_P_xN-FijGixO8ZEEZyNWUyEBVEO-BOsotdHHeVW3G3Tley5ftnghNa2FlFGqsaN_BD0psX2NNqso0Ri783CHdBHS0TWdI3iDV-qTMKzNfcHAUz9wAhI6VaSYyX1TyHXgbTiZ3rkauPdmVRW9Drgi_oUehVfphFmG19qmz1EIBVX7_DFtklNLsTij1QKwybkHmT"/>
+<div>
+<p class="text-stone-400 text-xs font-medium">Hế lô bạn iu!</p>
+<p class="font-headline font-bold text-on-background">Đi đâu đây?</p>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<!-- Khám phá -->
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-bold">Khám phá</span>
+</a>
+<!-- Lên đồ -->
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">backpack</span>
+<span class="font-bold">Lên đồ</span>
+</a>
+<!-- Phượt thôi -->
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">moped</span>
+<span class="font-bold">Phượt thôi</span>
+</a>
+<!-- Chốt đơn -->
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-bold">Chốt đơn</span>
+</a>
+<!-- Bạn hữu (Active State Logic) -->
+<a class="flex items-center gap-4 bg-orange-700 text-white rounded-full px-6 py-4 shadow-orange-900/20 shadow-lg hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-bold">Bạn hữu</span>
+</a>
+<!-- Cá nhân -->
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-bold">Cá nhân</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<button class="w-full py-4 rounded-xl bg-primary-container text-on-primary-container font-headline font-extrabold flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:scale-105 transition-all">
+                Tạo chuyến đi ✈️
+            </button>
+</div>
+</aside>
+<!-- TopNavBar (Authority: JSON) -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-20 bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-xl flex justify-between items-center px-8 z-40 shadow-sm font-['Be_Vietnam_Pro'] tracking-tight">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-stone-400">search</span>
+<input class="w-full bg-stone-100 dark:bg-stone-800 border-none rounded-full py-2.5 pl-12 pr-4 focus:ring-2 focus:ring-primary/20 text-sm" placeholder="Tìm đồng đội báo thủ..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full text-stone-500 hover:bg-stone-200/50 dark:hover:bg-stone-800/50 transition-all scale-95 duration-150">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full text-stone-500 hover:bg-stone-200/50 dark:hover:bg-stone-800/50 transition-all scale-95 duration-150">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] pt-24 p-8 min-h-screen">
+<!-- Hero Header -->
+<div class="relative mb-12 overflow-hidden rounded-xl h-[300px] flex items-end p-10 bg-stone-900">
+<img alt="Group of friends" class="absolute inset-0 w-full h-full object-cover opacity-60" data-alt="Group of diverse Gen Z friends laughing and taking photos together in a vibrant urban street market at night" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdh9cUGfz-V0PzXtV8aWrX4uEEP6VWTgin_p9HxEUks1ptoMRtDRZHg45KrLpLCAWCwjyqk9w6bgZiTl4orrnAzI3Jy3qW177cM9WzzJoPBGSYmTonXca868d4s9omaAzhEXYAFQlTjsgQLShdq9igmLzvay9F0OgHtUsLAr2T4l1TnSqvH-x_GC5qDpmaIRIKNwBJc4B1DlvNpwxUiXcg9ff17e9hsgMdWbTtqhSO1wRrUwYb8f6UsyIVRT3bdjrD9X6a_ZFv7Q30"/>
+<div class="relative z-10">
+<span class="bg-primary text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4 inline-block">Trip: Đà Lạt Đi Trốn 🛵</span>
+<h2 class="text-6-xl font-black text-white font-headline leading-tight drop-shadow-lg">
+                    BIỆT ĐỘI <br/> <span class="text-primary-container italic">BÁO THỦ</span>
+</h2>
+<p class="text-stone-200 mt-2 max-w-md font-medium">Chuyến đi này không có gì ngoài sự bất ổn và những kỉ niệm "để đời". Chốt đơn là đi!</p>
+</div>
+</div>
+<!-- Stats Grid (Kinetic Layout) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+<div class="bg-white p-6 rounded-lg shadow-sm border-b-4 border-primary">
+<p class="text-stone-500 text-sm font-bold uppercase tracking-wider mb-1">Tổng quân số</p>
+<p class="text-4xl font-black text-on-surface">06 <span class="text-lg font-medium text-stone-400">báo</span></p>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border-b-4 border-secondary">
+<p class="text-stone-500 text-sm font-bold uppercase tracking-wider mb-1">Trạng thái</p>
+<p class="text-2xl font-black text-secondary">80% Ready</p>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border-b-4 border-tertiary">
+<p class="text-stone-500 text-sm font-bold uppercase tracking-wider mb-1">Ngân sách hiện tại</p>
+<p class="text-2xl font-black text-tertiary">12.500k</p>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border-b-4 border-orange-400">
+<p class="text-stone-500 text-sm font-bold uppercase tracking-wider mb-1">Deadline chốt sổ</p>
+<p class="text-2xl font-black text-primary">2 ngày nữa</p>
+</div>
+</div>
+<!-- Members Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Member Card: Trưởng Đoàn -->
+<div class="bg-surface-container-low rounded-xl p-8 kinetic-card transition-all duration-300 flex flex-col items-center text-center relative overflow-hidden group">
+<div class="absolute top-4 right-4 bg-primary text-white text-[10px] font-black px-3 py-1 rounded-full uppercase z-20">Trưởng đoàn 👑</div>
+<div class="relative mb-6">
+<div class="w-32 h-32 rounded-full overflow-hidden ring-4 ring-primary-container p-1">
+<img alt="Avatar" class="w-full h-full object-cover rounded-full" data-alt="Close up portrait of a young man with a creative haircut and trendy clothing, looking confident" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC89_Rz5mb5ATrRc9bPgZPQFCC9VMCrvpOCZi4zV-51xvtv-ZKl31Sczyq_Os8IqaedM1G_H1je5PUlkqWEZlpPL25DxBNn-zzX7Ik56PkARl-nRBkcc4qtvtmLakyeTQDuzXQ0wFgESVHXzGzDs43rvKfj4fs_Atauzj2NBu6sauPVK4K8FoObw-ycGcWHKIFFxnemMEDDbJfV_JZrgMFYQGfUB5qJHzSVWL0BDrQ4PdpUi1B-SmGkRBivTkD04PuxSodXbljCgpp"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
+<span class="text-2xl">🔥</span>
+</div>
+</div>
+<h3 class="text-2xl font-black text-on-surface font-headline uppercase">Tuấn "Tú"</h3>
+<p class="text-primary font-bold text-sm mb-4">"Cái gì cũng biết, trừ đường đi"</p>
+<div class="flex items-center gap-2 mb-6">
+<span class="px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container text-xs font-black">ĐÃ SẴN SÀNG ✅</span>
+</div>
+<button class="w-full py-3 bg-white rounded-full text-stone-700 font-bold border border-stone-200 group-hover:bg-primary group-hover:text-white transition-colors">Nhắn tin ngay</button>
+</div>
+<!-- Member Card: Thủ Quỹ -->
+<div class="bg-surface-container-low rounded-xl p-8 kinetic-card transition-all duration-300 flex flex-col items-center text-center relative overflow-hidden group">
+<div class="absolute top-4 right-4 bg-secondary text-white text-[10px] font-black px-3 py-1 rounded-full uppercase z-20">Thủ quỹ 💰</div>
+<div class="relative mb-6">
+<div class="w-32 h-32 rounded-full overflow-hidden ring-4 ring-secondary-container p-1">
+<img alt="Avatar" class="w-full h-full object-cover rounded-full" data-alt="Close up portrait of a vibrant young woman with colored hair, smiling brightly at the camera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl15fh_sy4MPtRPOgootyHoU55_AvEptzMjaQTxNbYIawnFjuU6rRJJNp1m1TY7PcERzLBNVf7KgSJ5AHMOb36b1o43WEcN3zrcVXDdfOBcMES6hBFKNFCKvsARDc5mziUBU104lBtaXN8WxQYHWlJnpCvM1FaFBhGwtAltX1SwmUgMrvT8ZL2Za-OXMdOUT-sfkyq7eTYDXeNMs7Ej3PVruCa3Qsbx4YTf0hhTkCuYVpcnNhqarWdFagq8dTcFZMzIZwKFGLpua8G"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
+<span class="text-2xl">💸</span>
+</div>
+</div>
+<h3 class="text-2xl font-black text-on-surface font-headline uppercase">Linh "Lươn"</h3>
+<p class="text-secondary font-bold text-sm mb-4">"Chuyên gia đòi nợ xuyên lục địa"</p>
+<div class="flex items-center gap-2 mb-6">
+<span class="px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container text-xs font-black">ĐÃ SẴN SÀNG ✅</span>
+</div>
+<button class="w-full py-3 bg-white rounded-full text-stone-700 font-bold border border-stone-200 group-hover:bg-secondary group-hover:text-white transition-colors">Xem sổ nợ</button>
+</div>
+<!-- Member Card: Báo Thủ -->
+<div class="bg-surface-container-low rounded-xl p-8 kinetic-card transition-all duration-300 flex flex-col items-center text-center relative overflow-hidden group">
+<div class="absolute top-4 right-4 bg-on-background text-white text-[10px] font-black px-3 py-1 rounded-full uppercase z-20">Báo thủ 🤡</div>
+<div class="relative mb-6">
+<div class="w-32 h-32 rounded-full overflow-hidden ring-4 ring-surface-container-highest p-1">
+<img alt="Avatar" class="w-full h-full object-cover rounded-full grayscale group-hover:grayscale-0 transition-all" data-alt="Candid portrait of a young man laughing loudly, wearing street style clothing and a cap" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdKKssc_TgbypVB4nWUDj0O_GvIfXs29cGngZwZGxS5NTFgeorBGEoi00Nb_2UE4C18IyBoOZfsCVnSJAo2FZMU-Y-qFzRLXv1OBqOceQxHin8cgR6pi_5G9E5be8U1quIlfsOCVCvz0-as_ChdVMi161yJqMsVDJya8EuenYw6LSNuIowux7Ne_18PH-Vkr1uM8iCpYdT8jOfsbCZAgBHP6GsqBfkiMVRrhPbsaj3ZRjeLxw7nq6-0Fk-HFwIhYYZ65WI3W4iF759"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
+<span class="text-2xl">🛌</span>
+</div>
+</div>
+<h3 class="text-2xl font-black text-on-surface font-headline uppercase">Hoàng "Hủy"</h3>
+<p class="text-stone-500 font-bold text-sm mb-4">"Đại sứ giấc ngủ toàn quốc"</p>
+<div class="flex items-center gap-2 mb-6">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container text-xs font-black italic">ĐANG CHUẨN BỊ (NGỦ) 💤</span>
+</div>
+<button class="w-full py-3 bg-white rounded-full text-stone-700 font-bold border border-stone-200 group-hover:bg-on-background group-hover:text-white transition-colors">Gọi dậy mau!</button>
+</div>
+<!-- Member Card: Photographer -->
+<div class="bg-surface-container-low rounded-xl p-8 kinetic-card transition-all duration-300 flex flex-col items-center text-center relative overflow-hidden group">
+<div class="absolute top-4 right-4 bg-tertiary text-white text-[10px] font-black px-3 py-1 rounded-full uppercase z-20">Photo "Xịn" 📸</div>
+<div class="relative mb-6">
+<div class="w-32 h-32 rounded-full overflow-hidden ring-4 ring-tertiary-container p-1">
+<img alt="Avatar" class="w-full h-full object-cover rounded-full" data-alt="Young woman holding a vintage camera, wearing stylish urban fashion, soft cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUdqMgsiy03g_75PTLi8QVMw81aA1FII09bWdIjDK76kVspn3sVyadxyG2WAD5E6sI0jM-qTnI1GxMmq-cWeqBHZIvNcDk1_vWmEh4Ewoa79Qfzoz84qqAKt8lSbypizANZ18Ven54Fi3vhn-ZNiveJv0TKchoapplcxX4QZx3dOlaPD-t484UOIH8yu1rja_Huuk-1bqXIa_wAGJlJyMhBmuo8HBTUOGUoqL_Fhc8sdTO5sQF8FG5eJQ6pE82wTef-obikT9_uon6"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
+<span class="text-2xl">✨</span>
+</div>
+</div>
+<h3 class="text-2xl font-black text-on-surface font-headline uppercase">Mai "Mê"</h3>
+<p class="text-tertiary font-bold text-sm mb-4">"1000 tấm lấy được 1 tấm"</p>
+<div class="flex items-center gap-2 mb-6">
+<span class="px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container text-xs font-black">ĐÃ SẴN SÀNG ✅</span>
+</div>
+<button class="w-full py-3 bg-white rounded-full text-stone-700 font-bold border border-stone-200 group-hover:bg-tertiary group-hover:text-white transition-colors">Xem portfolio</button>
+</div>
+<!-- Member Card: Foodie -->
+<div class="bg-surface-container-low rounded-xl p-8 kinetic-card transition-all duration-300 flex flex-col items-center text-center relative overflow-hidden group">
+<div class="absolute top-4 right-4 bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase z-20">Thánh ăn 🍜</div>
+<div class="relative mb-6">
+<div class="w-32 h-32 rounded-full overflow-hidden ring-4 ring-orange-200 p-1">
+<img alt="Avatar" class="w-full h-full object-cover rounded-full" data-alt="Portrait of a young person eating a colorful ice cream, cheerful and candid expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC82ZS6kkbKHrUidGa-mG0sawla259MFJindCRnX68a8lEkw3dr4yyHCwxIhW1bfxyCUlMKWR04meqJeolW6p-oYq0E1PdBHllgjCmEEsTJIKR9cpZu2-V2wwQTvXwneLzTdKVrdM4MfrrbsM_rPX6bI67JCBg_s4UbaWVFtvlF4wGaPIOEYmFrKv6fUe2NNNsiU39ml8HIy6EnE40iZLT4ANQZmdRcCjHUjbOVdbKzOxNBOvyJ57hPwFtArazKxmfZn8YDd-tvmV4m"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
+<span class="text-2xl">🌮</span>
+</div>
+</div>
+<h3 class="text-2xl font-black text-on-surface font-headline uppercase">Kha "Khứa"</h3>
+<p class="text-orange-600 font-bold text-sm mb-4">"Ăn cả thế giới, trừ hành"</p>
+<div class="flex items-center gap-2 mb-6">
+<span class="px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container text-xs font-black">ĐÃ SẴN SÀNG ✅</span>
+</div>
+<button class="w-full py-3 bg-white rounded-full text-stone-700 font-bold border border-stone-200 group-hover:bg-orange-500 group-hover:text-white transition-colors">Địa điểm ăn uống</button>
+</div>
+<!-- Add Member Slot -->
+<div class="border-4 border-dashed border-stone-200 rounded-xl p-8 flex flex-col items-center justify-center text-center hover:border-primary/50 hover:bg-stone-50 transition-all cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-stone-100 flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-4xl">person_add</span>
+</div>
+<h3 class="text-xl font-black text-stone-400 group-hover:text-primary transition-colors">Rủ thêm báo thủ</h3>
+<p class="text-stone-400 text-sm mt-2">Càng đông càng vui, <br/> càng báo càng xịn!</p>
+</div>
+</div>
+<!-- Chat / Activity Overlay -->
+<div class="fixed bottom-8 right-8 z-50 flex flex-col gap-4">
+<div class="bg-white/80 glass-effect p-4 rounded-xl shadow-2xl border border-white/20 w-80 mb-4 hidden md:block">
+<div class="flex justify-between items-center mb-4">
+<h4 class="font-black text-on-background uppercase text-xs">Chat tổng 💬</h4>
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+</div>
+<div class="space-y-3">
+<div class="flex gap-2">
+<div class="w-8 h-8 rounded-full bg-primary flex-shrink-0"></div>
+<div class="bg-stone-100 p-2 rounded-lg rounded-tl-none">
+<p class="text-xs font-bold">Tuấn "Tú"</p>
+<p class="text-xs">Ai chưa đóng tiền quỹ tự giác nha!</p>
+</div>
+</div>
+<div class="flex gap-2 flex-row-reverse">
+<div class="w-8 h-8 rounded-full bg-secondary flex-shrink-0"></div>
+<div class="bg-secondary text-white p-2 rounded-lg rounded-tr-none">
+<p class="text-xs font-bold text-right">Linh "Lươn"</p>
+<p class="text-xs">Đúng rồi, báo quá báo...</p>
+</div>
+</div>
+</div>
+</div>
+<button class="w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center shadow-xl shadow-primary/40 hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">chat</span>
+</button>
+</div>
+</main>
+</body></html>

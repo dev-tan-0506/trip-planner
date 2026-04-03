@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gia nhập hội đi đu đưa - Mình Đi Đâu Thế?</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#FF4D00",
+              "primary-coral": "#FF784D",
+              "secondary": "#5a3bdd",
+              "background": "#F4F6F8",
+              "surface": "#FFFFFF",
+            },
+            fontFamily: {
+              "headline": ["Be Vietnam Pro"],
+              "body": ["Plus Jakarta Sans"],
+            },
+            borderRadius: {"DEFAULT": "1.25rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            boxShadow: {
+              'soft-deep': '0 20px 50px -12px rgba(0, 0, 0, 0.08)',
+              'float': '0 32px 64px -16px rgba(0, 0, 0, 0.12)',
+              'vibe-3d': '0 10px 40px -10px rgba(255, 77, 0, 0.3)',
+              'subtle-glow': '0 4px 12px rgba(0, 0, 0, 0.05)',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .netflix-collage {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+      }
+      .collage-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        width: 120%;
+        height: 120%;
+        transform: rotate(-5deg) translate(-5%, -5%);
+      }
+      .collage-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      }
+    </style>
+</head>
+<body class="bg-background font-body text-neutral-900 selection:bg-primary/20 overflow-x-hidden">
+<!-- Full Screen Background Collage -->
+<div class="netflix-collage">
+<div class="collage-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 120%; height: 140%; transform: rotate(-5deg) translate(-5%, -15%);">
+<img alt="Dalat" class="collage-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVAw_8C5H2l0Oc6LtOgTFabGZ7SvggeBUJMsM50NIIa9QXjZ8S9gaFT6Jpz_hNijfy-1XvAWw6uq1KyVFNgnansqZ2y7mVLJ93R67OeAsaS0LYTZfvxnZZOp0fO9Fcb_bJYEzKNELhQQicWSyNVX-bSWiKynaZoMBXoSplM7om11jtAm4a3yKx97JoVpY-uGbp55K_sVV01p-Hrv8BJB7GvWobxy8Cy6hbJ_qLUQOPq-7xh8pgo4jPOYeDbyMa59gkmhGKKFUmgxef"/>
+<img alt="Phu Quoc" class="collage-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB3l000O-39W4ppKAIZI3HxE95YbY6gdc9jOn2PwzKd93H2TXaL0mo5MQvuJoWc5QeV-gD59F0CX9TLLebMcioS6X_WnEfhdxenhUiNFvneMQJp6R-fy8S82qs5PudWay5S6wuy8CCf7zjk70xpnPRhIYeRe_zRQs4x9tT1M-U9Oj5wVNYWglgB-cLN7Ll6-WwvgUKttBf1Ptvb5H_4RC-t5OOqwdrKdLPrZk_c9J0T3u9iCQ_QfDbVhHnnuwRZUQJYoT-p06WEPFD"/>
+<img alt="Ha Giang" class="collage-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBS2R007b3mYJfa85NStVOEIdTL1M-FMqSsV1WDa_QmUeX38ghkucPykHPygm9BK6zysb_PwZ_whT7Tb2AN3zfvC4hUnqUqMXEzggZT2JxnQeX8XMYe9JNtD_A2FqVGN8kcyriFfncgOyqEKyVGI-7Y9CpBlfGV6_Ce3HObXWeQ0ymMZGlLbeTaLWcSfDYFIg4rHEPAVjt-pSv7QroJTf1Bt4MkzNtweGzgWTVtbEHh9UIbMhQnAkuDw_LHL5EcphkZY5wiAxPGJBy8"/>
+<img alt="Hoi An" class="collage-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIWYiVzpcxXFMm_pkAVFpeNxkGDxbTYJPPvL-S8FEGPZAWajlowLx78vQw8xI8J1UJLOf-u8xlMBeQJ5RVARnFs-_2ouDM1St8l9D2cuJmGq719X_n06prxDGlo0HuF3oMsbgoicDSQXSNlJu-_vuL9TcPgc1Dai9GFRXCR6GjvM3caWra7stjLmAP91FTVL6IIlk78HqkCnnbrngtaiS1Kmj6QgeAgnw6EyM5ZBNdgsKLrc7qDtZzD2j_9sdQ9Jid3i-77rcdGtyE"/>
+<img alt="Beach" class="collage-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVAw_8C5H2l0Oc6LtOgTFabGZ7SvggeBUJMsM50NIIa9QXjZ8S9gaFT6Jpz_hNijfy-1XvAWw6uq1KyVFNgnansqZ2y7mVLJ93R67OeAsaS0LYTZfvxnZZOp0fO9Fcb_bJYEzKNELhQQicWSyNVX-bSWiKynaZoMBXoSplM7om11jtAm4a3yKx97JoVpY-uGbp55K_sVV01p-Hrv8BJB7GvWobxy8Cy6hbJ_qLUQOPq-7xh8pgo4jPOYeDbyMa59gkmhGKKFUmgxef"/>
+<img alt="Mountain" class="collage-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBS2R007b3mYJfa85NStVOEIdTL1M-FMqSsV1WDa_QmUeX38ghkucPykHPygm9BK6zysb_PwZ_whT7Tb2AN3zfvC4hUnqUqMXEzggZT2JxnQeX8XMYe9JNtD_A2FqVGN8kcyriFfncgOyqEKyVGI-7Y9CpBlfGV6_Ce3HObXWeQ0ymMZGlLbeTaLWcSfDYFIg4rHEPAVjt-pSv7QroJTf1Bt4MkzNtweGzgWTVtbEHh9UIbMhQnAkuDw_LHL5EcphkZY5wiAxPGJBy8"/>
+<img alt="Island" class="collage-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB3l000O-39W4ppKAIZI3HxE95YbY6gdc9jOn2PwzKd93H2TXaL0mo5MQvuJoWc5QeV-gD59F0CX9TLLebMcioS6X_WnEfhdxenhUiNFvneMQJp6R-fy8S82qs5PudWay5S6wuy8CCf7zjk70xpnPRhIYeRe_zRQs4x9tT1M-U9Oj5wVNYWglgB-cLN7Ll6-WwvgUKttBf1Ptvb5H_4RC-t5OOqwdrKdLPrZk_c9J0T3u9iCQ_QfDbVhHnnuwRZUQJYoT-p06WEPFD"/>
+<img alt="Town" class="collage-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIWYiVzpcxXFMm_pkAVFpeNxkGDxbTYJPPvL-S8FEGPZAWajlowLx78vQw8xI8J1UJLOf-u8xlMBeQJ5RVARnFs-_2ouDM1St8l9D2cuJmGq719X_n06prxDGlo0HuF3oMsbgoicDSQXSNlJu-_vuL9TcPgc1Dai9GFRXCR6GjvM3caWra7stjLmAP91FTVL6IIlk78HqkCnnbrngtaiS1Kmj6QgeAgnw6EyM5ZBNdgsKLrc7qDtZzD2j_9sdQ9Jid3i-77rcdGtyE"/>
+</div>
+</div>
+<main class="relative min-h-screen flex flex-col items-center justify-center p-6 z-10">
+<!-- Central Registration Card -->
+<div class="w-full max-w-lg bg-white rounded-[3rem] p-10 md:p-12 shadow-float animate-in fade-in zoom-in duration-700">
+<!-- Branding -->
+<div class="text-center mb-8">
+<div class="inline-flex items-center justify-center w-20 h-20 bg-primary rounded-[2rem] mb-6 shadow-vibe-3d rotate-6 hover:rotate-0 transition-transform duration-500">
+<span class="material-symbols-outlined text-white text-5xl font-black" style="font-variation-settings: 'FILL' 1;">person_add</span>
+</div>
+<h2 class="font-headline font-black text-2xl md:text-3xl lg:text-[2.5rem] text-neutral-900 tracking-tighter uppercase mb-2 leading-none whitespace-nowrap text-center w-full">GIA NHẬP HỘI ĐI ĐU ĐƯA</h2>
+<p class="font-headline font-bold text-xl text-primary leading-tight text-center">Điền sương sương mấy cái này nha bạn iu! ✨</p>
+</div>
+<!-- Social Buttons -->
+<div class="space-y-3.5 mb-8">
+<button class="w-full flex items-center justify-center gap-4 bg-white border border-neutral-100 text-neutral-800 font-bold py-4 px-6 rounded-full shadow-subtle-glow hover:shadow-md transition-all active:scale-[0.98] group">
+<svg class="w-6 h-6" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+<span>Google lun đi!</span>
+</button>
+<button class="w-full flex items-center justify-center gap-4 bg-[#1877F2] text-white font-bold py-4 px-6 rounded-full shadow-lg shadow-blue-500/20 transition-all active:scale-[0.98]">
+<svg class="w-6 h-6 fill-current" viewbox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path></svg>
+<span>Facebook nè</span>
+</button>
+</div>
+<!-- Divider -->
+<div class="flex items-center gap-4 mb-8">
+<div class="h-[1px] flex-1 bg-neutral-100"></div>
+<span class="text-[10px] uppercase font-bold tracking-widest text-neutral-400">HOẶC DÙNG EMAIL</span>
+<div class="h-[1px] flex-1 bg-neutral-100"></div>
+</div>
+<!-- Registration Form -->
+<form class="space-y-4" onsubmit="return false;">
+<div class="space-y-4">
+<div class="relative group">
+<span class="absolute left-6 top-1/2 -translate-y-1/2 material-symbols-outlined text-neutral-400 group-focus-within:text-primary transition-colors">person</span>
+<input class="w-full pl-14 pr-6 py-5 bg-white border border-neutral-100 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary rounded-2xl font-medium placeholder:text-neutral-400 text-neutral-900 transition-all shadow-subtle-glow" placeholder="Tên xịn xò của bạn..." type="text"/>
+</div>
+<div class="relative group">
+<span class="absolute left-6 top-1/2 -translate-y-1/2 material-symbols-outlined text-neutral-400 group-focus-within:text-primary transition-colors">alternate_email</span>
+<input class="w-full pl-14 pr-6 py-5 bg-white border border-neutral-100 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary rounded-2xl font-medium placeholder:text-neutral-400 text-neutral-900 transition-all shadow-subtle-glow" placeholder="email_cua_tui@gmail.com" type="email"/>
+</div>
+<div class="relative group">
+<span class="absolute left-6 top-1/2 -translate-y-1/2 material-symbols-outlined text-neutral-400 group-focus-within:text-primary transition-colors">lock</span>
+<input class="w-full pl-14 pr-12 py-5 bg-white border border-neutral-100 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary rounded-2xl font-medium placeholder:text-neutral-400 text-neutral-900 transition-all shadow-subtle-glow" placeholder="Mật khẩu bí mật..." type="password"/>
+<button class="absolute right-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-neutral-400 hover:text-neutral-600" type="button">visibility</button>
+</div>
+</div>
+<button class="w-full py-5 px-8 mt-4 rounded-full bg-primary text-white font-headline text-lg font-black shadow-vibe-3d hover:shadow-2xl hover:shadow-primary/40 hover:-translate-y-1 active:scale-[0.98] transition-all transform flex items-center justify-center gap-3">
+                    Tạo tài khoản ngay! ✨
+                </button>
+</form>
+<!-- Footer Links -->
+<div class="mt-8 text-center">
+<p class="text-neutral-600 font-semibold text-base">
+                    Đã có tài khoản? 
+                    <a class="text-primary font-black hover:underline underline-offset-4 ml-1" href="#">Đăng nhập ngay</a>
+</p>
+</div>
+</div>
+<!-- Page Footer -->
+<footer class="mt-12 text-center text-neutral-800">
+<p class="text-[10px] uppercase font-bold tracking-[0.2em] mb-4 drop-shadow-sm">
+                © 2024 MÌNH ĐI ĐÂU THẾ? • MỘT SẢN PHẨM CỰC CHILL
+            </p>
+<div class="flex justify-center gap-8 text-[10px] font-black uppercase tracking-widest drop-shadow-sm">
+<a class="hover:text-primary transition-colors" href="#">VỀ CHÚNG MÌNH</a>
+<a class="hover:text-primary transition-colors" href="#">CHÍNH SÁCH</a>
+<a class="hover:text-primary transition-colors" href="#">LIÊN HỆ 🤙</a>
+</div>
+</footer>
+</main>
+</body></html>

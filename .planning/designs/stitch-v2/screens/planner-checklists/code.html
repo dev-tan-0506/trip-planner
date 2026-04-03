@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#d6d4d3",
+              "error-container": "#fb5151",
+              "secondary-container": "#d4cbff",
+              "inverse-primary": "#ff571a",
+              "surface-container": "#eae7e7",
+              "inverse-on-surface": "#9e9c9c",
+              "error": "#b31b25",
+              "on-tertiary": "#cdffd3",
+              "on-tertiary-fixed": "#004820",
+              "inverse-surface": "#0e0e0e",
+              "secondary-fixed": "#d4cbff",
+              "surface-variant": "#dfdcdc",
+              "on-surface-variant": "#5c5b5b",
+              "on-primary": "#ffefeb",
+              "background": "#f9f6f5",
+              "surface-container-highest": "#dfdcdc",
+              "tertiary-fixed": "#3fff8b",
+              "secondary-fixed-dim": "#c6bbff",
+              "on-background": "#2f2e2e",
+              "primary": "#a93000",
+              "tertiary-container": "#3fff8b",
+              "on-secondary-fixed-variant": "#4f2dd2",
+              "outline-variant": "#afacac",
+              "tertiary": "#006a33",
+              "on-tertiary-container": "#005d2c",
+              "primary-dim": "#942900",
+              "surface-bright": "#f9f6f5",
+              "outline": "#787676",
+              "tertiary-fixed-dim": "#24f07e",
+              "on-secondary": "#f6f0ff",
+              "primary-container": "#ff784d",
+              "surface-container-low": "#f3f0ef",
+              "on-secondary-fixed": "#3200a7",
+              "on-primary-fixed-variant": "#571400",
+              "on-surface": "#2f2e2e",
+              "tertiary-dim": "#005c2b",
+              "on-primary-fixed": "#000000",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-container": "#460f00",
+              "secondary": "#5a3bdd",
+              "on-tertiary-fixed-variant": "#006832",
+              "secondary-dim": "#4e2bd1",
+              "primary-fixed-dim": "#ff5d26",
+              "on-secondary-container": "#451dc8",
+              "surface-container-high": "#e5e2e1",
+              "on-error": "#ffefee",
+              "surface-tint": "#a93000",
+              "error-dim": "#9f0519",
+              "on-error-container": "#570008",
+              "surface": "#f9f6f5",
+              "primary-fixed": "#ff784d"
+            },
+            fontFamily: {
+              "headline": ["Be Vietnam Pro"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-shift-low-no-border {
+            background-color: rgba(249, 246, 245, 0.8);
+        }
+        .flat-tonal-layering {
+            background-color: #f9f6f5;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f9f6f5;
+            color: #2f2e2e;
+        }
+        .checklist-item:has(input:checked) span {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] p-6 bg-stone-50 dark:bg-stone-950 flex flex-col gap-2 border-r border-stone-200/20 z-50">
+<div class="mb-10">
+<h1 class="text-xl font-black text-orange-700 font-headline">Mì nh Đi Đâu Thế?</h1>
+</div>
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-full overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="portrait of a stylish gen z woman with trendy sunglasses and vibrant street fashion in a sunny urban setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZRCEEih7S3v8aZ0di7Jez6MNrWX4u6XkxOyMr3rdxg6MnjIUGjf5NB7shxF2Z8K5MQPmZmm_9uKU0nzAw5vGQiZmwGZz8Z9FC7Q4nZsRzFflce9-WL1aPHwH_oL8e3OkUMoMcYlVinXAfONiU_sJ5Z4FsztomWnZHhWABJQPPzVgP3-v2ef0-O5hlK5MT47O1maXvcfWXaJCdUCzflnv4B-t4Pxn-sE5dk2QrklfZLsPlNeqTCcsZAFUuaDF7m2DEQldCA3F9g9LP"/>
+</div>
+<div>
+<p class="font-headline font-bold text-on-background">Hế lô bạn iu!</p>
+<p class="text-sm text-stone-500">Đi đâu đây?</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-bold">Khám phá</span>
+</a>
+<a class="flex items-center gap-4 bg-orange-700 text-white rounded-full px-6 py-4 shadow-orange-900/20 shadow-lg hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="backpack">backpack</span>
+<span class="font-bold">Lên đồ</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="moped">moped</span>
+<span class="font-bold">Phượt thôi</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-bold">Chốt đơn</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-bold">Bạn hữu</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-bold">Cá nhân</span>
+</a>
+</nav>
+<button class="mt-auto bg-primary text-white font-headline font-bold py-4 rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95">
+            Tạo chuyến đi ✈️
+        </button>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-20 bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-xl flex justify-between items-center px-8 z-40 shadow-sm">
+<div class="flex items-center bg-stone-200/50 dark:bg-stone-800/50 rounded-full px-4 py-2 w-96 gap-3">
+<span class="material-symbols-outlined text-stone-500">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full font-body" placeholder="Tìm checklist, địa điểm..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative p-2 text-stone-500 hover:bg-stone-200/50 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-stone-200">
+<span class="material-symbols-outlined text-orange-700" data-icon="account_circle">account_circle</span>
+<span class="font-bold text-orange-700 font-headline">Hà Linh</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] pt-28 px-12 pb-12">
+<!-- Hero Header -->
+<section class="mb-12 relative overflow-hidden rounded-xl p-12 bg-gradient-to-br from-primary to-primary-container text-white">
+<div class="relative z-10 max-w-2xl">
+<span class="bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4 inline-block">Sắp đi Đà Lạt 🏕️</span>
+<h2 class="text-5xl font-black font-headline mb-4 leading-tight">Lên đồ thôi, <br/>ngại ngần chi nữa!</h2>
+<p class="text-lg opacity-90 font-body">Checklist xịn xò giúp bạn không quên cả thế giới ở nhà. Chốt đơn từng món một nào!</p>
+</div>
+<div class="absolute right-[-10%] top-1/2 -translate-y-1/2 w-96 h-96 opacity-20 rotate-12">
+<span class="material-symbols-outlined text-[20rem]" style="font-variation-settings: 'FILL' 1;">backpack</span>
+</div>
+</section>
+<!-- Bento Grid for Checklists -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Việc Cần Làm Section (Booking & Prep) -->
+<section class="col-span-12 lg:col-span-5 flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h3 class="text-2xl font-black font-headline text-primary flex items-center gap-3">
+                        Việc cần làm <span class="material-symbols-outlined">assignment_turned_in</span>
+</h3>
+<span class="text-xs font-bold bg-primary-container/20 text-on-primary-container px-3 py-1 rounded-full">3/6 xong</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-4">
+<label class="checklist-item flex items-center gap-4 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<input checked="" class="w-6 h-6 rounded-md border-outline text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-bold text-on-background">Booking homestay "chill"</span>
+<span class="text-xs text-stone-500">Đã chốt ở Mây Homestay</span>
+</div>
+</label>
+<label class="checklist-item flex items-center gap-4 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<input checked="" class="w-6 h-6 rounded-md border-outline text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-bold text-on-background">Vé xe giường nằm</span>
+<span class="text-xs text-stone-500">Thành Bưởi, 23:00 tối mai</span>
+</div>
+</label>
+<label class="checklist-item flex items-center gap-4 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<input class="w-6 h-6 rounded-md border-outline text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-bold text-on-background">Rút tiền mặt</span>
+<span class="text-xs text-stone-500">Để đi chợ đêm cho tiện</span>
+</div>
+</label>
+<label class="checklist-item flex items-center gap-4 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<input checked="" class="w-6 h-6 rounded-md border-outline text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-bold text-on-background">Sạc đầy sạc dự phòng</span>
+<span class="text-xs text-stone-500">100% pin cho ngày dài</span>
+</div>
+</label>
+<label class="checklist-item flex items-center gap-4 p-4 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<input class="w-6 h-6 rounded-md border-outline text-primary focus:ring-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-bold text-on-background">Dọn dẹp phòng trước khi đi</span>
+<span class="text-xs text-stone-500">Đi về phòng sạch mới sướng</span>
+</div>
+</label>
+<button class="flex items-center justify-center gap-2 py-4 border-2 border-dashed border-stone-200 rounded-lg text-stone-400 hover:border-primary hover:text-primary transition-all font-bold">
+<span class="material-symbols-outlined">add_circle</span>
+                        Thêm việc mới
+                    </button>
+</div>
+</section>
+<!-- Đồ Cần Mang Section (Packing List) -->
+<section class="col-span-12 lg:col-span-7 flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h3 class="text-2xl font-black font-headline text-secondary flex items-center gap-3">
+                        Đồ cần mang <span class="material-symbols-outlined">luggage</span>
+</h3>
+<span class="text-xs font-bold bg-secondary-container/30 text-on-secondary-container px-3 py-1 rounded-full">5/12 xong</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Clothing Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-4 border-t-4 border-secondary">
+<h4 class="font-bold text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">checkroom</span> Quần áo &amp; Giày
+                        </h4>
+<div class="space-y-3">
+<label class="checklist-item flex items-center gap-3 group">
+<input checked="" class="w-5 h-5 rounded border-outline text-secondary focus:ring-secondary" type="checkbox"/>
+<span class="text-sm font-medium">Áo len, cardigan (x3)</span>
+</label>
+<label class="checklist-item flex items-center gap-3 group">
+<input class="w-5 h-5 rounded border-outline text-secondary focus:ring-secondary" type="checkbox"/>
+<span class="text-sm font-medium">Quần jeans, baggy</span>
+</label>
+<label class="checklist-item flex items-center gap-3 group">
+<input checked="" class="w-5 h-5 rounded border-outline text-secondary focus:ring-secondary" type="checkbox"/>
+<span class="text-sm font-medium">Sneakers trắng</span>
+</label>
+<label class="checklist-item flex items-center gap-3 group">
+<input class="w-5 h-5 rounded border-outline text-secondary focus:ring-secondary" type="checkbox"/>
+<span class="text-sm font-medium">Váy hoa nhí "sống ảo"</span>
+</label>
+</div>
+</div>
+<!-- Tech Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-4 border-t-4 border-tertiary">
+<h4 class="font-bold text-tertiary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">power</span> Đồ công nghệ
+                        </h4>
+<div class="space-y-3">
+<label class="checklist-item flex items-center gap-3 group">
+<input checked="" class="w-5 h-5 rounded border-outline text-tertiary focus:ring-tertiary" type="checkbox"/>
+<span class="text-sm font-medium">Sạc dự phòng</span>
+</label>
+<label class="checklist-item flex items-center gap-3 group">
+<input checked="" class="w-5 h-5 rounded border-outline text-tertiary focus:ring-tertiary" type="checkbox"/>
+<span class="text-sm font-medium">Tai nghe chống ồn</span>
+</label>
+<label class="checklist-item flex items-center gap-3 group">
+<input class="w-5 h-5 rounded border-outline text-tertiary focus:ring-tertiary" type="checkbox"/>
+<span class="text-sm font-medium">Gậy tripod selfie</span>
+</label>
+</div>
+</div>
+<!-- Skincare Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-4 border-t-4 border-primary-container">
+<h4 class="font-bold text-primary-container flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">face</span> Skincare &amp; Thuốc
+                        </h4>
+<div class="space-y-3">
+<label class="checklist-item flex items-center gap-3 group">
+<input checked="" class="w-5 h-5 rounded border-outline text-primary-container focus:ring-primary-container" type="checkbox"/>
+<span class="text-sm font-medium">Kem chống nắng</span>
+</label>
+<label class="checklist-item flex items-center gap-3 group">
+<input class="w-5 h-5 rounded border-outline text-primary-container focus:ring-primary-container" type="checkbox"/>
+<span class="text-sm font-medium">Xịt khoáng cấp ẩm</span>
+</label>
+<label class="checklist-item flex items-center gap-3 group">
+<input class="w-5 h-5 rounded border-outline text-primary-container focus:ring-primary-container" type="checkbox"/>
+<span class="text-sm font-medium">Thuốc cảm, đau bụng</span>
+</label>
+</div>
+</div>
+<!-- Others Card -->
+<div class="bg-surface-container-low rounded-xl p-6 shadow-sm flex flex-col gap-4 border-2 border-dashed border-stone-200 justify-center items-center group cursor-pointer hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-4xl text-stone-300 group-hover:scale-110 transition-transform">add_box</span>
+<p class="text-stone-400 font-bold">Thêm phân loại</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Floating Quick Action Tips -->
+<div class="mt-12 p-8 bg-surface-container-low rounded-xl flex items-center gap-8">
+<div class="w-24 h-24 rounded-full overflow-hidden shrink-0 border-4 border-white shadow-lg">
+<img alt="Tip Image" class="w-full h-full object-cover" data-alt="close-up of a person typing on a laptop in a cozy cafe with warm lighting and a cup of coffee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDS7JKjJ9WtGS0sX4OfTNRptSYBx_dDa9tLSOuhR3f_FA0sPgpZNLTWXz-xoSGBSWs2ozzFVMqzAzPRtvqLhti_cl1x5jguZA9T8LbZUiRhwE1dznJ85QOP7zlKcI6KSfvczskjhD8iPMv6NFJTKQXCWO07yTT-JNNKUBwkw6yinO4HI6aaS2BCtyr84mE58JPkDTjFx1iG3bRzQa4ywLPUK6pwiqGat1Uk3yKhWSmykeNN3LGL2YSuJ0WdfKbcCUS2Bi-vHqPNOUXa"/>
+</div>
+<div>
+<h4 class="text-xl font-black font-headline text-on-background mb-1">Mẹo từ Gen Z đi trước 💡</h4>
+<p class="text-stone-600">Đừng quên mang theo một chiếc túi tote trống để đựng đồ lưu niệm khi về nhé. Đà Lạt có nhiều món 'xịn xò' lắm đấy!</p>
+</div>
+<button class="ml-auto bg-on-background text-background px-6 py-3 rounded-full font-bold hover:scale-105 active:scale-95 transition-all">
+                Xem thêm mẹo
+            </button>
+</div>
+</main>
+<!-- Contextual FAB - Only on Dashboard/Main screens -->
+<div class="fixed bottom-8 right-8 z-50">
+<button class="w-16 h-16 rounded-full bg-primary text-white flex items-center justify-center shadow-2xl shadow-primary/40 hover:rotate-90 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</div>
+</body></html>

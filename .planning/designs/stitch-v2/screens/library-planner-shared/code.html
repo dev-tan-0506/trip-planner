@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,700;0,800;0,900;1,800&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-variant": "#dfdcdc",
+              "error": "#b31b25",
+              "inverse-primary": "#ff571a",
+              "on-surface": "#2f2e2e",
+              "surface-tint": "#a93000",
+              "surface-container-lowest": "#ffffff",
+              "primary-container": "#ff784d",
+              "outline": "#787676",
+              "on-secondary": "#f6f0ff",
+              "outline-variant": "#afacac",
+              "inverse-surface": "#0e0e0e",
+              "tertiary": "#006a33",
+              "on-secondary-fixed": "#3200a7",
+              "surface-container-low": "#f3f0ef",
+              "primary-fixed-dim": "#ff5d26",
+              "tertiary-fixed": "#3fff8b",
+              "primary": "#a93000",
+              "surface-container-highest": "#dfdcdc",
+              "on-primary": "#ffefeb",
+              "inverse-on-surface": "#9e9c9c",
+              "surface": "#f9f6f5",
+              "on-tertiary": "#cdffd3",
+              "on-tertiary-fixed-variant": "#006832",
+              "primary-fixed": "#ff784d",
+              "tertiary-container": "#3fff8b",
+              "on-secondary-container": "#451dc8",
+              "background": "#fdfaf9",
+              "on-tertiary-container": "#005d2c",
+              "on-error": "#ffefee",
+              "primary-dim": "#942900",
+              "on-secondary-fixed-variant": "#4f2dd2",
+              "on-tertiary-fixed": "#004820",
+              "tertiary-fixed-dim": "#24f07e",
+              "secondary-fixed": "#d4cbff",
+              "on-primary-fixed": "#000000",
+              "on-primary-fixed-variant": "#571400",
+              "on-primary-container": "#460f00",
+              "secondary": "#5a3bdd",
+              "on-background": "#2f2e2e",
+              "surface-container": "#eae7e7",
+              "surface-bright": "#f9f6f5",
+              "secondary-container": "#d4cbff",
+              "error-container": "#fb5151",
+              "error-dim": "#9f0519",
+              "secondary-dim": "#4e2bd1",
+              "on-surface-variant": "#5c5b5b",
+              "tertiary-dim": "#005c2b",
+              "surface-dim": "#d6d4d3",
+              "secondary-fixed-dim": "#c6bbff",
+              "on-error-container": "#570008",
+              "surface-container-high": "#e5e2e1"
+            },
+            fontFamily: {
+              "headline": ["Be Vietnam Pro"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {
+              "DEFAULT": "1rem",
+              "lg": "2rem",
+              "xl": "3rem",
+              "2xl": "3.5rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .card-3d-shadow {
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+      }
+      .sidebar-item-active {
+        background: linear-gradient(90deg, #ffefeb 0%, #fff 100%);
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 hidden md:flex flex-col h-screen w-72 bg-white border-r border-zinc-100 py-10 px-8 z-40">
+<div class="mb-12">
+<h2 class="text-primary font-black text-2xl mb-1">Hế lô bạn iu!</h2>
+<p class="text-zinc-500 text-sm font-medium">Đi đâu đây?</p>
+</div>
+<nav class="flex-1 space-y-4">
+<a class="sidebar-item-active text-primary rounded-2xl px-6 py-4 flex items-center space-x-4 font-bold transition-all" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span>Khám phá</span>
+</a>
+<a class="text-zinc-400 px-6 py-4 flex items-center space-x-4 font-bold hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined text-xl">map</span>
+<span>Lịch trình</span>
+</a>
+<a class="text-zinc-400 px-6 py-4 flex items-center space-x-4 font-bold hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined text-xl">photo_library</span>
+<span>Bản đồ</span>
+</a>
+<a class="text-zinc-400 px-6 py-4 flex items-center space-x-4 font-bold hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined text-xl">auto_awesome</span>
+<span>Kỷ niệm</span>
+</a>
+<a class="text-zinc-400 px-6 py-4 flex items-center space-x-4 font-bold hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span>Cài đặt</span>
+</a>
+</nav>
+<div class="mt-auto">
+<button class="w-full py-5 bg-primary text-on-primary rounded-3xl font-black text-lg shadow-xl shadow-primary/25 active:scale-95 transition-all">
+                Lên đồ ngay! 🛵
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-72 min-h-screen relative">
+<!-- TopAppBar -->
+<header class="flex items-center justify-between px-10 py-8 sticky top-0 bg-background/80 backdrop-blur-md z-30">
+<div class="flex items-center space-x-12 flex-1">
+<h1 class="text-primary font-black text-2xl uppercase tracking-tighter italic">MÌNH ĐI ĐÂU THẾ?</h1>
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-zinc-300">search</span>
+<input class="w-full pl-14 pr-6 py-4 bg-zinc-100/50 border-none rounded-2xl focus:ring-2 focus:ring-primary/10 text-sm font-medium placeholder:text-zinc-400" placeholder="Tìm kèo mlem..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<button class="text-zinc-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-2xl">favorite</span>
+</button>
+<button class="text-zinc-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+</button>
+<div class="h-12 w-12 rounded-2xl bg-zinc-200 overflow-hidden border-2 border-white shadow-md">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkWq94p4ZJKYcWOiUFlEiXSQTD1nu6SJUFZV1RTd5Mv9ca-oRU5skZ5XRY6cHhLg8-5I2nzZcbj0xTG5W-krW4RfW51H5GmfKngW_Deft0AlvGLEnDFKHhqzcVmcJq7HIEre0_vlsMucRdMfkStRNYVcIU04gjTjcTCWVeATo0un1GRimnr1Z-jf8E0XNiyGAXWXxmhsLS66okPNUJZrap6jX4NnOWewhckF31W5A-OLCF5ugz4UcACfPohgEH8U-PGTDLq72SJfG9"/>
+</div>
+</div>
+</header>
+<!-- Page Scrollable Section -->
+<div class="px-10 pb-24">
+<!-- Hero Banner -->
+<div class="relative mb-14 overflow-hidden py-16 px-14 rounded-3xl bg-[#fff8f6] flex items-center">
+<div class="relative z-10 max-w-2xl">
+<h2 class="text-6xl font-black text-zinc-800 mb-6 flex flex-wrap items-center gap-x-4">
+                        Thư viện <span class="text-primary italic">Kèo Thơm!</span>
+<span class="text-5xl">🚀</span>
+</h2>
+<p class="text-zinc-500 text-lg font-medium mb-10 leading-relaxed">
+                        Copy-paste ngay những chuyến đi xịn xò nhất từ các đồng môn. Clone là ghiền, đi là bảnh! 🤘
+                    </p>
+<div class="flex items-center gap-6">
+<button class="px-10 py-5 bg-primary text-on-primary rounded-3xl font-black shadow-xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all">
+                            Tạo kèo mới 🛵
+                        </button>
+<button class="px-10 py-5 bg-white text-zinc-800 rounded-3xl font-black shadow-lg shadow-zinc-200/50 hover:bg-zinc-50 transition-all border border-zinc-100">
+                            Kèo của tôi
+                        </button>
+</div>
+</div>
+<!-- Decorative Graphic -->
+<div class="absolute right-10 top-1/2 -translate-y-1/2 opacity-10">
+<span class="material-symbols-outlined text-[18rem]" style="font-variation-settings: 'FILL' 1;">travel_explore</span>
+</div>
+</div>
+<!-- Filters -->
+<div class="flex items-center gap-4 mb-12 overflow-x-auto no-scrollbar pb-2">
+<button class="px-8 py-3.5 bg-primary text-on-primary rounded-2xl font-black whitespace-nowrap">Tất cả</button>
+<button class="px-8 py-3.5 bg-[#efebff] text-[#5a3bdd] rounded-2xl font-black whitespace-nowrap hover:bg-[#e4deff] transition-all">Chill 🧘‍♂️</button>
+<button class="px-8 py-3.5 bg-[#efebff] text-[#5a3bdd] rounded-2xl font-black whitespace-nowrap hover:bg-[#e4deff] transition-all">Quẩy 💃</button>
+<button class="px-8 py-3.5 bg-[#efebff] text-[#5a3bdd] rounded-2xl font-black whitespace-nowrap hover:bg-[#e4deff] transition-all">Khám phá 🧭</button>
+<button class="px-8 py-3.5 bg-[#efebff] text-[#5a3bdd] rounded-2xl font-black whitespace-nowrap hover:bg-[#e4deff] transition-all">Phượt 🏍️</button>
+</div>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+<!-- Card 1 -->
+<div class="bg-white rounded-[3.5rem] p-4 card-3d-shadow group transition-all hover:-translate-y-1">
+<div class="relative h-72 rounded-[2.8rem] overflow-hidden mb-6">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYAxeFUzT6KuVPsOGDfWKI4zjaBkMA3_Uvn8L-m4GnjHtzkj8TXiPAfj3Ad8gDHEjaH-hl-HhlQhNCaKCDV03Lwiq8tcwj2Pyia93qNVbQgZXtyW1Qitp3hClotWC-H7uRHb_RqTbbzQHArgglzqfll1BhiO8CeTW39DLZwBcLEcYeBLX076EK7X7QCTO5Njfrs174g_bLDVoo3ioS01ouMhX1r-vzkD29AO3T5U3gvkfPSUuqaCNyz0USwoPPOgM80WLGdDodAnHU"/>
+<div class="absolute top-5 left-5">
+<span class="bg-black/30 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider px-4 py-1.5 rounded-full">3 ngày 2 đêm</span>
+</div>
+<button class="absolute top-5 right-5 h-10 w-10 bg-white rounded-full flex items-center justify-center text-primary shadow-lg">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="px-4 pb-4">
+<div class="flex justify-between items-center mb-1">
+<h3 class="text-xl font-black text-zinc-800">Phá đảo Phú Quốc 🏖️</h3>
+<div class="flex items-center text-primary font-black text-sm">
+<span class="material-symbols-outlined text-xs mr-0.5" style="font-variation-settings: 'FILL' 1;">star</span>
+<span>4.9</span>
+</div>
+</div>
+<p class="text-zinc-400 text-xs font-bold mb-8 uppercase tracking-widest">Vibe: Quẩy cực sung</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center text-[10px] text-zinc-400 font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm mr-1">content_copy</span>
+<span>2.5k lượt clone</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3.5 rounded-2xl font-black text-xs shadow-lg shadow-primary/20 active:scale-95 transition-all">
+                                Hốt Kèo Ngay! ⚡
+                            </button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white rounded-[3.5rem] p-4 card-3d-shadow group transition-all hover:-translate-y-1">
+<div class="relative h-72 rounded-[2.8rem] overflow-hidden mb-6">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsgHG6SNcDxYAkI2J0Goqoy-jl8JIecZM7Ee6XgXfj9bVmcFQfm2JRQ6qdNCKDZ7x9RFAGhnJ3BdovOrKl6Qw23-o7hpViRRp5CfeXfU-Udb8xSJH_kMcOLBvXuqNdGgc1gwJRqjSzhOvF3hsgVRr0IUdgOx3Z_H_N9CAzDmgWP7h-5ZBNS6ZoGOo83gjLHmvFJzMTzh5a-j72AHuK7pVHNFDYX29dqoxECkSNl1qQrouUgZzryHuvRt_CuYe_ZbH06IDzDsByt2xZ"/>
+<div class="absolute top-5 left-5">
+<span class="bg-black/30 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider px-4 py-1.5 rounded-full">2 ngày 1 đêm</span>
+</div>
+<button class="absolute top-5 right-5 h-10 w-10 bg-white rounded-full flex items-center justify-center text-primary shadow-lg">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="px-4 pb-4">
+<div class="flex justify-between items-center mb-1">
+<h3 class="text-xl font-black text-zinc-800">Đà Lạt sương mù ☁️</h3>
+<div class="flex items-center text-primary font-black text-sm">
+<span class="material-symbols-outlined text-xs mr-0.5" style="font-variation-settings: 'FILL' 1;">star</span>
+<span>4.8</span>
+</div>
+</div>
+<p class="text-zinc-400 text-xs font-bold mb-8 uppercase tracking-widest">Vibe: Chill hết nấc</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center text-[10px] text-zinc-400 font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm mr-1">content_copy</span>
+<span>1.8k lượt clone</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3.5 rounded-2xl font-black text-xs shadow-lg shadow-primary/20 active:scale-95 transition-all">
+                                Hốt Kèo Ngay! ⚡
+                            </button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white rounded-[3.5rem] p-4 card-3d-shadow group transition-all hover:-translate-y-1">
+<div class="relative h-72 rounded-[2.8rem] overflow-hidden mb-6">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlw6nEafg7sP8q3yWex10K_pp4R7NhCGrZT--CDUci7UW-qPgyBSe2i9K6arSyxjKJAhROPiry6RgQvE1pLvScD0QXIgjw95Nb7NGk2oND2RBNiJY_idXLSMnRbVYQZfaugi-hFfjNJt7v3Jt8lxG_TOIVZODDGLqt6HBAx0gjjVDwXigb2ktLgX6R8FirXUtIFnchBufN0m0QofGbyo9o8f6f6pdNyqunexwggHLhNJNW9-dYiXxqTQ6rbzJIzjfH3Z9UoO6QBdu4"/>
+<div class="absolute top-5 left-5">
+<span class="bg-black/30 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider px-4 py-1.5 rounded-full">4 ngày 3 đêm</span>
+</div>
+<button class="absolute top-5 right-5 h-10 w-10 bg-white rounded-full flex items-center justify-center text-primary shadow-lg">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="px-4 pb-4">
+<div class="flex justify-between items-center mb-1">
+<h3 class="text-xl font-black text-zinc-800">Hà Giang hùng vĩ 🏍️</h3>
+<div class="flex items-center text-primary font-black text-sm">
+<span class="material-symbols-outlined text-xs mr-0.5" style="font-variation-settings: 'FILL' 1;">star</span>
+<span>5.0</span>
+</div>
+</div>
+<p class="text-zinc-400 text-xs font-bold mb-8 uppercase tracking-widest">Vibe: Khám phá mạo hiểm</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center text-[10px] text-zinc-400 font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm mr-1">content_copy</span>
+<span>3.2k lượt clone</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3.5 rounded-2xl font-black text-xs shadow-lg shadow-primary/20 active:scale-95 transition-all">
+                                Hốt Kèo Ngay! ⚡
+                            </button>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white rounded-[3.5rem] p-4 card-3d-shadow group transition-all hover:-translate-y-1">
+<div class="relative h-72 rounded-[2.8rem] overflow-hidden mb-6">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnw0xvTNLt-ND6lxRJoOH0SKmhjijRSEDqp5ahYyiBpUShrpp6AR8_QIWjSoPQxOHNSEUpo2LzPoUngoZ5Si37KJZVOJgMZWEWsO5ADZZGPoj1QkBjfTY5kXas8Su3c86hX8l1yBDEXe-lnI1Sc7HYHHGiZzkFDrb2NZarU5p9ZeYUtVcR5WQbi0sgTl6kSJvMMnufWuBNQsD2plTnkWzS0GJ07IiahVVKnZpDxHOumb-A7j9z_qC5tT410aoN_ItVMnVtSm94ppdb"/>
+<div class="absolute top-5 left-5">
+<span class="bg-black/30 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider px-4 py-1.5 rounded-full">1 ngày cực cháy</span>
+</div>
+<button class="absolute top-5 right-5 h-10 w-10 bg-white rounded-full flex items-center justify-center text-primary shadow-lg">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="px-4 pb-4">
+<div class="flex justify-between items-center mb-1">
+<h3 class="text-xl font-black text-zinc-800">Ninh Bình non nước 🚣‍♂️</h3>
+<div class="flex items-center text-primary font-black text-sm">
+<span class="material-symbols-outlined text-xs mr-0.5" style="font-variation-settings: 'FILL' 1;">star</span>
+<span>4.7</span>
+</div>
+</div>
+<p class="text-zinc-400 text-xs font-bold mb-8 uppercase tracking-widest">Vibe: Check-in xịn xò</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center text-[10px] text-zinc-400 font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm mr-1">content_copy</span>
+<span>950 lượt clone</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3.5 rounded-2xl font-black text-xs shadow-lg shadow-primary/20 active:scale-95 transition-all">
+                                Hốt Kèo Ngay! ⚡
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed bottom-10 right-10 h-20 w-20 bg-primary text-on-primary rounded-[2.5rem] flex items-center justify-center shadow-2xl shadow-primary/40 z-50 hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-4xl">add</span>
+</button>
+<!-- Bottom Navigation Bar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-100 px-8 py-5 flex justify-between items-center z-50">
+<a class="flex flex-col items-center text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="text-[10px] font-black mt-1">Khám phá</span>
+</a>
+<a class="flex flex-col items-center text-zinc-300" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="text-[10px] font-black mt-1">Lịch trình</span>
+</a>
+<div class="w-12 h-12 bg-primary rounded-2xl -mt-10 flex items-center justify-center text-white shadow-lg">
+<span class="material-symbols-outlined">add</span>
+</div>
+<a class="flex flex-col items-center text-zinc-300" href="#">
+<span class="material-symbols-outlined">photo_library</span>
+<span class="text-[10px] font-black mt-1">Bản đồ</span>
+</a>
+<a class="flex flex-col items-center text-zinc-300" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-black mt-1">Cá nhân</span>
+</a>
+</nav>
+</body></html>

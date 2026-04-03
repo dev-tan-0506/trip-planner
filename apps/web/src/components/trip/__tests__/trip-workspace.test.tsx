@@ -124,6 +124,7 @@ const mockSnapshot: ItinerarySnapshot = {
     },
   ],
   overlapWarnings: [],
+  healthWarnings: [],
   mapItems: [
     {
       id: 'item-1',

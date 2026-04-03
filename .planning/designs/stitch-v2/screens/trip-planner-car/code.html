@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Phương tiện di chuyển - Mình Đi Đâu Thế?</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#d6d4d3",
+              "error-container": "#fb5151",
+              "secondary-container": "#d4cbff",
+              "inverse-primary": "#ff571a",
+              "surface-container": "#eae7e7",
+              "inverse-on-surface": "#9e9c9c",
+              "error": "#b31b25",
+              "on-tertiary": "#cdffd3",
+              "on-tertiary-fixed": "#004820",
+              "inverse-surface": "#0e0e0e",
+              "secondary-fixed": "#d4cbff",
+              "surface-variant": "#dfdcdc",
+              "on-surface-variant": "#5c5b5b",
+              "on-primary": "#ffefeb",
+              "background": "#f9f6f5",
+              "surface-container-highest": "#dfdcdc",
+              "tertiary-fixed": "#3fff8b",
+              "secondary-fixed-dim": "#c6bbff",
+              "on-background": "#2f2e2e",
+              "primary": "#a93000",
+              "tertiary-container": "#3fff8b",
+              "on-secondary-fixed-variant": "#4f2dd2",
+              "outline-variant": "#afacac",
+              "tertiary": "#006a33",
+              "on-tertiary-container": "#005d2c",
+              "primary-dim": "#942900",
+              "surface-bright": "#f9f6f5",
+              "outline": "#787676",
+              "tertiary-fixed-dim": "#24f07e",
+              "on-secondary": "#f6f0ff",
+              "primary-container": "#ff784d",
+              "surface-container-low": "#f3f0ef",
+              "on-secondary-fixed": "#3200a7",
+              "on-primary-fixed-variant": "#571400",
+              "on-surface": "#2f2e2e",
+              "tertiary-dim": "#005c2b",
+              "on-primary-fixed": "#000000",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-container": "#460f00",
+              "secondary": "#5a3bdd",
+              "on-tertiary-fixed-variant": "#006832",
+              "secondary-dim": "#4e2bd1",
+              "primary-fixed-dim": "#ff5d26",
+              "on-secondary-container": "#451dc8",
+              "surface-container-high": "#e5e2e1",
+              "on-error": "#ffefee",
+              "surface-tint": "#a93000",
+              "error-dim": "#9f0519",
+              "on-error-container": "#570008",
+              "surface": "#f9f6f5",
+              "primary-fixed": "#ff784d"
+            },
+            fontFamily: {
+              "headline": ["Be Vietnam Pro"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(24px);
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar (Authority: Shared Components JSON) -->
+<aside class="fixed left-0 top-0 h-full w-[280px] p-6 bg-stone-50 dark:bg-stone-950 flex flex-col gap-2 border-r border-stone-200/20 z-50">
+<div class="mb-8 px-4">
+<h1 class="text-xl font-black text-orange-700 font-headline">Mì nh Đi Đâu Thế?</h1>
+</div>
+<div class="flex flex-col gap-6 mb-10 px-4">
+<div class="flex items-center gap-4">
+<img alt="User Avatar" class="w-12 h-12 rounded-full border-2 border-primary-container" data-alt="close up profile portrait of a stylish young person with colorful hair wearing modern streetwear sunglasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdquDydSE69EZOLyPIZW-Vdz4c0jqCSha7lsWsmM3Rp3nNKF0wS2fv90LFVBRvz9nc-HZJ1VGVolfhBGrrlDDgayJGE6vPS-8UTNMrYceGLtmMNp0hY-RsNcGosZPr2yu1KSGnYCmi33XSlOacNBjdA4aUynunLV-bGJiNP8hmeUSSycMMI3MyU4ITIfbk6i_Vnj7hF8Gs6NN3T1rmd2UvQSkxMx3tu9vuL0CRv_ppOdrzeeXz3-32rBAROKL8u18adPH0z58BsYnA"/>
+<div>
+<p class="text-sm text-stone-500 font-medium">Hế lô bạn iu!</p>
+<p class="font-bold text-on-surface">Đi đâu đây?</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-2">
+<!-- Navigation Items Mapping -->
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-bold font-headline">Khám phá</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">backpack</span>
+<span class="font-bold font-headline">Lên đồ</span>
+</a>
+<!-- Active Tab: Phượt thôi (Mapped from Phương tiện di chuyển) -->
+<a class="flex items-center gap-4 bg-orange-700 text-white rounded-full px-6 py-4 shadow-orange-900/20 shadow-lg active:scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">moped</span>
+<span class="font-bold font-headline">Phượt thôi</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-bold font-headline">Chốt đơn</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-bold font-headline">Bạn hữu</span>
+</a>
+<a class="flex items-center gap-4 text-stone-600 dark:text-stone-400 px-6 py-4 hover:translate-x-2 transition-transform duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-bold font-headline">Cá nhân</span>
+</a>
+</nav>
+<button class="mt-auto w-full py-4 px-6 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+            Tạo chuyến đi ✈️
+        </button>
+</aside>
+<!-- TopNavBar (Authority: Shared Components JSON) -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-20 bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-xl flex justify-between items-center px-8 z-40 shadow-sm">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-stone-400">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2.5 pl-12 pr-6 focus:ring-2 focus:ring-primary/20 text-sm" placeholder="Tìm kiếm hành trình..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-8 mr-8">
+<a class="text-orange-700 dark:text-orange-400 font-bold border-b-4 border-orange-700 py-6 font-headline tracking-tight" href="#">Phương tiện</a>
+<a class="text-stone-500 dark:text-stone-400 font-medium py-6 hover:bg-stone-200/50 dark:hover:bg-stone-800/50 transition-all font-headline tracking-tight" href="#">Lịch trình</a>
+<a class="text-stone-500 dark:text-stone-400 font-medium py-6 hover:bg-stone-200/50 dark:hover:bg-stone-800/50 transition-all font-headline tracking-tight" href="#">Chi phí</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2.5 rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-800/50 transition-all">
+<span class="material-symbols-outlined text-stone-600">notifications</span>
+</button>
+<button class="p-2.5 rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-800/50 transition-all">
+<span class="material-symbols-outlined text-stone-600">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[280px] pt-24 p-8 min-h-screen">
+<!-- Hero Section: Kinetic Layering -->
+<div class="relative mb-12 h-64 rounded-xl overflow-hidden group">
+<img class="w-full h-full object-cover grayscale-[0.2] group-hover:scale-105 transition-transform duration-700" data-alt="a wide highway winding through a lush tropical jungle during a misty morning with soft ambient light and cinematic mood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNMZNcLecUUoF3ozszrHpxWJ1oEdswafkWFjjUqsxyCYSjr-4TAs0nphHOs3YWBYipJvm2rchJALUzklMazIdLczEX2emYiutWo-sP9V70SWZwcgbSyv_7P-jLuapHrCI6np72wDOjVcI7oyx5yToNf0svtRmpNYGbzPy_tQWWjKN7UltBNzeg8IifQIH-utbxDfQVGUUy232iZBpoLf7LXhRXCciu9s92PfV37j8_45gMehqVYZ0KM0nPwoMjoXH_zrGkXcISQfsm"/>
+<div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent flex flex-col justify-center px-12">
+<span class="bg-tertiary text-white px-4 py-1 rounded-full text-xs font-bold w-fit mb-4">ON THE ROAD</span>
+<h2 class="text-5xl font-black text-white font-headline leading-tight tracking-tighter">PHƯỢT THÔI <br/>BẠN IU! 🛵</h2>
+</div>
+<div class="absolute -bottom-10 -right-10 w-48 h-48 bg-secondary rounded-full opacity-20 blur-3xl"></div>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Transport List & Details -->
+<div class="col-span-12 lg:col-span-7 space-y-8">
+<!-- Vehicle Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-sm border border-outline-variant/10 relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-10 -mt-10 transition-all group-hover:scale-150"></div>
+<div class="flex justify-between items-start mb-8 relative">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="bg-primary-container text-on-primary-container text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">Xe Số 01</span>
+<span class="text-2xl font-black font-headline text-on-background">29A - 123.45</span>
+</div>
+<p class="text-stone-500 font-medium">VinFast Lux A2.0 • Trắng Ngọc Trai</p>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-1">Khởi hành</p>
+<p class="text-xl font-black text-primary">06:30 AM</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-6 mb-8 relative">
+<div class="bg-surface-container-low rounded-lg p-4">
+<p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">location_on</span> Điểm đón
+                            </p>
+<p class="font-bold text-on-surface">Cổng Công viên Thống Nhất, Hà Nội</p>
+</div>
+<div class="bg-surface-container-low rounded-lg p-4 border-l-4 border-tertiary">
+<p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-2">Trạng thái</p>
+<p class="font-bold text-tertiary flex items-center gap-2">
+<span class="w-2 h-2 bg-tertiary rounded-full animate-pulse"></span>
+                                Đã sẵn sàng
+                            </p>
+</div>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface mb-4">Đồng bọn trên xe (4/4)</p>
+<div class="flex -space-x-3">
+<div class="relative group/member">
+<img class="w-12 h-12 rounded-full border-4 border-surface-container-lowest" data-alt="portrait avatar of a young woman with a friendly smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY5NML4xNY4FFTfudGkTe9ypLudJ8sV1UG5X8fUimEAlA2zXviplM55-weTygz0FqAagx623R5I7gfHI0MBZYFrDjlpT-qwUuKHIXbAL0eQPpfi6M6hy6_XT9c1m-5XQ1w41hfYsF2wSBSz-0sD4LyRNxeIsiMqYlS_X4iTMghWvRcfFrxTTIJE_awJqv-7KsR-rA97el7R-7FBLYJfUv3gLnXDbOdf9XPeo3aEx-CqUYSt6lE0kzDOaa2V1PhgY_49lczAY6jjEfn"/>
+<span class="absolute -bottom-1 -right-1 bg-primary text-white text-[8px] p-1 rounded-full material-symbols-outlined">directions_car</span>
+</div>
+<img class="w-12 h-12 rounded-full border-4 border-surface-container-lowest" data-alt="portrait avatar of a young man with cool glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCW8Ku8Ji-UEQWXz5d5VUCyk7AKwrFybO8ciBRR9dqTy0DDf6D2gSxghsjZwaFgwq4ePMzu8Z0okoPKJmUy1W6qV--Hnw6I8fE881QNYaOkvM1BRcBeg2WK4C_To5KqT7Dad3S4OWysf5oBMWj53V3yx5NWwNAkPnDEzyKPWPHdCt7xX00xjaqBMBKUityhMJg8S2cNyQUCSteprH8f1qa0u0AlZhso2HdAzVWDQ4qOO0nVmGEAcSrbQMjmLQbGbD0e1TQVbXM8nxvX"/>
+<img class="w-12 h-12 rounded-full border-4 border-surface-container-lowest" data-alt="portrait avatar of a smiling teenager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDGKOZUhYPu-L9hU2cNpNxeQX3wJqZ22wJPRKZMDLZuPV7yRi2aWlUHvN9lRhdia80iNEs3XFZUjZ7v5Yld7rZPuQ23MaZjGi5Z8Y9wrRfDSLROX5uqvhrR7zzUpto41TRfsgsF8LNVdORD2DPgixxIBs7Esxa6WsqyZmmsqq6sWcYz8jt81OUGZNioq4UEB6w8g7IhoCU8t5I0dNv66RFBsemgUzarcGIddtLqWSRrJu_5_2YGJPQqaevyNkQqPGlbiLAuReJG3BQ"/>
+<img class="w-12 h-12 rounded-full border-4 border-surface-container-lowest" data-alt="portrait avatar of a young person with headphones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClgSBhLLGmqjEaGxfgb4YS0yI5TCk9PrULPVCv6R-igpfAD3Ml1L4VdzTNqxTm1Pv4NT3qs2Zr5OcMdD71heeUVpGSnL_44-SVhc1YoTy6Hl1qKzRi46QwyxiHSYHPsHFheQI4vHX4V58gSccSZDC84rAaWS8DxfMMrLwmR6rxGleNteA9vEHWLp_D3ert5pBVsGXWO3hNejM8olFADklDQ1VCgaeyZs4A4ln5Hw2pFNIb2B1LAzDKtjVC8sCqFPqN41FDEL1RNmE5"/>
+<button class="w-12 h-12 rounded-full border-4 border-surface-container-lowest bg-surface-container flex items-center justify-center text-stone-500 hover:bg-stone-200 transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Vehicle Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-sm border border-outline-variant/10 relative overflow-hidden">
+<div class="flex justify-between items-start mb-8">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">Xe Số 02</span>
+<span class="text-2xl font-black font-headline text-on-background">30H - 678.99</span>
+</div>
+<p class="text-stone-500 font-medium">Honda SH 150i • Đen Nhám</p>
+</div>
+<div class="text-right">
+<p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-1">Khởi hành</p>
+<p class="text-xl font-black text-primary">07:00 AM</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-6 mb-8">
+<div class="bg-surface-container-low rounded-lg p-4">
+<p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">location_on</span> Điểm đón
+                            </p>
+<p class="font-bold text-on-surface">Đại học Bách Khoa Hà Nội</p>
+</div>
+<div class="bg-surface-container-low rounded-lg p-4 border-l-4 border-primary-container">
+<p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-2">Trạng thái</p>
+<p class="font-bold text-primary-container">Đang kiểm tra xe</p>
+</div>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface mb-4">Đồng bọn trên xe (2/2)</p>
+<div class="flex -space-x-3">
+<div class="relative">
+<img class="w-12 h-12 rounded-full border-4 border-surface-container-lowest" data-alt="portrait of a young adventurous woman in outdoor gear" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDw71j8rF1VpKZacW5m9GM061_8chKvvY4ue56YNYcSRQpkt7nmXuh18ydl_4b1I-it5stzsrNYXuTxQiLCzW9AdLSgA1pVETfWms_6HIG-7qv4lSvDe5nduHsaHRPrwFxFKRoeOW0QWPqN-mrwwVF7UDQ8tqybNUT0pT5H29qm-pO_daISKwi70NEOpo2SVdBC0rwqor0KTti3vd3_aDur_Xm9rNO4lKQMvwyX5PFQvxH_8TedASzSVxzmZaETX_Fji9fQAugeeicd"/>
+<span class="absolute -bottom-1 -right-1 bg-secondary text-white text-[8px] p-1 rounded-full material-symbols-outlined">moped</span>
+</div>
+<img class="w-12 h-12 rounded-full border-4 border-surface-container-lowest" data-alt="portrait of a male hiker with a backpack" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAizUp5185zxBRYp2EXrTYBggK3-mkGawGSElDxYor9QT1FXwUaedH0GvtfLKEHro_7_Z9aXTSSpX7y2c-v-L_HIpFZLFGej3Rj5vEHj6cOk5vp4_WESCYEueVTqiOjrc5OXAVFMP22XcaMJS9OgV2RN7ygRNnpwzFjEQLUJE_l0Qq1HVXhKqYvrnRrIOsX2_0L7FANRJ-PnDa8t9XAT_7hQH_C__RzAKz4_x7GuLgRbFSWswXt75U-VWn6LYORnL8WOcqiZr7bnv-d"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Interactive Map -->
+<div class="col-span-12 lg:col-span-5">
+<div class="sticky top-28 space-y-6">
+<div class="bg-surface-container-lowest rounded-xl p-2 shadow-lg border border-outline-variant/10 h-[600px] flex flex-col">
+<div class="p-4 flex justify-between items-center border-b border-surface-container">
+<h3 class="font-black font-headline text-on-background flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">map</span> LỘ TRÌNH DI CHUYỂN
+                            </h3>
+<button class="bg-primary-container/10 text-primary-container px-3 py-1 rounded-full text-xs font-bold hover:bg-primary-container/20 transition-colors">
+                                Xem chi tiết
+                            </button>
+</div>
+<div class="flex-1 relative rounded-lg overflow-hidden m-2">
+<!-- Placeholder for Map -->
+<img class="w-full h-full object-cover" data-alt="minimalist topographic map styling with clean lines and vibrant route markers in orange and purple" data-location="Hanoi, Vietnam" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASnA2LxnUoGzOsE26nxR-Dvz7BCEWxR5Y5R15qGwMaI1G9Nzw_Kl6VpbKA0U9AhbOOOuAplfv0wMMlZEOfKUDy5A6E34B8wHNjiJGw44qS3yuvPKtEM7JRK0lBsfxwUmFv6uTrGBm38gW6-7Plwg6T3iO-rOixjqGzS46yGZRp6b8I-WzDRUwfP_RLmaOmSUy-0GdflTXmD0KHbM5GWsvFB87hpz5JRmVal5JuSrRUPuVXv1ROwm1Fua62Ul3AAluCt0lyi291-v5v"/>
+<!-- Interactive Map Elements Overlay -->
+<div class="absolute top-4 left-4 space-y-2">
+<div class="glass-card px-4 py-2 rounded-full flex items-center gap-3 shadow-xl">
+<span class="w-3 h-3 bg-primary rounded-full"></span>
+<span class="text-xs font-bold text-on-surface">Vị trí hiện tại: Hà Nội</span>
+</div>
+</div>
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2 w-[90%]">
+<div class="glass-card p-4 rounded-lg shadow-2xl border border-white/40">
+<div class="flex justify-between items-end">
+<div>
+<p class="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Quãng đường còn lại</p>
+<p class="text-2xl font-black text-on-surface">124 <span class="text-sm font-bold">km</span></p>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Dự kiến đến</p>
+<p class="text-2xl font-black text-secondary">09:45 <span class="text-sm font-bold">AM</span></p>
+</div>
+</div>
+<div class="mt-4 h-1.5 w-full bg-stone-200 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-secondary w-[65%] rounded-full relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full border-2 border-primary shadow-lg"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Checklist Chip Bento -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-tertiary/10 p-4 rounded-lg border border-tertiary/20 flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-tertiary text-3xl mb-2">check_circle</span>
+<p class="text-xs font-bold text-tertiary-dim">Check xe xong ✅</p>
+</div>
+<div class="bg-secondary/10 p-4 rounded-lg border border-secondary/20 flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-secondary text-3xl mb-2">local_gas_station</span>
+<p class="text-xs font-bold text-secondary-dim">Đầy bình xăng ⛽</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB (Authority: Design System FAB Rules) -->
+<button class="fixed bottom-8 right-8 w-16 h-16 bg-primary text-white rounded-full shadow-[0_32px_64px_rgba(169,48,0,0.3)] flex items-center justify-center hover:scale-110 active:scale-90 transition-all z-50 group">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">add_road</span>
+<!-- Tooltip on hover -->
+<span class="absolute right-20 bg-on-surface text-white text-xs font-bold py-2 px-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">Thêm phương tiện mới</span>
+</button>
+</body></html>
