@@ -12,7 +12,7 @@ Requirements for the current milestone. Each requirement should map to exactly o
 
 - [x] **DSYS-01**: The product exposes a shared token system for typography, color, spacing, radius, elevation, and motion that matches the Stitch direction.
 - [x] **DSYS-02**: Shared UI primitives live in `packages/ui` and can be reused across public entry, planner-home, trip-hub, and operational-module surfaces.
-- [ ] **DSYS-03**: Shared UI primitives support the interaction states required by the product, including loading, empty, error, disabled, and mobile-responsive states.
+- [x] **DSYS-03**: Shared UI primitives support the interaction states required by the product, including loading, empty, error, disabled, and mobile-responsive states.
 
 ### Stitch-Covered UI Redesign
 

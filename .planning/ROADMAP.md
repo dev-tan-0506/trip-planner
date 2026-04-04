@@ -18,14 +18,14 @@
 **Requirements**: DSYS-01, DSYS-02, DSYS-03
 **UI hint**: yes
 **Dependencies**: none
-**Plans:** 3/7 plans executed
+**Plans:** 5/7 plans executed
 
 Plans:
 - [x] 07-01-PLAN.md — Stabilize the shared UI package boundary and style infrastructure.
 - [x] 07-02-PLAN.md — Move token authority into `packages/ui` and reduce app globals to wiring.
 - [x] 07-03-PLAN.md — Build the core action, input, and identity primitives.
-- [ ] 07-04-PLAN.md — Build the shared surface, overlay, and state primitives.
-- [ ] 07-05-PLAN.md — Compose shared planner chrome blocks from the primitive system.
+- [x] 07-04-PLAN.md — Build the shared surface, overlay, and state primitives.
+- [x] 07-05-PLAN.md — Compose shared planner chrome blocks from the primitive system.
 - [ ] 07-06-PLAN.md — Compose shared hero, status, and quick-action shell blocks.
 - [ ] 07-07-PLAN.md — Add app consumer proof and validation gates for the new system.
 
