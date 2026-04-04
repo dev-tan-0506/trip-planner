@@ -18,7 +18,7 @@
 **Requirements**: DSYS-01, DSYS-02, DSYS-03
 **UI hint**: yes
 **Dependencies**: none
-**Plans:** 5/7 plans executed
+**Plans:** 7/7 plans complete
 
 Plans:
 - [x] 07-01-PLAN.md — Stabilize the shared UI package boundary and style infrastructure.
@@ -26,8 +26,8 @@ Plans:
 - [x] 07-03-PLAN.md — Build the core action, input, and identity primitives.
 - [x] 07-04-PLAN.md — Build the shared surface, overlay, and state primitives.
 - [x] 07-05-PLAN.md — Compose shared planner chrome blocks from the primitive system.
-- [ ] 07-06-PLAN.md — Compose shared hero, status, and quick-action shell blocks.
-- [ ] 07-07-PLAN.md — Add app consumer proof and validation gates for the new system.
+- [x] 07-06-PLAN.md — Compose shared hero, status, and quick-action shell blocks.
+- [x] 07-07-PLAN.md — Add app consumer proof and validation gates for the new system.
 
 **Success criteria:**
 1. A real shared token system exists for typography, color, spacing, radius, elevation, and motion.

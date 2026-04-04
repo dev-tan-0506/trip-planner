@@ -56,14 +56,14 @@ export function SOSPanel({ snapshot, busy, onSend, onAcknowledge, onResolve }: S
       <div>
         <p className="text-sm font-black">SOS</p>
         <p className="mt-1 text-sm text-white/70">
-          Khu vá»±c kháº©n cáº¥p cho cáº£nh bÃ¡o nghiÃªm tÃºc, rÃµ rÃ ng vÃ  Ä‘i tháº³ng vÃ o hÃ nh Ä‘á»™ng.
+          Khu vực khẩn cấp cho cảnh báo nghiêm túc, rõ ràng và đi thẳng vào hành động.
         </p>
       </div>
 
       <textarea
         value={message}
         onChange={(event) => setMessage(event.target.value)}
-        placeholder="MÃ´ táº£ ngáº¯n tÃ¬nh huá»‘ng náº¿u báº¡n ká»‹p nháº­p..."
+        placeholder="Mô tả ngắn tình huống nếu bạn kịp nhập..."
         className="min-h-[96px] w-full rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-white outline-none placeholder:text-white/45"
       />
 
@@ -74,7 +74,7 @@ export function SOSPanel({ snapshot, busy, onSend, onAcknowledge, onResolve }: S
           onClick={() => onSend({ message })}
           className="rounded-2xl bg-brand-coral px-4 py-3 text-sm font-black text-white"
         >
-          Gá»­i SOS
+          Gửi SOS
         </button>
         <button
           type="button"
@@ -88,8 +88,8 @@ export function SOSPanel({ snapshot, busy, onSend, onAcknowledge, onResolve }: S
       {notificationState !== 'idle' && (
         <div className="rounded-2xl bg-white/10 px-4 py-3 text-sm text-white/75">
           {notificationState === 'granted'
-            ? 'ÄÃ£ báº­t thÃ´ng bÃ¡o trÃ¬nh duyá»‡t cho cáº£nh bÃ¡o SOS.'
-            : 'TrÃ¬nh duyá»‡t khÃ´ng cho phÃ©p thÃ´ng bÃ¡o. Báº¡n váº«n gá»­i SOS bÃ¬nh thÆ°á»ng.'}
+            ? 'Đã bật thông báo trình duyệt cho cảnh báo SOS.'
+            : 'Trình duyệt không cho phép thông báo. Bạn vẫn gửi SOS bình thường.'}
         </div>
       )}
 
