@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/*
+ * Phase 07 placeholder shared token scaffold.
+ * Plan 07-02 promotes these seed values into the full token authority.
+ */
+@theme {
+  --color-surface: #f9f6f5;
+  --color-surface-container-low: #f3f0ef;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #ece6e4;
+  --color-primary: #a93000;
+  --color-primary-container: #ff784d;
+  --color-error: #b31b25;
+  --color-error-container: #fb5151;
+  --color-success: #006a33;
+  --color-discovery: #5a3bdd;
+  --radius-base: 16px;
+  --radius-large: 32px;
+  --radius-hero: 48px;
+  --shadow-soft-lg: 0 20px 60px rgba(26, 20, 16, 0.08);
+}
+
+@layer base {
+  body {
+    background-color: var(--color-surface);
+    color: #1a1a2e;
+  }
+}
