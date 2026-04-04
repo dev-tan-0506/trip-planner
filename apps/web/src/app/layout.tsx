@@ -3,7 +3,7 @@ import { Be_Vietnam_Pro, Plus_Jakarta_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
-import { AuthHydration } from "../src/components/ui/AuthHydration";
+import { AuthHydration } from "../components/ui/AuthHydration";
 
 const beVietnamPro = Be_Vietnam_Pro({
   subsets: ["latin", "vietnamese"],
@@ -19,7 +19,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+  src: "./../../public/fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
 });
 

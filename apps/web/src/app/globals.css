@@ -1,0 +1,109 @@
+@import "@repo/ui/styles.css";
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .leaflet-container {
+    font-family: var(--font-body);
+  }
+}
+
+@layer components {
+  /* ─── Layout & Wrappers ─────────────────────────────────── */
+
+  .pe-auth-screen {
+    @apply mx-auto flex w-full max-w-md flex-col items-center;
+  }
+
+  .pe-auth-card {
+    @apply w-full rounded-[2.35rem] border border-white/60 bg-[rgba(255,255,255,0.94)] px-5 py-6 shadow-[0_28px_56px_-18px_rgba(0,0,0,0.15)] backdrop-blur-[10px] md:px-7 md:py-7;
+  }
+
+  .pe-nav-bar {
+    @apply mx-auto flex w-full max-w-7xl items-center justify-between gap-4 rounded-[2rem] border border-white/45 bg-[rgba(255,255,255,0.64)] px-4 py-3 shadow-[0_24px_60px_-18px_rgba(47,46,46,0.18)] backdrop-blur-[18px] md:px-6;
+  }
+
+  /* ─── Nav ───────────────────────────────────────────────── */
+
+  .pe-nav-link {
+    @apply text-sm font-[800] tracking-[-0.02em] text-[var(--text-muted)] transition-all duration-[var(--motion-fast)] hover:scale-[1.04] hover:text-[var(--accent-primary)];
+  }
+
+  /* ─── Buttons ───────────────────────────────────────────── */
+
+  .pe-btn-primary {
+    @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-[var(--accent-primary)] px-5 text-sm font-[900] tracking-[-0.02em] text-white transition-all duration-[var(--motion-fast)] hover:-translate-y-[1px] hover:brightness-[1.02] active:scale-[0.98] whitespace-nowrap;
+  }
+
+  .pe-btn-secondary {
+    @apply hidden min-h-[44px] items-center justify-center rounded-full border border-black/8 bg-white/80 px-4 text-sm font-[800] tracking-[-0.02em] text-[var(--text-primary)] transition-transform duration-[var(--motion-fast)] hover:scale-[1.02] sm:inline-flex whitespace-nowrap;
+  }
+
+  .pe-btn-cta-primary {
+    @apply inline-flex min-h-[60px] items-center justify-center gap-3 rounded-full bg-[var(--accent-primary)] px-8 text-lg font-[900] tracking-[-0.03em] text-white transition-all hover:-translate-y-[1px] active:scale-[0.98] whitespace-nowrap;
+  }
+
+  .pe-btn-cta-secondary {
+    @apply inline-flex min-h-[60px] items-center justify-center rounded-full border-2 border-[rgba(169,48,0,0.16)] bg-white/90 px-8 text-lg font-[900] tracking-[-0.03em] text-[var(--text-primary)] transition-all hover:bg-[rgba(169,48,0,0.05)] whitespace-nowrap;
+  }
+
+  .pe-social-btn {
+    @apply flex min-h-[50px] w-full items-center justify-center gap-3 rounded-full px-5 text-sm font-[800] transition-all active:scale-[0.98] whitespace-nowrap;
+  }
+
+  /* ─── Collage ───────────────────────────────────────────── */
+
+  .pe-collage-image {
+    @apply h-full min-h-[180px] w-full rounded-[2.25rem] object-cover shadow-[0_12px_36px_rgba(0,0,0,0.16)];
+  }
+
+  .pe-collage-gradient {
+    @apply absolute inset-0 bg-[linear-gradient(180deg,rgba(244,246,248,0.16),rgba(244,246,248,0.78))];
+  }
+
+  /* ─── Brand ─────────────────────────────────────────────── */
+
+  .pe-brand-icon {
+    @apply inline-flex rotate-[6deg] items-center justify-center rounded-[1.35rem] bg-[var(--accent-primary)] p-3 text-white shadow-[0_10px_40px_-10px_rgba(255,77,0,0.38)] transition-transform duration-[var(--motion-standard)] ease-[var(--ease-emphasis)] hover:rotate-0;
+  }
+
+  /* ─── Auth shell ─────────────────────────────────────────── */
+
+  .pe-auth-accent-icon {
+    @apply inline-flex h-16 w-16 rotate-[6deg] items-center justify-center rounded-[1.5rem] bg-[var(--accent-primary)] text-white shadow-[0_10px_32px_-12px_rgba(169,48,0,0.3)] transition-transform duration-[var(--motion-standard)] hover:rotate-0;
+  }
+
+  .pe-divider {
+    @apply h-px flex-1 bg-neutral-200;
+  }
+
+  /* ─── Landing sections ───────────────────────────────────── */
+
+  .pe-section-label {
+    @apply text-sm font-[900] uppercase tracking-[0.24em];
+  }
+
+  .pe-feature-card {
+    @apply rounded-[2rem] bg-white p-8 shadow-[0_24px_48px_-14px_rgba(47,46,46,0.14)];
+  }
+
+  .pe-feature-card-icon {
+    @apply mb-8 inline-flex h-16 w-16 items-center justify-center rounded-[1.5rem];
+  }
+
+  .pe-gallery-image {
+    @apply w-full object-cover transition-transform duration-700 hover:scale-105;
+  }
+
+  .pe-safety-item-icon {
+    @apply mt-1 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10;
+  }
+}

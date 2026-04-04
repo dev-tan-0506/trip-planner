@@ -16,8 +16,8 @@ import Link from 'next/link';
 import {
   templatesApi,
   CommunityTemplate,
-} from '../../../src/lib/api-client';
-import { CloneTemplateDialog } from '../../../src/components/templates/CloneTemplateDialog';
+} from '../../../lib/api-client';
+import { CloneTemplateDialog } from '../../../components/templates/CloneTemplateDialog';
 
 export default function TemplateDetailPage() {
   const params = useParams<{ templateId: string }>();

@@ -132,4 +132,4 @@ Plans:
 **Requirements mapped:** 19
 **Coverage:** 100%
 
-**Recommended next step:** `$gsd-discuss-phase 07`
+**Recommended next step:** `$gsd-discuss-phase 08`

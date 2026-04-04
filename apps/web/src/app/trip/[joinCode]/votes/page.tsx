@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useCallback, useRef } from 'react';
-import { useParams } from 'next/navigation';
-import { io, Socket } from 'socket.io-client';
+import { useEffect, useState, useCallback, useRef } from "react";
+import { useParams } from "next/navigation";
+import { io, Socket } from "socket.io-client";
 import {
   tripsApi,
   votesApi,
@@ -10,23 +10,16 @@ import {
   VoteSession,
   itineraryApi,
   ItineraryItem,
-} from '../../../../src/lib/api-client';
-import { useAuthStore } from '../../../../src/store/useAuthStore';
-import { VoteSessionLobby } from '../../../../src/components/votes/VoteSessionLobby';
-import { VoteCardDeck } from '../../../../src/components/votes/VoteCardDeck';
-import { VoteResultsPanel } from '../../../../src/components/votes/VoteResultsPanel';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ArrowLeft,
-  Vote,
-  Loader2,
-  Wifi,
-  WifiOff,
-  Compass,
-} from 'lucide-react';
-import Link from 'next/link';
+} from "../../../../lib/api-client";
+import { useAuthStore } from "../../../../store/useAuthStore";
+import { VoteSessionLobby } from "../../../../components/votes/VoteSessionLobby";
+import { VoteCardDeck } from "../../../../components/votes/VoteCardDeck";
+import { VoteResultsPanel } from "../../../../components/votes/VoteResultsPanel";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, Vote, Loader2, Wifi, WifiOff, Compass } from "lucide-react";
+import Link from "next/link";
 
-const WS_BASE_URL = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:3001';
+const WS_BASE_URL = process.env.NEXT_PUBLIC_WS_URL || "http://localhost:3001";
 
 export default function VotesPage() {
   const params = useParams();
@@ -59,7 +52,7 @@ export default function VotesPage() {
         setSessions(sessionsData);
         setItineraryItems(itinerarySnapshot.days.flatMap((day) => day.items));
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Không thể tải dữ liệu');
+        setError(err instanceof Error ? err.message : "Không thể tải dữ liệu");
       } finally {
         setLoading(false);
       }
@@ -72,7 +65,7 @@ export default function VotesPage() {
     if (!trip) return;
 
     const socket = io(`${WS_BASE_URL}/votes`, {
-      transports: ['websocket', 'polling'],
+      transports: ["websocket", "polling"],
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionAttempts: 10,
@@ -80,22 +73,22 @@ export default function VotesPage() {
 
     socketRef.current = socket;
 
-    socket.on('connect', () => {
+    socket.on("connect", () => {
       setConnected(true);
       // Rejoin active session room on reconnect
       if (activeSessionIdRef.current) {
-        socket.emit('vote.join', { sessionId: activeSessionIdRef.current });
+        socket.emit("vote.join", { sessionId: activeSessionIdRef.current });
       }
     });
 
-    socket.on('disconnect', () => setConnected(false));
+    socket.on("disconnect", () => setConnected(false));
 
     // Live update events
-    socket.on('vote.snapshot', (snapshot: VoteSession) => {
+    socket.on("vote.snapshot", (snapshot: VoteSession) => {
       setActiveSession(snapshot);
     });
 
-    socket.on('vote.session-updated', (snapshot: VoteSession) => {
+    socket.on("vote.session-updated", (snapshot: VoteSession) => {
       setActiveSession(snapshot);
       // Also update in sessions list
       setSessions((prev) =>
@@ -103,11 +96,11 @@ export default function VotesPage() {
       );
     });
 
-    socket.on('vote.results-updated', (snapshot: VoteSession) => {
+    socket.on("vote.results-updated", (snapshot: VoteSession) => {
       setActiveSession(snapshot);
     });
 
-    socket.on('vote.closed', (snapshot: VoteSession) => {
+    socket.on("vote.closed", (snapshot: VoteSession) => {
       setActiveSession(snapshot);
       setSessions((prev) =>
         prev.map((s) => (s.id === snapshot.id ? snapshot : s)),
@@ -132,13 +125,13 @@ export default function VotesPage() {
         const snapshot = await votesApi.getSession(trip.id, sessionId);
         setActiveSession(snapshot);
       } catch {
-        setError('Không thể tải phiên bình chọn');
+        setError("Không thể tải phiên bình chọn");
         return;
       }
 
       // Then join socket room for live updates
       if (socketRef.current?.connected) {
-        socketRef.current.emit('vote.join', { sessionId });
+        socketRef.current.emit("vote.join", { sessionId });
       }
     },
     [trip],
@@ -147,7 +140,7 @@ export default function VotesPage() {
   // Leave session room
   const leaveSessionRoom = useCallback(() => {
     if (activeSessionIdRef.current && socketRef.current?.connected) {
-      socketRef.current.emit('vote.leave', {
+      socketRef.current.emit("vote.leave", {
         sessionId: activeSessionIdRef.current,
       });
     }
@@ -164,7 +157,7 @@ export default function VotesPage() {
 
   const isLeader =
     user && trip
-      ? trip.members.some((m) => m.user.id === user.id && m.role === 'LEADER')
+      ? trip.members.some((m) => m.user.id === user.id && m.role === "LEADER")
       : false;
 
   if (!isHydrated || loading) {
@@ -194,7 +187,7 @@ export default function VotesPage() {
             <Compass size={40} className="text-brand-coral" />
           </div>
           <h1 className="text-2xl font-black text-gray-900">Oops! 😅</h1>
-          <p className="text-gray-500">{error || 'Không tìm thấy chuyến đi'}</p>
+          <p className="text-gray-500">{error || "Không tìm thấy chuyến đi"}</p>
           <Link
             href="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-brand-blue text-white rounded-2xl font-bold hover:bg-brand-blue/90 transition-all active:scale-95"
@@ -246,16 +239,12 @@ export default function VotesPage() {
             <span
               className={`flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${
                 connected
-                  ? 'bg-brand-green/10 text-brand-green'
-                  : 'bg-gray-200 text-gray-500'
+                  ? "bg-brand-green/10 text-brand-green"
+                  : "bg-gray-200 text-gray-500"
               }`}
             >
-              {connected ? (
-                <Wifi size={12} />
-              ) : (
-                <WifiOff size={12} />
-              )}
-              {connected ? 'Trực tuyến' : 'Mất kết nối'}
+              {connected ? <Wifi size={12} /> : <WifiOff size={12} />}
+              {connected ? "Trực tuyến" : "Mất kết nối"}
             </span>
           </div>
         </div>
@@ -271,8 +260,8 @@ export default function VotesPage() {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              {activeSession.status === 'CLOSED' ||
-              activeSession.status === 'LEADER_DECISION_REQUIRED' ? (
+              {activeSession.status === "CLOSED" ||
+              activeSession.status === "LEADER_DECISION_REQUIRED" ? (
                 <VoteResultsPanel
                   session={activeSession}
                   isLeader={!!isLeader}
@@ -293,7 +282,7 @@ export default function VotesPage() {
               ) : (
                 <VoteCardDeck
                   session={activeSession}
-                  userId={user?.id || ''}
+                  userId={user?.id || ""}
                   onVote={async (optionId) => {
                     await votesApi.submitBallot(activeSession.id, optionId);
                     const updated = await votesApi.getSession(
@@ -326,9 +315,14 @@ export default function VotesPage() {
                 itineraryItems={itineraryItems}
                 onSelectSession={joinSessionRoom}
                 onCreateSession={async ({ session, options }) => {
-                  const createdSession = await votesApi.createSession(trip.id, session);
+                  const createdSession = await votesApi.createSession(
+                    trip.id,
+                    session,
+                  );
                   await Promise.all(
-                    options.map((option) => votesApi.createOption(createdSession.id, option)),
+                    options.map((option) =>
+                      votesApi.createOption(createdSession.id, option),
+                    ),
                   );
                   await refreshSessions();
                   return createdSession;

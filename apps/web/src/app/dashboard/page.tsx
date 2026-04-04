@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { useAuthStore } from '../../src/store/useAuthStore';
-import { tripsApi } from '../../src/lib/api-client';
+import { useAuthStore } from '../../store/useAuthStore';
+import { tripsApi } from '../../lib/api-client';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MapPin,

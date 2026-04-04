@@ -1,4 +1,4 @@
-import { TemplateLibraryPage } from '../../src/components/templates/TemplateLibraryPage';
+import { TemplateLibraryPage } from '../../components/templates/TemplateLibraryPage';
 
 export const metadata = {
   title: 'Mẫu hành trình cộng đồng | Mình Đi Đâu Thế',
