@@ -1,6 +1,7 @@
 # Phase 08: Landing & Auth Redesign - Research
 
 **Researched:** 2026-04-04
+**Refresh:** 2026-04-04 (`--research` rerun; no material change to plan shape)
 **Domain:** public-entry redesign for a Next.js web app with existing client-side auth restore
 **Confidence:** HIGH
 
@@ -55,6 +56,14 @@ Phase 08 should be planned as a thin public-entry redesign layer on top of exist
 The main planning risk is not backend integration. It is letting the redesign sprawl into bespoke markup per screen and accidentally breaking the existing signed-in/signed-out routing and login/register submission flow. The safest plan is to create a small shared public-entry layer first, then redesign landing and auth on top of it in parallel.
 
 **Primary recommendation:** plan Phase 08 as shared public-entry composition first, then split landing and auth redesign into separate execution plans that both reuse the shared layer and keep regression tests close to the changed routes.
+
+## Refresh Delta
+
+Manual re-research for `--research` did not change the recommended plan topology:
+
+- The 3-plan split still matches the codebase best: shared public-entry foundation first, then landing and auth in parallel.
+- No new dependency or hidden integration point appeared that would justify adding a backend or infrastructure plan.
+- The clearest refinement from the refresh is to make auth copy-fix requirements more concrete, especially around corrected Vietnamese validation/error strings, because current mojibake is visible and easy to regress during redesign work.
 
 ## Sequencing
 
