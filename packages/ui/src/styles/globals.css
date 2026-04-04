@@ -1,29 +1,155 @@
 @import "tailwindcss";
 
-/*
- * Phase 07 placeholder shared token scaffold.
- * Plan 07-02 promotes these seed values into the full token authority.
- */
 @theme {
-  --color-surface: #f9f6f5;
-  --color-surface-container-low: #f3f0ef;
-  --color-surface-container-lowest: #ffffff;
-  --color-surface-container-high: #ece6e4;
-  --color-primary: #a93000;
-  --color-primary-container: #ff784d;
-  --color-error: #b31b25;
-  --color-error-container: #fb5151;
-  --color-success: #006a33;
-  --color-discovery: #5a3bdd;
+  --font-display: var(--font-be-vietnam-pro), sans-serif;
+  --font-heading: var(--font-be-vietnam-pro), sans-serif;
+  --font-body: var(--font-plus-jakarta), sans-serif;
+  --font-label: var(--font-plus-jakarta), sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+
+  --text-display: 56px;
+  --text-heading: 28px;
+  --text-body: 16px;
+  --text-label: 14px;
+  --leading-display: 1.05;
+  --leading-heading: 1.2;
+  --leading-body: 1.5;
+  --leading-label: 1.3;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --touch-target-min: 44px;
+  --fab-size-desktop: 80px;
+
   --radius-base: 16px;
   --radius-large: 32px;
   --radius-hero: 48px;
-  --shadow-soft-lg: 0 20px 60px rgba(26, 20, 16, 0.08);
+  --radius-pill: 9999px;
+
+  --shadow-soft: 0 20px 48px rgba(47, 46, 46, 0.06);
+  --shadow-soft-lg: 0 28px 64px rgba(47, 46, 46, 0.1);
+  --shadow-soft-hover: 0 18px 42px rgba(47, 46, 46, 0.08);
+  --blur-glass: 24px;
+  --blur-glass-subtle: 16px;
+
+  --motion-fast: 150ms;
+  --motion-standard: 300ms;
+  --motion-hero: 500ms;
+  --ease-emphasis: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --surface-app: #f9f6f5;
+  --surface-section: #f3f0ef;
+  --surface-card: #ffffff;
+  --surface-high: #ece6e4;
+  --surface-glass: rgba(249, 246, 245, 0.6);
+  --surface-outline: rgba(47, 46, 46, 0.15);
+
+  --accent-primary: #a93000;
+  --accent-primary-container: #ff784d;
+  --status-discovery: #5a3bdd;
+  --status-success: #006a33;
+  --status-destructive: #b31b25;
+  --status-urgent-surface: #fb5151;
+  --focus-ring: rgba(169, 48, 0, 0.28);
+  --text-primary: #2f2e2e;
+  --text-muted: rgba(47, 46, 46, 0.72);
+  --text-subtle: rgba(47, 46, 46, 0.56);
+
+  --gradient-cta: linear-gradient(135deg, #a93000 0%, #ff784d 100%);
+  --gradient-hero: linear-gradient(135deg, rgba(169, 48, 0, 0.14) 0%, rgba(90, 59, 221, 0.12) 100%);
 }
 
 @layer base {
-  body {
-    background-color: var(--color-surface);
-    color: #1a1a2e;
+  html {
+    background-color: var(--surface-app);
+    color: var(--text-primary);
   }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--surface-app);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    font-size: var(--text-display);
+    line-height: var(--leading-display);
+  }
+
+  h2,
+  h3 {
+    font-size: var(--text-heading);
+    line-height: var(--leading-heading);
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  *:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+@utility surface-app {
+  background-color: var(--surface-app);
+  color: var(--text-primary);
+}
+
+@utility surface-section {
+  background-color: var(--surface-section);
+}
+
+@utility surface-card {
+  background-color: var(--surface-card);
+  box-shadow: var(--shadow-soft);
+}
+
+@utility surface-glass {
+  background: var(--surface-glass);
+  backdrop-filter: blur(var(--blur-glass));
+  -webkit-backdrop-filter: blur(var(--blur-glass));
+}
+
+@utility no-divider {
+  border: 0;
+  box-shadow: none;
+}
+
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+@utility shadow-soft-lg {
+  box-shadow: var(--shadow-soft-lg);
+}
+
+@utility cta-gradient {
+  background-image: var(--gradient-cta);
+  color: #fff;
 }
