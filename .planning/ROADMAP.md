@@ -18,6 +18,14 @@
 **Requirements**: DSYS-01, DSYS-02, DSYS-03
 **UI hint**: yes
 **Dependencies**: none
+**Plans:** 5 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Stabilize the shared UI package boundary and style infrastructure.
+- [ ] 07-02-PLAN.md — Move token authority into `packages/ui` and reduce app globals to wiring.
+- [ ] 07-03-PLAN.md — Build the reusable primitive layer with state coverage.
+- [ ] 07-04-PLAN.md — Compose shared shell blocks from the primitive system.
+- [ ] 07-05-PLAN.md — Add app consumer proof and validation gates for the new system.
 
 **Success criteria:**
 1. A real shared token system exists for typography, color, spacing, radius, elevation, and motion.
