@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
 milestone: v2.0
-milestone_name: Stitch Redesign & Architecture Refactor
-status: planning
-stopped_at: Phase 07 context captured, ready for planning
-last_updated: "2026-04-03T13:10:00+07:00"
-last_activity: 2026-04-03
+milestone_name: milestone
+status: executing
+stopped_at: Phase 07 context captured for `v2.0`
+last_updated: "2026-04-04T04:14:24.457Z"
+last_activity: 2026-04-04
 progress:
   total_phases: 6
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 7
+  completed_plans: 1
   percent: 0
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-03)
 
 **Core value:** Maximum convenience and reduced group-travel friction through one seamless web experience.
-**Current focus:** Start phase 07 for `v2.0` design system and shared-shell foundation.
+**Current focus:** Phase 07 — design-system-shared-shell-foundation
 
 ## Current Position
 
-Phase: 07 Design System & Shared Shell Foundation
-Plan: -
-Status: Context ready, awaiting phase planning
-Last activity: 2026-04-03 - Phase 07 context captured from Stitch inventory and codebase scout
+Phase: 07 (design-system-shared-shell-foundation) — EXECUTING
+Plan: 2 of 7
+Status: Ready to execute
+Last activity: 2026-04-04
 
 Progress: [----------] 0%
 
@@ -42,6 +42,7 @@ Progress: [----------] 0%
 - `v2.0` is a modernization milestone: Stitch-covered core-surface redesign plus FE/BE structural refactor.
 - Only exported Stitch screens are promised as bespoke redesign targets in the current roadmap.
 - Phase 07 is locked to semantic surface tiers, primitives plus shell blocks, default-hard Stitch brand rules, and a desktop-first mobile-safe foundation.
+- [Phase 07]: Phase 07 Wave 1 stabilizes @repo/ui with explicit root, component, style, and lib/utils entrypoints before primitive work begins. — The repo already had shadcn alias assumptions and shared CSS paths, so package-boundary stability had to land before token and primitive waves to avoid repeated import rewiring.
 
 ### Pending Todos
 
